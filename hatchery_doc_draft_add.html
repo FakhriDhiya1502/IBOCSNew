@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IBOCS | Buat DO Draft DOC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f5f7fb; color: #222; }
+        .card { background: #fff; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 13px 16px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #fafbfe; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+        .card-body { padding: 16px; }
+        .form-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin-bottom: 14px; }
+        .form-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-bottom: 14px; }
+        .field label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; }
+        .field label .req { color: #dc2626; }
+        .field input, .field select { width: 100%; border: 1px solid #d5dae3; border-radius: 8px; padding: 0 11px; font-size: 13px; background: #fff; height: 38px; }
+        .field input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+        #externalSection { display: none; }
+        #externalSection.show { display: block; }
+
+        /* Lines table */
+        .lines-wrap { overflow-x: auto; }
+        table.lt { width: 100%; border-collapse: collapse; min-width: 700px; }
+        table.lt th { font-size: 11px; color: #4b5563; font-weight: 700; padding: 9px 10px; text-align: left; white-space: nowrap; border-bottom: 2px solid #e0e7ef; }
+        table.lt th.hb { background: #e8eaf6; color: #3730a3; }
+        table.lt th.ha { background: #f0fdf4; color: #166534; }
+        table.lt th.hp { background: #fff7ed; color: #c2410c; }
+        table.lt td { padding: 7px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; font-size: 13px; }
+        table.lt td.cb { background: #eef2ff; border-right: 2px solid #c7d2fe; vertical-align: top; }
+        table.lt td.ca { background: #f8fffe; }
+        table.lt td.cp { background: #fffbf5; }
+        table.lt tr.tr-act td { background: #f5f7ff; padding: 5px 10px; border-bottom: 1px solid #e0e7ef; }
+        table.lt tr.tr-sep td { height: 6px; background: #dde3f8; padding: 0; border: none; }
+        table.lt tr.tr-empty td { text-align: center; color: #9ca3af; padding: 24px; font-size: 13px; }
+
+        /* Table inputs */
+        .ti  { width: 100%; border: 1px solid #d5dae3; border-radius: 6px; padding: 4px 8px; font-size: 12px; height: 30px; background: #fff; }
+        .tn  { width: 90px; border: 1px solid #d5dae3; border-radius: 6px; padding: 4px 8px; font-size: 12px; height: 30px; text-align: right; background: #fff; }
+        .tuom{ width: 70px; border: 1px solid #d5dae3; border-radius: 6px; padding: 4px 6px; font-size: 12px; height: 30px; text-align: center; background: #fff; }
+        .tp  { width: 110px; border: 1px solid #fdba74; border-radius: 6px; padding: 4px 8px; font-size: 12px; height: 30px; text-align: right; background: #fffbf5; }
+        .ts  { width: 100%; border: 1px solid #d5dae3; border-radius: 6px; padding: 0 6px; font-size: 12px; height: 30px; background: #fff; }
+        .inp-s { display: flex; gap: 4px; }
+        .btn-s { padding: 0 7px; border: 1px solid #d5dae3; border-radius: 6px; background: #f9fafb; cursor: pointer; height: 30px; font-size: 12px; flex-shrink: 0; color: #6366f1; }
+        .btn-s:hover { background: #e0e7ff; border-color: #6366f1; }
+
+        /* Qty badge */
+        .qok { display:inline-block; margin-top:3px; font-size:10px; font-weight:700; color:#166534; }
+        .qmm { display:inline-block; margin-top:3px; font-size:10px; font-weight:700; color:#d97706; background:#fef3c7; padding:1px 5px; border-radius:4px; }
+
+        /* Buttons */
+        .btn-aa  { padding: 3px 9px; border: 1.5px dashed #16a34a; border-radius: 5px; background: #f0fdf4; color: #15803d; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .btn-dg  { padding: 3px 9px; border: 0; border-radius: 5px; background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 6px; }
+        .btn-da  { padding: 2px 7px; border: 0; border-radius: 5px; background: #fee2e2; color: #991b1b; font-size: 11px; cursor: pointer; }
+        .btn-al  { padding: 7px 14px; border: 1.5px dashed #6366f1; border-radius: 8px; background: #eef2ff; color: #4338ca; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .btn-pri { padding: 9px 18px; border-radius: 8px; border: 0; font-size: 13px; font-weight: 700; background: #1a237e; color: #fff; cursor: pointer; }
+        .btn-sec { padding: 9px 18px; border-radius: 8px; border: 1px solid #d1d5db; font-size: 13px; font-weight: 700; background: #fff; color: #374151; cursor: pointer; text-decoration: none; display: inline-block; }
+
+        /* Search modal */
+        .item-row { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
+        .item-row:hover { background: #eff6ff; }
+        .item-row .ic { font-size: 11px; font-weight: 700; color: #6366f1; }
+        .item-row .in { font-size: 13px; font-weight: 600; }
+        .item-row .im { font-size: 11px; color: #6b7280; }
+
+        @media (max-width: 900px) { .form-grid-3, .form-grid-2 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand fw-bold" href="forecast_dashboard.html">IBOCS</a>
+            <span class="navbar-text text-white-50 small d-none d-md-inline">Hatchery Portal</span>
+            <div class="ms-auto">
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" id="userBtn">User</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text small text-muted" id="userInfo">-</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item text-danger" id="btnLogout">Logout</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-3">
+        <div class="row g-3">
+            <div class="col-lg-2" id="sidebar-container"></div>
+            <div class="col-lg-10">
+
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div>
+                        <h5 class="fw-bold mb-0" id="pageTitle">Buat DO Draft DOC</h5>
+                        <div class="text-muted" id="pageSubtitle" style="font-size:13px;">Isi item, qty, dan brand</div>
+                    </div>
+                    <a href="hatchery_doc_draft_list.html" class="btn-sec"><i class="bi bi-arrow-left me-1"></i> Kembali</a>
+                </div>
+
+                <!-- Header -->
+                <div class="card">
+                    <div class="card-header">Informasi Header</div>
+                    <div class="card-body">
+                        <div class="form-grid-3">
+                            <div class="field">
+                                <label>No. DO Draft</label>
+                                <input type="text" id="fId" disabled placeholder="Auto-generate">
+                            </div>
+                            <div class="field">
+                                <label>Tanggal <span class="req">*</span></label>
+                                <input type="date" id="fDate">
+                            </div>
+                            <div class="field">
+                                <label>DOC Type <span class="req">*</span></label>
+                                <select id="fDocType" onchange="onDocTypeChange()">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="internal">Internal</option>
+                                    <option value="external">External</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-grid-3">
+                            <div class="field">
+                                <label>Referensi Forecast <span class="req">*</span></label>
+                                <select id="fForecastRef" onchange="onForecastChange()">
+                                    <option value="">-- Pilih Forecast --</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Customer Tujuan <span class="req">*</span></label>
+                                <select id="fCustomer">
+                                    <option value="">-- Pilih Customer --</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Warehouse <span class="req">*</span></label>
+                                <select id="fWarehouse">
+                                    <option value="">-- Pilih Warehouse --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- External -->
+                <div class="card" id="externalSection">
+                    <div class="card-header"><i class="bi bi-truck me-2"></i>Informasi DOC External</div>
+                    <div class="card-body">
+                        <div class="form-grid-3">
+                            <div class="field">
+                                <label>Vendor External <span class="req">*</span></label>
+                                <select id="fExtVendor"><option value="">-- Pilih Vendor --</option></select>
+                            </div>
+                            <div class="field">
+                                <label>No. Surat Jalan <span class="req">*</span></label>
+                                <input type="text" id="fNoSJ" placeholder="cth: SJ/2026/0042">
+                            </div>
+                            <div class="field">
+                                <label>Tanggal Surat Jalan <span class="req">*</span></label>
+                                <input type="date" id="fTglSJ">
+                            </div>
+                        </div>
+                        <div class="form-grid-3">
+                            <div class="field">
+                                <label>No. Polisi Kendaraan <span class="req">*</span></label>
+                                <input type="text" id="fNoPol" placeholder="cth: BK 1234 AB" style="text-transform:uppercase">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lines -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>Item Lines — <span style="color:#3730a3">Item Code</span> / <span style="color:#166534">Conversion</span></span>
+                        <button class="btn-al" onclick="addBeforeLine()" style="display:none;"><i class="bi bi-plus-lg me-1"></i> Tambah Item Code</button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="lines-wrap">
+                            <table class="lt">
+                                <thead id="linesHead"></thead>
+                                <tbody id="linesTbody">
+                                    <tr class="tr-empty"><td colspan="10"><i class="bi bi-inbox me-2"></i>Belum ada item. Pilih Forecast atau klik "Tambah Before Item".</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mb-4">
+                    <a href="hatchery_doc_draft_list.html" class="btn-sec">Batal</a>
+                    <button class="btn-pri" onclick="saveDraft()"><i class="bi bi-save me-1"></i> Simpan Draft</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Search Modal -->
+    <div class="modal fade" id="itemSearchModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#1a237e;color:#fff;">
+                    <h5 class="modal-title" id="searchTitle">Cari Item</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="p-3 border-bottom">
+                        <input type="text" class="form-control form-control-sm" id="searchQ"
+                            placeholder="Ketik nama atau kode item..." oninput="filterSearch(this.value)">
+                    </div>
+                    <div id="searchList" style="max-height:380px;overflow-y:auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="master_data.js"></script>
+    <script src="doc_draft_storage.js"></script>
+    <script src="sidebar.js"></script>
+    <script>
+        const sidebar = new SidebarSystem(null, "doc_draft_list");
+        sidebar.render();
+
+        const userData  = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
+        const role      = userData.role || "";
+        // Price visible for admin_sales and super_admin
+        const showPrice = role === "admin_sales" || role === "super_admin";
+
+        document.getElementById("userInfo").textContent = userData.name || role || "-";
+        document.getElementById("userBtn").textContent  = userData.name || "User";
+        document.getElementById("btnLogout").addEventListener("click", () => {
+            localStorage.removeItem("IBOCS_user");
+            location.href = "login.html";
+        });
+
+        if (showPrice) {
+            document.getElementById("pageSubtitle").textContent = "Isi item, qty, brand, dan price";
+        }
+
+        /* ── State ──────────────────────────────────────────────── */
+        let draftLines = [];
+        let editId     = null;
+        let _searchCb  = null;
+        let _searchCat = null;
+
+        /* ── Helpers ────────────────────────────────────────────── */
+        function fmtNum(n) { return n ? Number(n).toLocaleString("id-ID") : "0"; }
+
+        /* ── Init ───────────────────────────────────────────────── */
+        function init() {
+            document.getElementById("fDate").value = new Date().toISOString().slice(0, 10);
+
+            // Forecast dropdown
+            const fcSel = document.getElementById("fForecastRef");
+            DOC_FORECAST_REFS.forEach(fc => {
+                const opt = document.createElement("option");
+                opt.value = fc.id;
+                opt.textContent = fc.id + " — " + fc.desc + " (" + fc.customerName + ")";
+                opt.dataset.customer = fc.customer;
+                fcSel.appendChild(opt);
+            });
+
+            // Customer dropdown
+            const custSel = document.getElementById("fCustomer");
+            M.customers.forEach(c => {
+                custSel.innerHTML += `<option value="${c.code}">${c.shortName} — ${c.name}</option>`;
+            });
+
+            // Warehouse dropdown
+            const whSel = document.getElementById("fWarehouse");
+            M.warehouses.forEach(w => {
+                whSel.innerHTML += `<option value="${w.code}">${w.code} — ${w.name} (${w.location})</option>`;
+            });
+
+            // External vendor dropdown
+            M.externalVendors.forEach(v => {
+                document.getElementById("fExtVendor").innerHTML += `<option value="${v.code}">${v.name}</option>`;
+            });
+
+            // Build table header
+            buildHeader();
+
+            // Edit mode
+            const params = new URLSearchParams(location.search);
+            editId = params.get("id");
+            if (editId) {
+                const draft = docDraftGet(editId);
+                if (!draft) { alert("DO Draft tidak ditemukan."); location.href = "hatchery_doc_draft_list.html"; return; }
+                if (draft.status !== "Draft") { location.href = "hatchery_doc_draft_view.html?id=" + editId; return; }
+                loadIntoForm(draft);
+                document.getElementById("pageTitle").textContent = "Edit DO Draft — " + editId;
+            } else {
+                document.getElementById("fId").value = "Auto (" + docDraftNextId() + ")";
+            }
+        }
+
+        function buildHeader() {
+            const ext = document.getElementById("fDocType").value === "external";
+            let cols = `
+                <th class="hb" style="width:110px;">Brand</th>
+                <th class="hb" style="min-width:170px;">Item Code</th>
+                <th class="hb" style="width:70px;">UoM</th>
+                <th class="hb" style="width:100px;">Qty</th>`;
+            if (showPrice && ext) cols += `<th class="hp" style="width:120px;">Harga Beli</th>`;
+            cols += `
+                <th class="ha" style="min-width:170px;">Conversion</th>
+                <th class="ha" style="width:70px;">UoM</th>
+                <th class="ha" style="width:100px;">Qty</th>`;
+            if (showPrice) cols += `<th class="hp" style="width:120px;">Harga Jual</th>`;
+            cols += `<th style="width:70px;">Aksi</th>`;
+            document.getElementById("linesHead").innerHTML = `<tr>${cols}</tr>`;
+        }
+
+        function loadIntoForm(d) {
+            document.getElementById("fId").value          = d.id;
+            document.getElementById("fDate").value        = d.date;
+            document.getElementById("fDocType").value     = d.docType;
+            document.getElementById("fForecastRef").value = d.forecastRef;
+            document.getElementById("fCustomer").value    = d.customer;
+            document.getElementById("fWarehouse").value   = d.warehouse || "";
+            onDocTypeChange();
+            if (d.docType === "external") {
+                document.getElementById("fExtVendor").value = d.externalVendor  || "";
+                document.getElementById("fNoSJ").value      = d.noSuratJalan    || "";
+                document.getElementById("fTglSJ").value     = d.tglSuratJalan   || "";
+                document.getElementById("fNoPol").value     = d.noPol           || "";
+            }
+            draftLines = d.lines.map(l => ({
+                ...l,
+                afterItems: l.afterItems.map(a => ({ ...a }))
+            }));
+            renderTable();
+        }
+
+        /* ── Toggles ────────────────────────────────────────────── */
+        function onDocTypeChange() {
+            const v = document.getElementById("fDocType").value;
+            document.getElementById("externalSection").classList.toggle("show", v === "external");
+            buildHeader();
+            renderTable();
+        }
+
+        function onForecastChange() {
+            const sel = document.getElementById("fForecastRef");
+            const opt = sel.options[sel.selectedIndex];
+            // Auto-select customer from forecast
+            if (opt && opt.dataset.customer) {
+                document.getElementById("fCustomer").value = opt.dataset.customer;
+            }
+
+            const fc = DOC_FORECAST_REFS.find(f => f.id === sel.value);
+            if (!fc || !fc.suggestedLines || !fc.suggestedLines.length) return;
+
+            const doPopulate = () => {
+                draftLines = fc.suggestedLines.map(sl => ({
+                    id: uniqueId(),
+                    brand: sl.brand, brandName: sl.brandName,
+                    itemBefore: sl.itemBefore, uomBefore: sl.uomBefore || "Ekor",
+                    qtyBefore: sl.qtyBefore, priceBefore: null,
+                    afterItems: [{ id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, priceAfter: null }]
+                }));
+                renderTable();
+            };
+
+            if (draftLines.length > 0) {
+                if (confirm("Forecast ini punya data item bawaan. Replace lines yang sudah ada?")) doPopulate();
+            } else {
+                doPopulate();
+            }
+        }
+
+        /* ── Line management ────────────────────────────────────── */
+        function addBeforeLine() {
+            draftLines.push({
+                id: uniqueId(), brand: "", brandName: "", itemBefore: "", uomBefore: "Ekor",
+                qtyBefore: 0, priceBefore: null,
+                afterItems: [{ id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, priceAfter: null }]
+            });
+            renderTable();
+        }
+
+        function removeBeforeLine(lineId) {
+            if (draftLines.length <= 1 && !confirm("Hapus group terakhir?")) return;
+            draftLines = draftLines.filter(l => l.id !== lineId);
+            renderTable();
+        }
+
+        function addAfterItem(lineId) {
+            const line = draftLines.find(l => l.id === lineId);
+            if (line) {
+                line.afterItems.push({ id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, priceAfter: null });
+                renderTable();
+            }
+        }
+
+        function removeAfterItem(lineId, afterId) {
+            const line = draftLines.find(l => l.id === lineId);
+            if (!line || line.afterItems.length <= 1) return;
+            line.afterItems = line.afterItems.filter(a => a.id !== afterId);
+            renderTable();
+        }
+
+        /* ── Field setters (called by oninput/onchange) ─────────── */
+        function setB(lineId, f, v) { // before field setter
+            const l = draftLines.find(x => x.id === lineId);
+            if (!l) return;
+            l[f] = (f === "qtyBefore" || f === "priceBefore") ? (parseFloat(v) || 0) : v;
+            if (f === "qtyBefore") updateBadge(lineId);
+        }
+        function setBrand(lineId, v) {
+            const l = draftLines.find(x => x.id === lineId);
+            if (!l) return;
+            l.brand = v;
+            l.brandName = (M.brands.find(b => b.code === v) || {}).name || v;
+        }
+        function setA(lineId, afterId, f, v) { // after field setter
+            const l = draftLines.find(x => x.id === lineId);
+            const a = l && l.afterItems.find(x => x.id === afterId);
+            if (!a) return;
+            a[f] = (f === "qtyAfter" || f === "priceAfter") ? (parseFloat(v) || 0) : v;
+            if (f === "qtyAfter") updateBadge(lineId);
+        }
+
+        function updateBadge(lineId) {
+            const line = draftLines.find(l => l.id === lineId);
+            if (!line) return;
+            const tot = line.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
+            const mm  = tot !== (line.qtyBefore || 0);
+            const el  = document.getElementById("qb_bdg_" + lineId);
+            if (!el) return;
+            el.className   = mm ? "qmm" : "qok";
+            el.textContent = mm
+                ? `⚠ After: ${fmtNum(tot)} ≠ Before: ${fmtNum(line.qtyBefore)}`
+                : `✓ After: ${fmtNum(tot)}`;
+        }
+
+        /* ── Render table ───────────────────────────────────────── */
+        function renderTable() {
+            const tbody = document.getElementById("linesTbody");
+            const ext = document.getElementById("fDocType").value === "external";
+            const showPriceBefore = showPrice && ext;
+            // brand+item+uom+qty[+priceBefore] + conversion+uom+qty[+priceAfter]+aksi
+            const totalCols = 8 + (showPriceBefore ? 1 : 0) + (showPrice ? 1 : 0);
+
+            if (!draftLines.length) {
+                tbody.innerHTML = `<tr class="tr-empty"><td colspan="${totalCols}"><i class="bi bi-inbox me-2"></i>Belum ada item. Pilih Forecast atau klik "Tambah Item Code".</td></tr>`;
+                return;
+            }
+
+            const brandOpts = M.brands.map(b =>
+                `<option value="${b.code}">${b.name} (${b.type})</option>`
+            ).join("");
+
+            // colspan for action row
+            const bcCols = 4 + (showPriceBefore ? 1 : 0); // before cols with rowspan
+            const acCols = 3 + (showPrice ? 1 : 0);       // after cols per row (incl aksi)
+
+            let rows = "";
+            draftLines.forEach((line, li) => {
+                const tot = line.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
+                const mm  = tot !== (line.qtyBefore || 0);
+                const rs  = line.afterItems.length;
+
+                line.afterItems.forEach((a, ai) => {
+                    rows += `<tr>`;
+                    if (ai === 0) {
+                        rows += `
+                        <td class="cb" rowspan="${rs}">
+                            <select class="ts" onchange="setBrand('${line.id}',this.value)">
+                                <option value="">--</option>${brandOpts}
+                            </select>
+                        </td>
+                        <td class="cb" rowspan="${rs}">
+                            <div class="inp-s">
+                                <input class="ti" type="text" value="${line.itemBefore.replace(/"/g,'&quot;')}"
+                                    placeholder="Nama item CTU"
+                                    onchange="setB('${line.id}','itemBefore',this.value)">
+                                <button class="btn-s" onclick="openSearch('DOC',v=>fillIB('${line.id}',v))" title="Cari"><i class="bi bi-search"></i></button>
+                            </div>
+                        </td>
+                        <td class="cb" rowspan="${rs}" style="text-align:center;">
+                            <input class="tuom" type="text" value="${line.uomBefore || 'Ekor'}"
+                                onchange="setB('${line.id}','uomBefore',this.value)">
+                        </td>
+                        <td class="cb" rowspan="${rs}" style="text-align:center;">
+                            <input class="tn" type="number" value="${line.qtyBefore || ''}" min="0" placeholder="0"
+                                oninput="setB('${line.id}','qtyBefore',this.value)">
+                            <span id="qb_bdg_${line.id}" class="${mm ? 'qmm' : 'qok'}">
+                                ${mm ? `⚠ After: ${fmtNum(tot)} ≠ Before: ${fmtNum(line.qtyBefore)}` : `✓ After: ${fmtNum(tot)}`}
+                            </span>
+                        </td>`;
+                        if (showPriceBefore) {
+                            rows += `<td class="cp cb" rowspan="${rs}" style="text-align:center;">
+                                <input class="tp" type="number" value="${line.priceBefore || ''}" min="0" placeholder="0"
+                                    oninput="setB('${line.id}','priceBefore',this.value)">
+                            </td>`;
+                        }
+                    }
+
+                    // Conversion cells
+                    rows += `
+                        <td class="ca">
+                            <div class="inp-s">
+                                <input class="ti" type="text" value="${a.itemAfter.replace(/"/g,'&quot;')}"
+                                    placeholder="Nama item customer"
+                                    onchange="setA('${line.id}','${a.id}','itemAfter',this.value)">
+                                <button class="btn-s" onclick="openSearch(null,v=>fillIA('${line.id}','${a.id}',v))" title="Cari"><i class="bi bi-search"></i></button>
+                            </div>
+                        </td>
+                        <td class="ca" style="text-align:center;">
+                            <input class="tuom" type="text" value="${a.uomAfter || 'Ekor'}"
+                                onchange="setA('${line.id}','${a.id}','uomAfter',this.value)">
+                        </td>
+                        <td class="ca" style="text-align:center;">
+                            <input class="tn" type="number" value="${a.qtyAfter || ''}" min="0" placeholder="0"
+                                oninput="setA('${line.id}','${a.id}','qtyAfter',this.value)">
+                        </td>`;
+                    if (showPrice) {
+                        rows += `<td class="cp" style="text-align:center;">
+                            <input class="tp" type="number" value="${a.priceAfter || ''}" min="0" placeholder="0"
+                                oninput="setA('${line.id}','${a.id}','priceAfter',this.value)">
+                        </td>`;
+                    }
+                    rows += `<td style="text-align:center;">
+                        ${line.afterItems.length > 1
+                            ? `<button class="btn-da" onclick="removeAfterItem('${line.id}','${a.id}')" title="Hapus"><i class="bi bi-x-lg"></i></button>`
+                            : ""}
+                    </td></tr>`;
+                });
+
+                // Action row
+                rows += `<tr class="tr-act">
+                    <td colspan="${bcCols}"></td>
+                    <td colspan="${acCols}" style="padding:5px 10px;">
+                        <button class="btn-aa" onclick="addAfterItem('${line.id}')"><i class="bi bi-plus-sm"></i> Conversion Item</button>
+                        <button class="btn-dg" onclick="removeBeforeLine('${line.id}')"><i class="bi bi-trash"></i> Hapus Group</button>
+                    </td>
+                </tr>`;
+                if (li < draftLines.length - 1) {
+                    rows += `<tr class="tr-sep"><td colspan="${totalCols}"></td></tr>`;
+                }
+            });
+
+            tbody.innerHTML = rows;
+
+            // Restore brand select values after innerHTML replacement
+            draftLines.forEach(line => {
+                const bSel = document.querySelector(`[onchange*="setBrand('${line.id}"]`);
+                if (bSel) bSel.value = line.brand;
+            });
+        }
+
+        /* ── Search popup ───────────────────────────────────────── */
+        function openSearch(cat, cb) {
+            _searchCb  = cb;
+            _searchCat = cat;
+            document.getElementById("searchQ").value    = "";
+            document.getElementById("searchTitle").textContent = "Cari Item" + (cat ? " (" + cat + ")" : "");
+            filterSearch("");
+            new bootstrap.Modal(document.getElementById("itemSearchModal")).show();
+        }
+
+        function filterSearch(q) {
+            const items = M.items.filter(i => {
+                if (_searchCat && i.category !== _searchCat) return false;
+                if (!q) return true;
+                return i.name.toLowerCase().includes(q.toLowerCase()) ||
+                       i.code.toLowerCase().includes(q.toLowerCase());
+            });
+            document.getElementById("searchList").innerHTML = items.length
+                ? items.map(i => `
+                    <div class="item-row" onclick="pickItem('${i.code}','${i.name.replace(/'/g,"\\'")}','${i.uom}')">
+                        <div class="ic">${i.code}</div>
+                        <div class="in">${i.name}</div>
+                        <div class="im">${i.category} · ${i.uom} · Rp ${i.price.toLocaleString("id-ID")}</div>
+                    </div>`).join("")
+                : `<div class="p-3 text-center text-muted" style="font-size:13px;">Tidak ada item ditemukan</div>`;
+        }
+
+        function pickItem(code, name, uom) {
+            if (_searchCb) _searchCb({ code, name, uom });
+            bootstrap.Modal.getInstance(document.getElementById("itemSearchModal")).hide();
+        }
+
+        function fillIB(lineId, item) {
+            const line = draftLines.find(l => l.id === lineId);
+            if (!line) return;
+            line.itemBefore = item.name;
+            line.uomBefore  = item.uom || "Ekor";
+            renderTable();
+        }
+
+        function fillIA(lineId, afterId, item) {
+            const line = draftLines.find(l => l.id === lineId);
+            const a = line && line.afterItems.find(x => x.id === afterId);
+            if (!a) return;
+            a.itemAfter = item.name;
+            a.uomAfter  = item.uom || "Ekor";
+            renderTable();
+        }
+
+        /* ── Save ───────────────────────────────────────────────── */
+        function saveDraft() {
+            const date     = document.getElementById("fDate").value;
+            const docType  = document.getElementById("fDocType").value;
+            const fcRef    = document.getElementById("fForecastRef").value;
+            const custCode = document.getElementById("fCustomer").value;
+            const whCode   = document.getElementById("fWarehouse").value;
+
+            if (!date || !docType || !fcRef) { alert("Tanggal, DOC Type, dan Referensi Forecast wajib diisi."); return; }
+            if (!custCode) { alert("Customer Tujuan wajib dipilih."); return; }
+            if (!whCode)   { alert("Warehouse wajib dipilih."); return; }
+            if (!draftLines.length) { alert("Minimal 1 Item Code harus diisi."); return; }
+
+            if (docType === "external") {
+                if (!document.getElementById("fExtVendor").value ||
+                    !document.getElementById("fNoSJ").value      ||
+                    !document.getElementById("fTglSJ").value     ||
+                    !document.getElementById("fNoPol").value) {
+                    alert("Semua field External wajib diisi."); return;
+                }
+            }
+
+            for (const line of draftLines) {
+                if (!line.brand || !line.itemBefore) { alert("Brand dan Item Code wajib diisi di setiap group."); return; }
+                for (const a of line.afterItems) {
+                    if (!a.itemAfter) { alert("Conversion item tidak boleh kosong."); return; }
+                }
+            }
+
+            const custObj = M.getCustomer(custCode);
+            const whObj   = M.getWarehouse(whCode);
+            const fc      = DOC_FORECAST_REFS.find(f => f.id === fcRef) || {};
+            const extCode = docType === "external" ? document.getElementById("fExtVendor").value : null;
+            const brandMap= {};
+            M.brands.forEach(b => { brandMap[b.code] = b.name; });
+
+            const draft = {
+                id: editId || docDraftNextId(),
+                date, docType,
+                forecastRef: fcRef, forecastDesc: fc.desc || "",
+                customer: custCode, customerName: custObj ? custObj.name : custCode,
+                warehouse: whCode,  warehouseName: whObj  ? whObj.name  : whCode,
+                externalVendor:     docType === "external" ? extCode : null,
+                externalVendorName: docType === "external" ? (M.getExternalVendor(extCode)||{}).name : null,
+                noSuratJalan:  docType === "external" ? document.getElementById("fNoSJ").value : null,
+                tglSuratJalan: docType === "external" ? document.getElementById("fTglSJ").value : null,
+                noPol:         docType === "external" ? document.getElementById("fNoPol").value.toUpperCase() : null,
+                lines: draftLines.map(l => ({ ...l, brandName: brandMap[l.brand] || l.brand })),
+                status: "Draft",
+                createdBy: role || "admin_hatchery",
+                createdAt: editId ? (docDraftGet(editId)||{}).createdAt || date : date
+            };
+
+            docDraftSave(draft);
+            location.href = "hatchery_doc_draft_view.html?id=" + draft.id;
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IBOCS | DOC Forecast</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f5f7fb; color: #222; }
+        .page { max-width: 100%; border-radius: 12px; background: #fff; padding: 24px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 22px; }
+        .subtext { margin-top: 6px; font-size: 13px; color: #6b7280; }
+        .btn-action { padding: 9px 16px; border-radius: 8px; border: 0; font-weight: 700; cursor: pointer; font-size: 13px; background: #2563eb; color: #fff; text-decoration: none; display: inline-block; }
+        .btn-secondary-action { padding: 9px 16px; border-radius: 8px; border: 1px solid #d1d5db; font-weight: 700; cursor: pointer; font-size: 13px; background: #fff; color: #374151; }
+        .card { background: #fff; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 13px 16px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #fafbfe; }
+        .card-body { padding: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+        .field label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; }
+        .field input, .field select { width: 100%; height: 36px; border: 1px solid #d5dae3; border-radius: 8px; padding: 0 11px; font-size: 13px; background: #fff; }
+        .filter-actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+        .summary-box { border: 1px solid #e8ebf1; border-radius: 10px; padding: 14px; background: #fafbfe; }
+        .summary-box .label { font-size: 11px; color: #666; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .4px; }
+        .summary-box .value { font-size: 22px; font-weight: 700; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th, td { padding: 10px 12px; border-bottom: 1px solid #edf0f5; font-size: 13px; text-align: left; vertical-align: middle; }
+        th { background: #f9fafc; font-size: 12px; color: #555; font-weight: 700; white-space: nowrap; }
+        tbody tr:hover { background: #fafcff; cursor: pointer; }
+        .tag { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+        .tag-gray   { background: #f3f4f6; color: #4b5563; }
+        .tag-yellow { background: #fef9c3; color: #92400e; }
+        .tag-green  { background: #dcfce7; color: #166534; }
+        .tag-blue   { background: #dbeafe; color: #1d4ed8; }
+        .tag-red    { background: #fee2e2; color: #991b1b; }
+        .text-link { color: #2563eb; font-weight: 700; text-decoration: none; }
+        .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn-xs { padding: 6px 10px; border-radius: 7px; border: 0; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .btn-open   { background: #dbeafe; color: #1d4ed8; }
+        .btn-gen-po { background: #2563eb; color: #fff; }
+        .gap-zero { color: #166534; font-weight: 700; }
+        .gap-pos  { color: #991b1b; font-weight: 700; }
+        .modal-header { background: #1a237e; color: #fff; }
+        .modal-header .btn-close { filter: invert(1); }
+        .info-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+        .info-box { flex: 1 1 120px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; background: #fafbfe; min-width: 100px; }
+        .info-box .ib-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: .4px; }
+        .info-box .ib-value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+        .ib-red   { color: #991b1b; }
+        .ib-green { color: #166534; }
+        @media (max-width: 1100px) { .grid-4, .summary-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+        @media (max-width: 700px)  { .topbar { flex-direction: column; align-items: stretch; } .grid-4, .summary-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand fw-bold" href="customer_dashboard.html">IBOCS</a>
+            <span class="navbar-text text-white-50 small d-none d-md-inline">Customer Portal</span>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" id="userBtn">User</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text small text-muted" id="userInfo">-</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="index.html">Ganti Portal</a></li>
+                        <li><button class="dropdown-item text-danger" id="btnLogout">Logout</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-3">
+        <div class="row g-3">
+            <div class="col-lg-2" id="sidebar-container"></div>
+
+            <div class="col-lg-10">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0 fw-bold" style="color:#1a237e;"><i class="bi bi-egg me-2"></i>DOC Forecast</h4>
+                </div>
+
+                <div class="page shadow-sm">
+                    <div class="topbar">
+                        <div>
+                            <h1>DOC Forecast List</h1>
+                            <div class="subtext">Kelola kebutuhan dan ketersediaan bibit ayam (DOC).</div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="card">
+                        <div class="card-header"><i class="bi bi-bar-chart me-1"></i>Summary DOC</div>
+                        <div class="card-body">
+                            <div class="summary-grid">
+                                <div class="summary-box">
+                                    <div class="label">Required</div>
+                                    <div class="value" id="docSumRequired">-</div>
+                                </div>
+                                <div class="summary-box">
+                                    <div class="label">Ready</div>
+                                    <div class="value" id="docSumReady" style="color:#166534;">-</div>
+                                </div>
+                                <div class="summary-box">
+                                    <div class="label">Gap</div>
+                                    <div class="value" id="docSumGap" style="color:#991b1b;">-</div>
+                                </div>
+                                <div class="summary-box">
+                                    <div class="label">PO Pending</div>
+                                    <div class="value" id="docSumPoPending" style="color:#92400e;">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter -->
+                    <div class="card">
+                        <div class="card-header"><i class="bi bi-funnel me-1"></i>Filter</div>
+                        <div class="card-body">
+                            <div class="grid-4">
+                                <div class="field">
+                                    <label>Company</label>
+                                    <select id="dCompany">
+                                        <option value="">All Company</option>
+                                        <option>PT AYM</option>
+                                        <option>PT TOP</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Farm</label>
+                                    <select id="dFarm">
+                                        <option value="">All Farm</option>
+                                        <option>Farm 1</option>
+                                        <option>Farm 2</option>
+                                        <option>Farm Deli</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Plan Status</label>
+                                    <select id="dPlanStatus">
+                                        <option value="">All Status</option>
+                                        <option>Draft</option>
+                                        <option>Released</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>PO Status</label>
+                                    <select id="dPoStatus">
+                                        <option value="">All PO Status</option>
+                                        <option>Not Created</option>
+                                        <option>Created</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="filter-actions">
+                                <button class="btn-action" onclick="renderDocTable()"><i class="bi bi-search me-1"></i>Search</button>
+                                <button class="btn-secondary-action" onclick="resetDocFilter()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="card">
+                        <div class="card-header"><i class="bi bi-egg me-1"></i>DOC Execution List</div>
+                        <div class="card-body">
+                            <div class="table-wrap">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Company</th>
+                                            <th>Farm</th>
+                                            <th>Warehouse</th>
+                                            <th>Plan No</th>
+                                            <th>Plan Status</th>
+                                            <th>Item Code</th>
+                                            <th>Item Name</th>
+                                            <th>Required</th>
+                                            <th>Ready</th>
+                                            <th>Gap</th>
+                                            <th>PO Status</th>
+                                            <th style="width:120px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="docBody">
+                                        <tr><td colspan="12" class="text-center py-4 text-muted">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /page -->
+
+                <div class="text-center text-muted small mt-4 mb-2">© 2026 IBOCS — Customer Portal</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOC Detail Modal -->
+    <div class="modal fade" id="docModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-egg me-2"></i>DOC Detail — <span id="mdPlanNo"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-2 mb-3">
+                        <div class="col-6 col-md-3">
+                            <div class="info-box">
+                                <div class="ib-label">Company</div>
+                                <div class="ib-value" id="mdCompany" style="font-size:14px;">-</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="info-box">
+                                <div class="ib-label">Farm</div>
+                                <div class="ib-value" id="mdFarm" style="font-size:14px;">-</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="info-box">
+                                <div class="ib-label">Warehouse</div>
+                                <div class="ib-value" id="mdWarehouse" style="font-size:14px;">-</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="info-box">
+                                <div class="ib-label">Plan Status</div>
+                                <div id="mdPlanStatus">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6 col-md-3">
+                            <div class="info-box">
+                                <div class="ib-label">Item Code</div>
+                                <div class="ib-value" id="mdItemCode" style="font-size:14px;">-</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-9">
+                            <div class="info-box">
+                                <div class="ib-label">Item Name</div>
+                                <div class="ib-value" id="mdItemName" style="font-size:14px;">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-row mb-3">
+                        <div class="info-box">
+                            <div class="ib-label">Required</div>
+                            <div class="ib-value" id="mdRequired">-</div>
+                        </div>
+                        <div class="info-box">
+                            <div class="ib-label">Ready</div>
+                            <div class="ib-value ib-green" id="mdReady">-</div>
+                        </div>
+                        <div class="info-box">
+                            <div class="ib-label">Gap</div>
+                            <div class="ib-value" id="mdGap">-</div>
+                        </div>
+                        <div class="info-box">
+                            <div class="ib-label">PO Status</div>
+                            <div id="mdPoStatus">-</div>
+                        </div>
+                    </div>
+
+                    <div class="card-header mb-2" style="border-radius:8px 8px 0 0;"><i class="bi bi-list-ul me-1"></i>Batch Detail</div>
+                    <div class="table-wrap">
+                        <table style="min-width:400px;">
+                            <thead>
+                                <tr>
+                                    <th>Batch</th>
+                                    <th>DOC Code</th>
+                                    <th>Qty Ready</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mdBatchBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="mdGenPoSection" class="mt-4 p-3" style="border:1.5px dashed #93c5fd; border-radius:10px; background:#eff6ff; display:none;">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-bag-plus" style="color:#1d4ed8; font-size:18px;"></i>
+                            <span class="fw-bold" style="color:#1d4ed8;">Siap Generate Purchase Order</span>
+                        </div>
+                        <p class="text-muted small mb-3">Klik tombol di bawah untuk membuat PO berdasarkan DOC requirement ini. Form PO akan terbuka dengan data sudah ter-prefill.</p>
+                        <button class="btn-action" onclick="goToGeneratePO()"><i class="bi bi-box-arrow-up-right me-1"></i>Buat Purchase Order</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="sidebar.js"></script>
+    <script>
+        // ─── SESSION GUARD ────────────────────────────────────────────────────────
+        const sess = localStorage.getItem("IBOCS_user");
+        if (!sess) window.location.href = "login.html?role=customer";
+        const user = JSON.parse(sess);
+        if (user.role !== "customer" && user.role !== "super_admin") window.location.href = "index.html";
+        document.getElementById("userBtn").textContent  = user.name || "User";
+        document.getElementById("userInfo").textContent = `${user.email} • role=${user.role}`;
+        document.getElementById("btnLogout").addEventListener("click", () => {
+            localStorage.removeItem("IBOCS_user");
+            window.location.href = "index.html";
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            new SidebarSystem(null, 'doc_forecast').render();
+            renderDocTable();
+        });
+
+        // ─── DOC DATA ─────────────────────────────────────────────────────────────
+        const DEMO_DOC = [
+            {
+                company: "PT AYM", farm: "Farm 1", warehouse: "WH-KDG01",
+                planNo: "PL-001", planStatus: "Draft",
+                itemCode: "DOC-001", itemName: "DOC Broiler A",
+                required: 15000, ready: 10000, poStatus: "Not Created",
+                batches: [{ batch: "HAT-001", docCode: "DOC-001", qtyReady: 10000, status: "Partial" }]
+            },
+            {
+                company: "PT AYM", farm: "Farm 1", warehouse: "WH-KDG02",
+                planNo: "PL-002", planStatus: "Released",
+                itemCode: "DOC-001", itemName: "DOC Broiler A",
+                required: 15000, ready: 15000, poStatus: "Not Created",
+                batches: [{ batch: "HAT-002", docCode: "DOC-001", qtyReady: 15000, status: "Complete" }]
+            },
+            {
+                company: "PT AYM", farm: "Farm 2", warehouse: "WH-KDG03",
+                planNo: "PL-003", planStatus: "Released",
+                itemCode: "DOC-002", itemName: "DOC Broiler B",
+                required: 18000, ready: 18000, poStatus: "Created",
+                batches: [{ batch: "HAT-003", docCode: "DOC-002", qtyReady: 18000, status: "Complete" }]
+            },
+            {
+                company: "PT TOP", farm: "Farm Deli", warehouse: "WH-KDG01",
+                planNo: "PL-010", planStatus: "Released",
+                itemCode: "DOC-003", itemName: "DOC Layer Premium",
+                required: 20000, ready: 16000, poStatus: "Not Created",
+                batches: [
+                    { batch: "HAT-004", docCode: "DOC-003", qtyReady: 10000, status: "Partial" },
+                    { batch: "HAT-005", docCode: "DOC-003", qtyReady: 6000,  status: "Partial" }
+                ]
+            }
+        ];
+
+        function getDocList() {
+            const stored = JSON.parse(localStorage.getItem("IBOCS_doc_list") || "[]");
+            const storedNos = new Set(stored.map(d => d.planNo + d.itemCode));
+            return [...stored, ...DEMO_DOC.filter(d => !storedNos.has(d.planNo + d.itemCode))];
+        }
+
+        function renderDocTable() {
+            const dCompany    = document.getElementById("dCompany").value;
+            const dFarm       = document.getElementById("dFarm").value;
+            const dPlanStatus = document.getElementById("dPlanStatus").value;
+            const dPoStatus   = document.getElementById("dPoStatus").value;
+
+            const all = getDocList();
+
+            const totalRequired = all.reduce((s, d) => s + d.required, 0);
+            const totalReady    = all.reduce((s, d) => s + d.ready, 0);
+            const totalGap      = all.reduce((s, d) => s + Math.max(0, d.required - d.ready), 0);
+            const poPending     = all.filter(d => d.planStatus === "Released" && d.poStatus === "Not Created").length;
+            document.getElementById("docSumRequired").textContent  = totalRequired.toLocaleString();
+            document.getElementById("docSumReady").textContent     = totalReady.toLocaleString();
+            document.getElementById("docSumGap").textContent       = totalGap.toLocaleString();
+            document.getElementById("docSumPoPending").textContent = poPending;
+
+            const list = all.filter(d => {
+                if (dCompany    && d.company !== dCompany)       return false;
+                if (dFarm       && d.farm !== dFarm)             return false;
+                if (dPlanStatus && d.planStatus !== dPlanStatus) return false;
+                if (dPoStatus   && d.poStatus !== dPoStatus)     return false;
+                return true;
+            });
+
+            const tbody = document.getElementById("docBody");
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="12" class="text-center py-4 text-muted">Tidak ada data.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = list.map((d, i) => {
+                const gap = d.required - d.ready;
+                const gapHtml = gap <= 0
+                    ? `<span class="gap-zero">0</span>`
+                    : `<span class="gap-pos">${gap.toLocaleString()}</span>`;
+                const planBadge = d.planStatus === "Released"
+                    ? `<span class="tag tag-green">Released</span>`
+                    : `<span class="tag tag-yellow">Draft</span>`;
+                const poBadge = d.poStatus === "Created"
+                    ? `<span class="tag tag-green">Created</span>`
+                    : `<span class="tag tag-red">Not Created</span>`;
+                const genPoBtn = (d.planStatus === "Released" && d.poStatus === "Not Created")
+                    ? `<button class="btn-xs btn-gen-po" onclick="event.stopPropagation();openDocModal(${i})"><i class="bi bi-bag-plus me-1"></i>Generate PO</button>`
+                    : "";
+                return `
+                <tr onclick="openDocModal(${i})" style="cursor:pointer;">
+                    <td>${d.company}</td>
+                    <td>${d.farm}</td>
+                    <td>${d.warehouse}</td>
+                    <td><span class="text-link">${d.planNo}</span></td>
+                    <td>${planBadge}</td>
+                    <td>${d.itemCode}</td>
+                    <td>${d.itemName}</td>
+                    <td>${d.required.toLocaleString()}</td>
+                    <td>${d.ready.toLocaleString()}</td>
+                    <td>${gapHtml}</td>
+                    <td>${poBadge}</td>
+                    <td>
+                        <div class="action-group" onclick="event.stopPropagation()">
+                            <button class="btn-xs btn-open" onclick="openDocModal(${i})"><i class="bi bi-eye me-1"></i>Detail</button>
+                            ${genPoBtn}
+                        </div>
+                    </td>
+                </tr>`;
+            }).join("");
+
+            window._docFilteredList = list;
+        }
+
+        function resetDocFilter() {
+            ["dCompany","dFarm","dPlanStatus","dPoStatus"].forEach(id => document.getElementById(id).value = "");
+            renderDocTable();
+        }
+
+        // ─── DOC MODAL ────────────────────────────────────────────────────────────
+        let _currentDocIdx = null;
+
+        function openDocModal(idx) {
+            const list = window._docFilteredList || getDocList();
+            const d = list[idx];
+            if (!d) return;
+            _currentDocIdx = idx;
+
+            document.getElementById("mdPlanNo").textContent    = d.planNo;
+            document.getElementById("mdCompany").textContent   = d.company;
+            document.getElementById("mdFarm").textContent      = d.farm;
+            document.getElementById("mdWarehouse").textContent = d.warehouse;
+            document.getElementById("mdItemCode").textContent  = d.itemCode;
+            document.getElementById("mdItemName").textContent  = d.itemName;
+            document.getElementById("mdRequired").textContent  = d.required.toLocaleString();
+            document.getElementById("mdReady").textContent     = d.ready.toLocaleString();
+
+            const gap = d.required - d.ready;
+            const gapEl = document.getElementById("mdGap");
+            gapEl.textContent = gap <= 0 ? "0" : gap.toLocaleString();
+            gapEl.className   = "ib-value " + (gap <= 0 ? "ib-green" : "ib-red");
+
+            document.getElementById("mdPlanStatus").innerHTML = d.planStatus === "Released"
+                ? '<span class="tag tag-green" style="font-size:13px;">Released</span>'
+                : '<span class="tag tag-yellow" style="font-size:13px;">Draft</span>';
+
+            document.getElementById("mdPoStatus").innerHTML = d.poStatus === "Created"
+                ? '<span class="tag tag-green" style="font-size:13px;">Created</span>'
+                : '<span class="tag tag-red" style="font-size:13px;">Not Created</span>';
+
+            document.getElementById("mdBatchBody").innerHTML = (d.batches || []).map(b => {
+                const sCls = b.status === "Complete" ? "tag-green" : "tag-yellow";
+                return `<tr>
+                    <td>${b.batch}</td>
+                    <td>${b.docCode}</td>
+                    <td>${b.qtyReady.toLocaleString()}</td>
+                    <td><span class="tag ${sCls}">${b.status}</span></td>
+                </tr>`;
+            }).join("") || '<tr><td colspan="4" class="text-center text-muted py-2">Tidak ada batch.</td></tr>';
+
+            const showGenPo = d.planStatus === "Released" && d.poStatus === "Not Created";
+            document.getElementById("mdGenPoSection").style.display = showGenPo ? "" : "none";
+
+            new bootstrap.Modal(document.getElementById("docModal")).show();
+        }
+
+        function goToGeneratePO() {
+            const list = window._docFilteredList || getDocList();
+            const d = list[_currentDocIdx];
+            if (!d) return;
+
+            const gap = Math.max(0, d.required - d.ready);
+            localStorage.setItem("IBOCS_doc_pending_po", JSON.stringify({
+                sourceType: "DOC",
+                company:    d.company,
+                farm:       d.farm,
+                warehouse:  d.warehouse,
+                planNo:     d.planNo,
+                planStatus: d.planStatus,
+                itemCode:   d.itemCode,
+                itemName:   d.itemName,
+                required:   d.required,
+                ready:      d.ready,
+                gap:        gap,
+                suggestedQty: gap > 0 ? gap : d.required,
+                batches:    d.batches || []
+            }));
+
+            bootstrap.Modal.getInstance(document.getElementById("docModal")).hide();
+            window.location.href = "customer_order_detail.html";
+        }
+    </script>
+</body>
+</html>

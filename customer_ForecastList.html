@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IBOCS | Feed Forecast</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f5f7fb; color: #222; }
+        .page { max-width: 100%; border-radius: 12px; background: #fff; padding: 24px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 22px; }
+        .subtext { margin-top: 6px; font-size: 13px; color: #6b7280; }
+        .card { background: #fff; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 13px 16px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #fafbfe; }
+        .card-body { padding: 16px; }
+        .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+        .summary-box { border: 1px solid #e8ebf1; border-radius: 10px; padding: 14px; background: #fafbfe; }
+        .summary-box .lbl { font-size: 11px; color: #666; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .4px; }
+        .summary-box .val { font-size: 22px; font-weight: 700; }
+        .table-wrap { overflow-x: auto; }
+
+        /* Matrix table */
+        .matrix-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .matrix-table th, .matrix-table td { border: 1px solid #e5e7eb; padding: 8px 10px; vertical-align: middle; white-space: nowrap; }
+        .matrix-table thead tr:first-child th { background: #1a237e; color: #fff; text-align: center; font-size: 12px; }
+        .matrix-table thead tr:nth-child(2) th { background: #f1f3f9; color: #374151; font-size: 11px; text-align: center; }
+        .matrix-table tbody tr:hover { background: #f8faff; }
+        .col-feed { background: #f9fafc; font-weight: 700; min-width: 180px; }
+        .col-phase { background: #f9fafc; color: #6b7280; font-size: 11px; min-width: 90px; }
+        .col-uom { background: #f9fafc; color: #6b7280; font-size: 11px; min-width: 50px; text-align: center; }
+        .cell-vitality { color: #166534; text-align: right; min-width: 80px; }
+        .cell-feedcons { color: #1d4ed8; text-align: right; min-width: 90px; }
+        .cell-qty { text-align: right; min-width: 90px; font-weight: 700; cursor: pointer; }
+        .cell-qty:hover { background: #dbeafe; color: #1d4ed8; }
+        .cell-qty-skip { text-align: center; color: #9ca3af; font-size: 11px; }
+        .row-total td { background: #fef9c3; font-weight: 700; }
+        .row-total .col-feed { background: #fef9c3; }
+
+        /* Kandang header */
+        .kdg-header-main { background: #1a237e !important; color: #fff !important; }
+        .kdg-sub { font-size: 10px; font-weight: 400; opacity: 0.85; display: block; margin-top: 2px; }
+
+        /* Info chips */
+        .chip { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; margin: 1px; }
+        .chip-green  { background: #dcfce7; color: #166534; }
+        .chip-blue   { background: #dbeafe; color: #1d4ed8; }
+        .chip-orange { background: #fef3c7; color: #92400e; }
+
+        /* Kandang selector */
+        .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+        .field label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; }
+        .field select, .field input { width: 100%; height: 36px; border: 1px solid #d5dae3; border-radius: 8px; padding: 0 11px; font-size: 13px; background: #fff; }
+        .kdg-selector-wrap { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
+        .kdg-selector-head { background: #f1f3f9; padding: 8px 12px; font-size: 12px; font-weight: 700; color: #374151; display: flex; justify-content: space-between; align-items: center; }
+        .kdg-selector-list { max-height: 260px; overflow-y: auto; }
+        .kdg-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: background .1s; }
+        .kdg-row:last-child { border-bottom: 0; }
+        .kdg-row:hover { background: #f8faff; }
+        .kdg-row.selected { background: #eff6ff; }
+        .kdg-row input[type=radio] { width: 15px; height: 15px; accent-color: #2563eb; cursor: pointer; flex-shrink: 0; }
+        .kdg-row .kr-id { font-size: 11px; font-weight: 700; color: #1a237e; min-width: 60px; }
+        .kdg-row .kr-farm { font-size: 12px; font-weight: 700; flex: 1; }
+        .kdg-row .kr-wh { font-size: 11px; color: #9ca3af; min-width: 90px; }
+        .kdg-row .kr-company { font-size: 11px; color: #6b7280; min-width: 120px; }
+        .kdg-row .kr-age { font-size: 11px; font-weight: 700; color: #92400e; min-width: 60px; text-align: right; }
+        .kdg-empty { text-align: center; color: #9ca3af; font-size: 12px; padding: 20px; }
+        .btn-action { padding: 9px 18px; border-radius: 8px; border: 0; font-weight: 700; cursor: pointer; font-size: 13px; background: #2563eb; color: #fff; }
+        .btn-action:disabled { background: #93c5fd; cursor: not-allowed; }
+        .btn-secondary-action { padding: 9px 16px; border-radius: 8px; border: 1px solid #d1d5db; font-weight: 700; cursor: pointer; font-size: 13px; background: #fff; color: #374151; }
+        .selected-badge { display: inline-block; background: #dbeafe; color: #1d4ed8; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 2px 9px; margin-left: 6px; }
+        .result-section { display: none; }
+        .result-section.visible { display: block; }
+
+        /* Kandang cards */
+        .kdg-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+        .kdg-card { flex: 1 1 200px; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; background: #fafbfe; min-width: 180px; }
+        .kdg-card .kc-id { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .5px; }
+        .kdg-card .kc-farm { font-size: 14px; font-weight: 700; color: #1a237e; margin: 2px 0; }
+        .kdg-card .kc-wh { font-size: 11px; color: #9ca3af; }
+        .kdg-card .kc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+        .kdg-card .kc-stat { border: 1px solid #e5e7eb; border-radius: 7px; padding: 6px 8px; background: #fff; }
+        .kdg-card .kc-stat .ks-lbl { font-size: 10px; color: #9ca3af; }
+        .kdg-card .kc-stat .ks-val { font-size: 13px; font-weight: 700; }
+
+        /* Modal */
+        .modal-header { background: #1a237e; color: #fff; }
+        .modal-header .btn-close { filter: invert(1); }
+        .calc-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .calc-table th { background: #f1f3f9; font-size: 11px; padding: 7px 10px; border-bottom: 2px solid #e5e7eb; text-align: right; }
+        .calc-table th:first-child { text-align: center; }
+        .calc-table td { padding: 6px 10px; border-bottom: 1px solid #f3f4f6; text-align: right; font-size: 12px; }
+        .calc-table td:first-child { text-align: center; font-weight: 700; }
+        .calc-table tr.phase-header td { background: #eff6ff; font-weight: 700; color: #1d4ed8; font-size: 11px; text-align: left; }
+        .calc-table tr.phase-total td { background: #f0fdf4; font-weight: 700; color: #166534; }
+        .calc-table tr.grand-total td { background: #fef9c3; font-weight: 700; font-size: 13px; }
+        .formula-box { background: #f8faff; border: 1px solid #dbeafe; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #374151; margin-bottom: 14px; }
+        .formula-box .f-label { font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+        .formula-box code { background: #e0e7ff; border-radius: 4px; padding: 1px 5px; font-size: 11px; color: #3730a3; }
+
+        @media (max-width: 900px) { .summary-grid { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 600px) { .summary-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand fw-bold" href="customer_dashboard.html">IBOCS</a>
+            <span class="navbar-text text-white-50 small d-none d-md-inline">Customer Portal</span>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" id="userBtn">User</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text small text-muted" id="userInfo">-</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="index.html">Ganti Portal</a></li>
+                        <li><button class="dropdown-item text-danger" id="btnLogout">Logout</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-3">
+        <div class="row g-3">
+            <div class="col-lg-2" id="sidebar-container"></div>
+            <div class="col-lg-10">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0 fw-bold" style="color:#1a237e;"><i class="bi bi-clipboard2-data me-2"></i>Feed Forecast</h4>
+                    <span class="text-muted small">Target Panen: <strong>Hari ke-35</strong></span>
+                </div>
+
+                <div class="page shadow-sm">
+                    <div class="topbar">
+                        <div>
+                            <h1>Feed Forecast</h1>
+                            <div class="subtext">Pilih kandang aktif, lalu klik Generate untuk melihat proyeksi kebutuhan pakan sisa siklus.</div>
+                        </div>
+                        <span class="text-muted small">Target panen: <strong>Hari ke-35</strong></span>
+                    </div>
+
+                    <!-- ── SELECTOR CARD ── -->
+                    <div class="card">
+                        <div class="card-header"><i class="bi bi-funnel me-1"></i>Pilih Kandang
+                            <span class="selected-badge" id="selectedBadge">0 dipilih</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="filter-grid">
+                                <div class="field">
+                                    <label>Company</label>
+                                    <select id="fCompany" onchange="filterKandangList()">
+                                        <option value="">Semua Company</option>
+                                        <option>PT TOP Distribusi</option>
+                                        <option>PT AYM</option>
+                                        <option>PT BMAX</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Farm</label>
+                                    <select id="fFarm" onchange="filterKandangList()">
+                                        <option value="">Semua Farm</option>
+                                        <option>Farm Deli</option>
+                                        <option>Farm Binjai</option>
+                                        <option>Farm BMAX</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="kdg-selector-wrap">
+                                <div class="kdg-selector-head">
+                                    <span>Daftar Kandang Aktif — pilih salah satu</span>
+                                </div>
+                                <div class="kdg-selector-list" id="kdgSelectorList"></div>
+                            </div>
+
+                            <div style="margin-top:14px;display:flex;gap:10px;">
+                                <button class="btn-action" id="btnGenerate" onclick="generateForecast()">
+                                    <i class="bi bi-play-fill me-1"></i>Generate Forecast
+                                </button>
+                                <button class="btn-secondary-action" onclick="resetAll()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── RESULT SECTION (hidden until generate) ── -->
+                    <div class="result-section" id="resultSection">
+
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="#" id="viewDetailBtn" class="btn-action">
+                                <i class="bi bi-box-arrow-up-right me-1"></i>View Detail
+                            </a>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="card">
+                            <div class="card-header"><i class="bi bi-bar-chart me-1"></i>Summary</div>
+                            <div class="card-body">
+                                <div class="summary-grid">
+                                    <div class="summary-box">
+                                        <div class="lbl">Kandang Dipilih</div>
+                                        <div class="val" id="sumKandang">-</div>
+                                    </div>
+                                    <div class="summary-box">
+                                        <div class="lbl">Total DOC</div>
+                                        <div class="val" id="sumDOC">-</div>
+                                    </div>
+                                    <div class="summary-box">
+                                        <div class="lbl">Total Feed Needed (kg)</div>
+                                        <div class="val" style="color:#1d4ed8;" id="sumFeed">-</div>
+                                    </div>
+                                    <div class="summary-box">
+                                        <div class="lbl">Avg Vitality Sisa Siklus</div>
+                                        <div class="val" style="color:#166534;" id="sumVitality">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kandang Cards -->
+                        <div class="card">
+                            <div class="card-header"><i class="bi bi-house me-1"></i>Info Kandang Aktif</div>
+                            <div class="card-body pb-2">
+                                <div class="kdg-cards" id="kandangCards"></div>
+                            </div>
+                        </div>
+
+                        <!-- Matrix Table -->
+                        <div class="card">
+                            <div class="card-header"><i class="bi bi-table me-1"></i>Kebutuhan Pakan per Kandang
+                                <span class="text-muted fw-normal ms-2" style="font-size:11px;">Vitality% = rata2 sisa hari &nbsp;|&nbsp; Feed Cons = kg/ekor/hari avg &nbsp;|&nbsp; Qty = total kg dibutuhkan &nbsp;|&nbsp; Klik qty untuk detail</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-wrap">
+                                    <table class="matrix-table">
+                                        <thead id="matrixHead"></thead>
+                                        <tbody id="matrixBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /result-section -->
+
+                </div>
+                <div class="text-center text-muted small mt-4 mb-2">© 2026 IBOCS — Customer Portal</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Kalkulasi Modal -->
+    <div class="modal fade" id="calcModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-calculator me-2"></i>Detail Kalkulasi — <span id="calcTitle"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="formula-box">
+                        <div class="f-label">Formula Kalkulasi</div>
+                        <div id="calcFormula"></div>
+                    </div>
+                    <div id="calcSummaryChips" class="mb-3"></div>
+                    <div class="table-wrap">
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">Hari</th>
+                                    <th>Fase Pakan</th>
+                                    <th>DOC Awal</th>
+                                    <th>Vitality (%)</th>
+                                    <th>Ayam Hidup</th>
+                                    <th>Feed Cons Daily (kg/ekor)</th>
+                                    <th>Feed Qty Hari Ini (kg)</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calcBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="sidebar.js"></script>
+    <script>
+    // ─── SESSION GUARD ────────────────────────────────────────────────────────
+    const sess = localStorage.getItem("IBOCS_user");
+    if (!sess) window.location.href = "login.html?role=customer";
+    const user = JSON.parse(sess);
+    if (user.role !== "customer" && user.role !== "super_admin") window.location.href = "index.html";
+    document.getElementById("userBtn").textContent = user.name || "User";
+    document.getElementById("userInfo").textContent = `${user.email} • role=${user.role}`;
+    document.getElementById("btnLogout").addEventListener("click", () => {
+        localStorage.removeItem("IBOCS_user");
+        window.location.href = "index.html";
+    });
+
+    // ─── STD ANALYSIS — hardcoded dari Standard Analysis Document ────────────
+    // Sumber: STDA-100000000 "STD AHP", kolom: Mortality(%), Vitality(%), Feed Cons Daily (kg/ekor/hari)
+    const STD = [
+      // day, mortality%, vitality%, feedDaily(kg/ekor/hari)
+      {d:  1, m: 0.00, v:100.00, fd: 0.0010},
+      {d:  2, m: 0.10, v: 99.90, fd: 0.0020},
+      {d:  3, m: 0.10, v: 99.80, fd: 0.0030},
+      {d:  4, m: 0.10, v: 99.70, fd: 0.0040},
+      {d:  5, m: 0.10, v: 99.60, fd: 0.0050},
+      {d:  6, m: 0.10, v: 99.50, fd: 0.0060},
+      {d:  7, m: 0.10, v: 99.40, fd: 0.0070},
+      {d:  8, m: 0.20, v: 99.20, fd: 0.0090},
+      {d:  9, m: 0.20, v: 99.00, fd: 0.0120},
+      {d: 10, m: 0.20, v: 98.80, fd: 0.0150},
+      {d: 11, m: 0.20, v: 98.60, fd: 0.0180},
+      {d: 12, m: 0.20, v: 98.40, fd: 0.0220},
+      {d: 13, m: 0.20, v: 98.20, fd: 0.0260},
+      {d: 14, m: 0.20, v: 98.00, fd: 0.0300},
+      {d: 15, m: 0.20, v: 97.80, fd: 0.0350},
+      {d: 16, m: 0.20, v: 97.60, fd: 0.0400},
+      {d: 17, m: 0.20, v: 97.40, fd: 0.0450},
+      {d: 18, m: 0.20, v: 97.20, fd: 0.0500},
+      {d: 19, m: 0.20, v: 97.00, fd: 0.0560},
+      {d: 20, m: 0.20, v: 96.80, fd: 0.0620},
+      {d: 21, m: 0.20, v: 96.60, fd: 0.0680},
+      {d: 22, m: 0.30, v: 96.30, fd: 0.0750},
+      {d: 23, m: 0.30, v: 96.00, fd: 0.0820},
+      {d: 24, m: 0.30, v: 95.70, fd: 0.0890},
+      {d: 25, m: 0.30, v: 95.40, fd: 0.0960},
+      {d: 26, m: 0.30, v: 95.10, fd: 0.1030},
+      {d: 27, m: 0.30, v: 94.80, fd: 0.1100},
+      {d: 28, m: 0.30, v: 94.50, fd: 0.1160},
+      {d: 29, m: 0.30, v: 94.20, fd: 0.1220},
+      {d: 30, m: 0.30, v: 93.90, fd: 0.1280},
+      {d: 31, m: 0.30, v: 93.60, fd: 0.1330},
+      {d: 32, m: 0.30, v: 93.30, fd: 0.1380},
+      {d: 33, m: 0.30, v: 93.00, fd: 0.1420},
+      {d: 34, m: 0.30, v: 92.70, fd: 0.1460},
+      {d: 35, m: 0.30, v: 92.40, fd: 0.1500},
+    ];
+
+    // ─── FEED PHASES ──────────────────────────────────────────────────────────
+    const PHASES = [
+        { code: "FEED-001", name: "Pakan Pre-Starter (S-0)", dayFrom:  1, dayTo:  7, uom: "Kg" },
+        { code: "FEED-002", name: "Pakan Starter (BR-1)",    dayFrom:  8, dayTo: 21, uom: "Kg" },
+        { code: "FEED-004", name: "Pakan Finisher (BR-3)",   dayFrom: 22, dayTo: 35, uom: "Kg" },
+    ];
+
+    // ─── ALL KANDANG MASTER (pool semua kandang aktif) ────────────────────────
+    const ALL_KANDANG = [
+        { id:"KDG-01", farm:"Farm Deli",   wh:"WH-KDG01", company:"PT TOP Distribusi", docQty:20000, docType:"DOC Broiler Cobb 500", age:  7 },
+        { id:"KDG-02", farm:"Farm Deli",   wh:"WH-KDG02", company:"PT TOP Distribusi", docQty:24000, docType:"DOC Broiler Ross 308", age:  9 },
+        { id:"KDG-03", farm:"Farm Binjai", wh:"WH-KDG03", company:"PT AYM",            docQty:12000, docType:"DOC Broiler Cobb 500", age: 19 },
+        { id:"KDG-04", farm:"Farm BMAX",   wh:"WH-KDG04", company:"PT BMAX",           docQty:15000, docType:"DOC Broiler Ross 308", age: 23 },
+        { id:"KDG-05", farm:"Farm Deli",   wh:"WH-KDG05", company:"PT TOP Distribusi", docQty:18000, docType:"DOC Broiler Cobb 500", age:  3 },
+        { id:"KDG-06", farm:"Farm Binjai", wh:"WH-KDG06", company:"PT AYM",            docQty:10000, docType:"DOC Broiler Ross 308", age: 14 },
+        { id:"KDG-07", farm:"Farm BMAX",   wh:"WH-KDG07", company:"PT BMAX",           docQty:22000, docType:"DOC Broiler Cobb 500", age: 28 },
+    ];
+
+    // Selected kandang ID (single selection)
+    let selectedId = null;
+
+    // ─── KALKULASI ────────────────────────────────────────────────────────────
+    // Menghitung kebutuhan pakan per phase untuk satu kandang
+    // Mengembalikan: { phaseResults: [{phaseIdx, qty, avgVitality, avgFeedCons, days}], totalQty }
+    function calcFeedNeed(kandang) {
+        const { docQty, age } = kandang;
+        const HARVEST_DAY = 35;
+
+        const phaseResults = PHASES.map((ph, idx) => {
+            // Hari-hari di phase ini yang masih tersisa (belum dilewati)
+            const startDay = Math.max(ph.dayFrom, age + 1);
+            const endDay   = Math.min(ph.dayTo, HARVEST_DAY);
+
+            if (startDay > endDay) {
+                return { phaseIdx: idx, qty: 0, avgVitality: null, avgFeedCons: null, days: 0, skipped: true };
+            }
+
+            let totalQty = 0, sumVitality = 0, sumFeedCons = 0, count = 0;
+            for (let d = startDay; d <= endDay; d++) {
+                const row = STD[d - 1];
+                const liveBirds = docQty * (row.v / 100);
+                const feedQty   = liveBirds * row.fd;
+                totalQty    += feedQty;
+                sumVitality += row.v;
+                sumFeedCons += row.fd;
+                count++;
+            }
+
+            return {
+                phaseIdx:    idx,
+                qty:         totalQty,
+                avgVitality: sumVitality / count,
+                avgFeedCons: sumFeedCons / count,
+                days:        count,
+                skipped:     false,
+            };
+        });
+
+        const totalQty = phaseResults.reduce((s, r) => s + r.qty, 0);
+        return { phaseResults, totalQty };
+    }
+
+    // ─── HELPERS ──────────────────────────────────────────────────────────────
+    function fmt(n, dec = 0) { return n.toLocaleString("id-ID", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+
+    // ─── KANDANG SELECTOR ─────────────────────────────────────────────────────
+    function filterKandangList() {
+        const fCompany = document.getElementById("fCompany").value;
+        const fFarm    = document.getElementById("fFarm").value;
+        const filtered = ALL_KANDANG.filter(k =>
+            (!fCompany || k.company === fCompany) &&
+            (!fFarm    || k.farm    === fFarm)
+        );
+        const list = document.getElementById("kdgSelectorList");
+        if (!filtered.length) {
+            list.innerHTML = `<div class="kdg-empty">Tidak ada kandang aktif.</div>`;
+            return;
+        }
+        list.innerHTML = filtered.map(k => {
+            const checked = selectedId === k.id ? "checked" : "";
+            const rowSel  = selectedId === k.id ? "selected" : "";
+            const currentPhase = PHASES.find(p => k.age + 1 >= p.dayFrom && k.age + 1 <= p.dayTo) || PHASES[PHASES.length - 1];
+            return `
+            <div class="kdg-row ${rowSel}" onclick="selectKdg('${k.id}')">
+                <input type="radio" name="kdgRadio" id="rdio_${k.id}" ${checked} onclick="event.stopPropagation();selectKdg('${k.id}')">
+                <span class="kr-id">${k.id}</span>
+                <span class="kr-farm">${k.farm}</span>
+                <span class="kr-wh">${k.wh}</span>
+                <span class="kr-company">${k.company}</span>
+                <span class="chip chip-blue" style="font-size:10px;">${fmt(k.docQty)} ekor</span>
+                <span class="kr-age">Hari ${k.age}</span>
+                <span class="chip chip-orange" style="font-size:10px;">${currentPhase.name.split("(")[0].trim()}</span>
+            </div>`;
+        }).join("");
+    }
+
+    function selectKdg(id) {
+        selectedId = id;
+        filterKandangList();
+        document.getElementById("selectedBadge").textContent = id + " dipilih";
+    }
+
+    function resetAll() {
+        selectedId = null;
+        document.getElementById("fCompany").value = "";
+        document.getElementById("fFarm").value = "";
+        filterKandangList();
+        document.getElementById("selectedBadge").textContent = `0 dipilih`;
+        document.getElementById("resultSection").classList.remove("visible");
+    }
+
+    // ─── GENERATE ─────────────────────────────────────────────────────────────
+    function generateForecast() {
+        if (!selectedId) { alert("Pilih kandang terlebih dahulu."); return; }
+
+        const KANDANG = ALL_KANDANG.filter(k => k.id === selectedId);
+        const results = KANDANG.map(k => ({ kandang: k, calc: calcFeedNeed(k) }));
+
+        // Summary
+        const totalDOC  = KANDANG.reduce((s, k) => s + k.docQty, 0);
+        const totalFeed = results.reduce((s, r) => s + r.calc.totalQty, 0);
+        let vSum = 0, vCount = 0;
+        KANDANG.forEach(k => {
+            for (let d = k.age + 1; d <= 35; d++) { vSum += STD[d-1].v; vCount++; }
+        });
+        document.getElementById("sumKandang").textContent  = KANDANG.length;
+        document.getElementById("sumDOC").textContent      = fmt(totalDOC);
+        document.getElementById("sumFeed").textContent     = fmt(totalFeed, 0) + " kg";
+        document.getElementById("sumVitality").textContent = (vCount ? (vSum/vCount).toFixed(1) : "-") + "%";
+
+        // Kandang cards
+        document.getElementById("kandangCards").innerHTML = KANDANG.map(k => {
+            const sisaHari    = 35 - k.age;
+            const currentVit  = STD[k.age] ? STD[k.age].v.toFixed(1) : "-";
+            const currentPhase = PHASES.find(p => k.age + 1 >= p.dayFrom && k.age + 1 <= p.dayTo) || PHASES[PHASES.length - 1];
+            return `
+            <div class="kdg-card">
+                <div class="kc-id">${k.id}</div>
+                <div class="kc-farm">${k.farm}</div>
+                <div class="kc-wh">${k.wh} &middot; ${k.company}</div>
+                <div class="kc-stats">
+                    <div class="kc-stat"><div class="ks-lbl">DOC Awal</div><div class="ks-val">${fmt(k.docQty)}</div></div>
+                    <div class="kc-stat"><div class="ks-lbl">Umur Saat Ini</div><div class="ks-val" style="color:#1a237e;">Hari ${k.age}</div></div>
+                    <div class="kc-stat"><div class="ks-lbl">Sisa Hari</div><div class="ks-val" style="color:#92400e;">${sisaHari} hari</div></div>
+                    <div class="kc-stat"><div class="ks-lbl">Vitality Kini</div><div class="ks-val" style="color:#166534;">${currentVit}%</div></div>
+                </div>
+                <div class="mt-2">
+                    <span class="chip chip-blue">${k.docType}</span>
+                    <span class="chip chip-orange">Fase: ${currentPhase.name.split("(")[0].trim()}</span>
+                </div>
+            </div>`;
+        }).join("");
+
+        // Matrix head
+        let r1 = `<tr>
+            <th rowspan="2" style="background:#374151;min-width:180px;">Item Pakan</th>
+            <th rowspan="2" style="background:#374151;min-width:80px;">Fase (Hari)</th>
+            <th rowspan="2" style="background:#374151;min-width:40px;">UOM</th>`;
+        KANDANG.forEach(k => {
+            r1 += `<th colspan="3" class="kdg-header-main">${k.id} — ${k.farm}
+                <span class="kdg-sub">${fmt(k.docQty)} ekor &middot; Hari ${k.age} &middot; Sisa ${35 - k.age} hr</span>
+            </th>`;
+        });
+        r1 += `<th rowspan="2" style="background:#374151;min-width:110px;text-align:center;">Grand Total (kg)</th></tr>`;
+        let r2 = `<tr>`;
+        KANDANG.forEach(() => {
+            r2 += `<th>Avg Vitality%</th><th>Feed Cons Daily<br><small style="font-weight:400;">(kg/ekor/hari)</small></th><th>Qty Needed (kg)</th>`;
+        });
+        r2 += `</tr>`;
+        document.getElementById("matrixHead").innerHTML = r1 + r2;
+
+        // Matrix body
+        let rows = "";
+        const grandTotals = new Array(KANDANG.length).fill(0);
+        let grandTotalAll = 0;
+
+        PHASES.forEach((ph, phIdx) => {
+            rows += `<tr>
+                <td class="col-feed">${ph.name}</td>
+                <td class="col-phase">Hari ${ph.dayFrom}–${ph.dayTo}</td>
+                <td class="col-uom">${ph.uom}</td>`;
+            let rowTotal = 0;
+            results.forEach((r, kIdx) => {
+                const pr = r.calc.phaseResults[phIdx];
+                if (pr.skipped) {
+                    rows += `<td class="cell-vitality" style="color:#d1d5db;">—</td>
+                             <td class="cell-feedcons" style="color:#d1d5db;">—</td>
+                             <td class="cell-qty-skip">Sudah lewat</td>`;
+                } else {
+                    rows += `<td class="cell-vitality">${pr.avgVitality.toFixed(2)}%</td>
+                             <td class="cell-feedcons">${pr.avgFeedCons.toFixed(4)}</td>
+                             <td class="cell-qty" onclick="showCalc('${r.kandang.id}', ${phIdx})" title="Klik untuk detail kalkulasi">
+                                ${fmt(pr.qty, 1)}
+                                <i class="bi bi-info-circle" style="font-size:10px;color:#93c5fd;margin-left:3px;"></i>
+                             </td>`;
+                    grandTotals[kIdx] += pr.qty;
+                    rowTotal += pr.qty;
+                }
+            });
+            grandTotalAll += rowTotal;
+            rows += `<td style="font-weight:700;text-align:right;background:#fff8f0;">${fmt(rowTotal, 1)}</td></tr>`;
+        });
+
+        // Total row
+        rows += `<tr class="row-total"><td class="col-feed" colspan="3">TOTAL SEMUA PAKAN</td>`;
+        KANDANG.forEach((_, kIdx) => {
+            rows += `<td colspan="2" style="background:#fef9c3;"></td>
+                     <td style="background:#fef9c3;font-weight:700;text-align:right;">${fmt(grandTotals[kIdx], 1)}</td>`;
+        });
+        rows += `<td style="background:#fef3c7;font-weight:700;text-align:right;font-size:14px;">${fmt(grandTotalAll, 1)}</td></tr>`;
+
+        document.getElementById("matrixBody").innerHTML = rows;
+        document.getElementById("resultSection").classList.add("visible");
+        document.getElementById("viewDetailBtn").href = `customer_ForecastView.html?kdgId=${encodeURIComponent(selectedId)}`;
+        document.getElementById("resultSection").scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Store KANDANG for modal reference
+        window._activeKandang = KANDANG;
+    }
+
+    // ─── DETAIL KALKULASI MODAL ───────────────────────────────────────────────
+    function showCalc(kdgId, phaseIdx) {
+        const kandang = (window._activeKandang || ALL_KANDANG).find(k => k.id === kdgId);
+        const ph      = PHASES[phaseIdx];
+        const { docQty, age } = kandang;
+        const HARVEST_DAY = 35;
+
+        const startDay = Math.max(ph.dayFrom, age + 1);
+        const endDay   = Math.min(ph.dayTo, HARVEST_DAY);
+
+        document.getElementById("calcTitle").textContent = `${kdgId} — ${ph.name}`;
+
+        // Formula box
+        document.getElementById("calcFormula").innerHTML = `
+            <strong>Qty per hari</strong> = DOC Awal × <code>Vitality% / 100</code> × <code>Feed Cons Daily</code><br>
+            <strong>Total Qty fase</strong> = Σ Qty per hari (hari ${startDay} s/d ${endDay})<br>
+            <span style="color:#6b7280;">DOC Awal: <strong>${fmt(docQty)} ekor</strong> &nbsp;|&nbsp; Umur sekarang: <strong>Hari ${age}</strong> &nbsp;|&nbsp; Sisa fase: <strong>Hari ${startDay}–${endDay}</strong></span>
+        `;
+
+        // Summary chips
+        let phaseTotal = 0, sumV = 0, sumFc = 0, cnt = 0;
+        for (let d = startDay; d <= endDay; d++) {
+            const row = STD[d-1];
+            const liveB = docQty * (row.v / 100);
+            phaseTotal += liveB * row.fd;
+            sumV  += row.v;
+            sumFc += row.fd;
+            cnt++;
+        }
+        document.getElementById("calcSummaryChips").innerHTML = `
+            <span class="chip chip-blue">Avg Vitality: ${cnt ? (sumV/cnt).toFixed(2) : 0}%</span>
+            <span class="chip chip-blue">Avg Feed Cons: ${cnt ? (sumFc/cnt).toFixed(4) : 0} kg/ekor/hari</span>
+            <span class="chip chip-green">Total Qty Fase: <strong>${fmt(phaseTotal, 2)} kg</strong></span>
+            <span class="chip chip-orange">${cnt} hari dikalkulasi</span>
+        `;
+
+        // Calc table
+        let tbody = "";
+        let cumQty = 0;
+        for (let d = startDay; d <= endDay; d++) {
+            const row    = STD[d - 1];
+            const liveB  = docQty * (row.v / 100);
+            const feedQty = liveB * row.fd;
+            cumQty += feedQty;
+            const isFirst = d === startDay;
+            tbody += `
+            <tr>
+                <td>${d}</td>
+                <td style="text-align:left;">${ph.name.split("(")[0].trim()}</td>
+                <td>${fmt(docQty)}</td>
+                <td style="color:#166534;">${row.v.toFixed(2)}%</td>
+                <td style="color:#166534;font-weight:700;">${fmt(Math.round(liveB))}</td>
+                <td style="color:#1d4ed8;">${row.fd.toFixed(4)}</td>
+                <td style="font-weight:700;">${fmt(feedQty, 2)}</td>
+                <td style="text-align:left;color:#9ca3af;font-size:11px;">
+                    ${fmt(docQty)} × ${row.v.toFixed(2)}% × ${row.fd.toFixed(4)}
+                </td>
+            </tr>`;
+        }
+
+        // Phase total row
+        tbody += `
+        <tr class="phase-total">
+            <td colspan="6" style="text-align:right;">Total ${ph.name.split("(")[0].trim()}</td>
+            <td>${fmt(phaseTotal, 2)} kg</td>
+            <td></td>
+        </tr>`;
+
+        document.getElementById("calcBody").innerHTML = tbody;
+
+        new bootstrap.Modal(document.getElementById("calcModal")).show();
+    }
+
+    // ─── INIT ─────────────────────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+        new SidebarSystem(null, 'forecast').render();
+        filterKandangList();
+    });
+    </script>
+</body>
+</html>

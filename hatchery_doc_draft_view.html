@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IBOCS | View DO Draft DOC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f5f7fb; color: #222; }
+        .card { background: #fff; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 13px 16px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #fafbfe; }
+        .card-body { padding: 16px; }
+
+        /* Info grid */
+        .ig3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin-bottom: 14px; }
+        .ig4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-bottom: 14px; }
+        .field label { display: block; font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 5px; }
+        .field .val  { font-size: 14px; color: #111827; font-weight: 500; }
+        .field .vm   { font-size: 14px; font-weight: 700; color: #1a237e; }
+
+        /* Status banner */
+        .s-banner { border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; }
+        .s-draft  { background: #fef9c3; color: #92400e; border: 1px solid #fde68a; }
+        .s-done   { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .s-notice { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #1d4ed8; margin-bottom: 18px; }
+
+        .tag { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+        .t-int { background: #dbeafe; color: #1d4ed8; }
+        .t-ext { background: #f3e8ff; color: #7c3aed; }
+
+        /* Lines table */
+        .lines-wrap { overflow-x: auto; }
+        table.lt { width: 100%; border-collapse: collapse; }
+        table.lt th { font-size: 11px; color: #4b5563; font-weight: 700; padding: 9px 12px; text-align: left; white-space: nowrap; border-bottom: 2px solid #e0e7ef; }
+        table.lt th.hb { background: #e8eaf6; color: #3730a3; }
+        table.lt th.ha { background: #f0fdf4; color: #166534; }
+        table.lt th.hp { background: #fff7ed; color: #c2410c; }
+        table.lt td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; font-size: 13px; }
+        table.lt td.cb { background: #eef2ff; border-right: 2px solid #c7d2fe; vertical-align: top; }
+        table.lt td.ca { background: #f8fffe; }
+        table.lt td.cp { background: #fffbf5; }
+        table.lt tr.tr-sum td  { background: #f5f7ff; padding: 5px 12px; border-bottom: 1px solid #e0e7ef; font-size: 11px; color: #6b7280; }
+        table.lt tr.tr-sep td  { height: 6px; background: #dde3f8; padding: 0; border: none; }
+
+        /* Price input */
+        .pinp { width: 120px; border: 1px solid #fdba74; border-radius: 6px; padding: 4px 8px; font-size: 12px; height: 30px; background: #fffbf5; text-align: right; }
+        .pinp:focus { outline: none; border-color: #ea580c; box-shadow: 0 0 0 2px #fed7aa; }
+        .p-empty { font-size: 12px; color: #d97706; font-style: italic; }
+
+        /* Qty badge */
+        .qok { font-size: 11px; font-weight: 700; color: #166534; }
+        .qmm { font-size: 11px; font-weight: 700; color: #d97706; background: #fef3c7; padding: 2px 5px; border-radius: 4px; display: inline-block; }
+
+        /* Buttons */
+        .btn-pri { padding: 10px 20px; border-radius: 8px; border: 0; font-size: 13px; font-weight: 700; background: #1a237e; color: #fff; cursor: pointer; }
+        .btn-suc { padding: 10px 20px; border-radius: 8px; border: 0; font-size: 13px; font-weight: 700; background: #16a34a; color: #fff; cursor: pointer; }
+        .btn-wrn { padding: 10px 20px; border-radius: 8px; border: 0; font-size: 13px; font-weight: 700; background: #f59e0b; color: #fff; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-sec { padding: 10px 20px; border-radius: 8px; border: 1px solid #d1d5db; font-size: 13px; font-weight: 700; background: #fff; color: #374151; cursor: pointer; text-decoration: none; display: inline-block; }
+
+        @media (max-width: 900px) { .ig3, .ig4 { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand fw-bold" href="forecast_dashboard.html">IBOCS</a>
+            <span class="navbar-text text-white-50 small d-none d-md-inline">DO Draft DOC</span>
+            <div class="ms-auto">
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" id="userBtn">User</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text small text-muted" id="userInfo">-</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item text-danger" id="btnLogout">Logout</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-3">
+        <div class="row g-3">
+            <div class="col-lg-2" id="sidebar-container"></div>
+            <div class="col-lg-10">
+
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div>
+                        <h5 class="fw-bold mb-0" id="pageTitle">DO Draft DOC</h5>
+                        <div class="text-muted" style="font-size:13px;" id="pageSubtitle">—</div>
+                    </div>
+                    <a href="hatchery_doc_draft_list.html" class="btn-sec"><i class="bi bi-arrow-left me-1"></i> Kembali</a>
+                </div>
+
+                <div id="statusBanner"></div>
+                <div id="salesNotice"></div>
+
+                <!-- Header Info -->
+                <div class="card">
+                    <div class="card-header">Informasi Header</div>
+                    <div class="card-body">
+                        <div class="ig4">
+                            <div class="field"><label>No. DO Draft</label><div class="vm" id="vId">—</div></div>
+                            <div class="field"><label>No. DO</label><div class="vm" id="vDoNumber" style="color:#166534;">—</div></div>
+                            <div class="field"><label>Tanggal</label><div class="val" id="vDate">—</div></div>
+                            <div class="field"><label>DOC Type</label><div id="vDocType">—</div></div>
+                        </div>
+                        <div class="ig4">
+                            <div class="field"><label>Referensi Forecast</label><div class="vm" id="vFcRef">—</div></div>
+                            <div class="field"><label>Customer Tujuan</label><div class="val" id="vCustomer">—</div></div>
+                            <div class="field"><label>Warehouse</label><div class="val" id="vWarehouse">—</div></div>
+                            <div class="field"><label>Dibuat Oleh</label><div class="val" id="vCreatedBy">—</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- External Info -->
+                <div class="card" id="extCard" style="display:none;">
+                    <div class="card-header"><i class="bi bi-truck me-2"></i>Informasi DOC External</div>
+                    <div class="card-body">
+                        <div class="ig4">
+                            <div class="field"><label>Vendor External</label><div class="val" id="vExtVendor">—</div></div>
+                            <div class="field"><label>No. Surat Jalan</label><div class="vm" id="vNoSJ">—</div></div>
+                            <div class="field"><label>Tanggal Surat Jalan</label><div class="val" id="vTglSJ">—</div></div>
+                            <div class="field"><label>No. Polisi</label><div class="vm" id="vNoPol">—</div></div>
+                        </div>
+                        <div class="ig4">
+                            <div class="field"><label>No. GRPO</label><div class="vm" id="vGrpoNumber" style="color:#7c3aed;">—</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lines Table -->
+                <div class="card">
+                    <div class="card-header">Item Lines — <span style="color:#3730a3">Before</span> / <span style="color:#166534">After</span></div>
+                    <div class="card-body p-0">
+                        <div class="lines-wrap">
+                            <table class="lt">
+                                <thead id="lHead"></thead>
+                                <tbody id="lBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mb-4" id="actionFooter"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Generate DO Modal -->
+    <div class="modal fade" id="modalGen" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#1a237e;color:#fff;">
+                    <h5 class="modal-title">Konfirmasi Generate DO</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-success btn-sm fw-bold" onclick="confirmGen()">Ya, Generate DO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="modalOk" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content text-center">
+                <div class="modal-body py-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size:48px;"></i>
+                    <h5 class="fw-bold mt-3" id="okTitle">Berhasil!</h5>
+                    <p class="text-muted" style="font-size:13px;" id="okMsg"></p>
+                    <a href="hatchery_doc_draft_list.html" class="btn btn-primary btn-sm fw-bold mt-1">Kembali ke List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="master_data.js"></script>
+    <script src="doc_draft_storage.js"></script>
+    <script src="sidebar.js"></script>
+    <script>
+        const sidebar = new SidebarSystem(null, "doc_draft_list");
+        sidebar.render();
+
+        const userData = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
+        const role     = userData.role || "";
+        // Price visible for admin_sales and super_admin
+        const showPrice = role === "admin_sales" || role === "super_admin";
+        const isHatch   = role === "admin_hatchery" || role === "super_admin";
+
+        document.getElementById("userInfo").textContent = userData.name || role || "-";
+        document.getElementById("userBtn").textContent  = userData.name || "User";
+        document.getElementById("btnLogout").addEventListener("click", () => {
+            localStorage.removeItem("IBOCS_user");
+            location.href = "login.html";
+        });
+
+        let draft = null;
+
+        /* ── Helpers ────────────────────────────────────────────── */
+        function fmtNum(n) { return (n != null && n !== "") ? Number(n).toLocaleString("id-ID") : "—"; }
+        function fmtDate(d) {
+            if (!d) return "—";
+            const [y,m,dd] = d.split("-"); return `${dd}/${m}/${y}`;
+        }
+
+        /* ── Render header ──────────────────────────────────────── */
+        function renderHeader(d) {
+            document.getElementById("pageTitle").textContent    = "DO Draft DOC — " + d.id;
+            document.getElementById("pageSubtitle").textContent = d.forecastDesc + " | " + d.customerName;
+
+            const isDone = d.status === "DO Generated";
+            document.getElementById("statusBanner").innerHTML = isDone
+                ? `<div class="s-banner s-done"><i class="bi bi-check-circle-fill"></i> DO Generated — Nomor DO: <strong>${d.doNumber || "—"}</strong></div>`
+                : `<div class="s-banner s-draft"><i class="bi bi-clock-history"></i> Draft — Menunggu pengisian price oleh Admin Sales.</div>`;
+
+            if (showPrice && !isDone) {
+                document.getElementById("salesNotice").innerHTML =
+                    `<div class="s-notice"><i class="bi bi-info-circle-fill me-2"></i><strong>Admin Sales:</strong> Isi Price Before & Price After pada setiap item, lalu klik <strong>Generate DO</strong>.</div>`;
+            }
+
+            document.getElementById("vId").textContent         = d.id;
+            document.getElementById("vDoNumber").textContent   = d.doNumber || "—";
+            document.getElementById("vDate").textContent       = fmtDate(d.date);
+            document.getElementById("vDocType").innerHTML      = d.docType === "internal"
+                ? `<span class="tag t-int">Internal</span>`
+                : `<span class="tag t-ext">External</span>`;
+            document.getElementById("vFcRef").textContent      = d.forecastRef + " — " + d.forecastDesc;
+            document.getElementById("vCustomer").textContent   = d.customerName;
+            document.getElementById("vWarehouse").textContent  = d.warehouseName || d.warehouse || "—";
+            document.getElementById("vCreatedBy").textContent  = d.createdBy || "—";
+
+            if (d.docType === "external") {
+                document.getElementById("extCard").style.display   = "block";
+                document.getElementById("vExtVendor").textContent  = d.externalVendorName || "—";
+                document.getElementById("vNoSJ").textContent       = d.noSuratJalan || "—";
+                document.getElementById("vTglSJ").textContent      = fmtDate(d.tglSuratJalan);
+                document.getElementById("vNoPol").textContent      = d.noPol || "—";
+                document.getElementById("vGrpoNumber").textContent = d.grpoNumber || "—";
+            }
+        }
+
+        /* ── Render lines table ─────────────────────────────────── */
+        function renderLines(d) {
+            const isDraft   = d.status === "Draft";
+            const canEdit   = showPrice && isDraft;  // editable price inputs
+
+            // Header columns
+            let hCols = `
+                <th class="hb">Brand</th>
+                <th class="hb">Item Before</th>
+                <th class="hb" style="width:70px;">UoM</th>
+                <th class="hb" style="width:100px;">Qty Before</th>`;
+            if (showPrice) hCols += `<th class="hp" style="width:130px;">Price Before</th>`;
+            hCols += `
+                <th class="ha">Item After</th>
+                <th class="ha" style="width:70px;">UoM</th>
+                <th class="ha" style="width:100px;">Qty After</th>`;
+            if (showPrice) hCols += `<th class="hp" style="width:130px;">Price After</th>`;
+            document.getElementById("lHead").innerHTML = `<tr>${hCols}</tr>`;
+
+            const totalCols = showPrice ? 9 : 7;
+            const bcCols    = showPrice ? 5 : 4;
+            const acCols    = showPrice ? 4 : 3;
+
+            let rows = "";
+            d.lines.forEach((line, li) => {
+                const tot = line.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
+                const mm  = tot !== (line.qtyBefore || 0);
+                const rs  = line.afterItems.length;
+
+                line.afterItems.forEach((a, ai) => {
+                    rows += `<tr>`;
+                    if (ai === 0) {
+                        rows += `
+                        <td class="cb" rowspan="${rs}" style="font-weight:700;color:#4338ca;">
+                            ${line.brandName || line.brand}
+                        </td>
+                        <td class="cb" rowspan="${rs}">${line.itemBefore}</td>
+                        <td class="cb" rowspan="${rs}" style="text-align:center;color:#6b7280;">
+                            ${line.uomBefore || "Ekor"}
+                        </td>
+                        <td class="cb" rowspan="${rs}" style="text-align:center;">
+                            <div style="font-weight:700;">${fmtNum(line.qtyBefore)}</div>
+                            <span class="${mm ? 'qmm' : 'qok'}">
+                                ${mm ? `⚠ After: ${fmtNum(tot)} ≠ Before: ${fmtNum(line.qtyBefore)}`
+                                     : `✓ After: ${fmtNum(tot)}`}
+                            </span>
+                        </td>`;
+                        if (showPrice) {
+                            rows += `<td class="cp cb" rowspan="${rs}" style="text-align:center;">
+                                ${canEdit
+                                    ? `<input class="pinp" type="number" id="pb_${line.id}"
+                                          value="${line.priceBefore || ''}" min="0" placeholder="0"
+                                          onchange="syncPB('${line.id}',this.value)">`
+                                    : (line.priceBefore
+                                        ? `Rp ${fmtNum(line.priceBefore)}`
+                                        : `<span class="p-empty">Belum diisi</span>`)}
+                            </td>`;
+                        }
+                    }
+
+                    // After cells
+                    const aMM = mm && ai === line.afterItems.length - 1;
+                    rows += `
+                        <td class="ca">${a.itemAfter || "—"}</td>
+                        <td class="ca" style="text-align:center;color:#6b7280;">${a.uomAfter || "Ekor"}</td>
+                        <td class="ca" style="text-align:center;${aMM ? 'background:#fef9c3;' : ''}">
+                            <span class="${aMM ? 'qmm' : ''}">${fmtNum(a.qtyAfter)}</span>
+                        </td>`;
+                    if (showPrice) {
+                        rows += `<td class="cp" style="text-align:center;">
+                            ${canEdit
+                                ? `<input class="pinp" type="number" id="pa_${a.id}"
+                                      value="${a.priceAfter || ''}" min="0" placeholder="0"
+                                      onchange="syncPA('${line.id}','${a.id}',this.value)">`
+                                : (a.priceAfter
+                                    ? `Rp ${fmtNum(a.priceAfter)}`
+                                    : `<span class="p-empty">Belum diisi</span>`)}
+                        </td>`;
+                    }
+                    rows += `</tr>`;
+                });
+
+                // Summary row per group
+                rows += `<tr class="tr-sum">
+                    <td colspan="${totalCols}">
+                        <i class="bi bi-layers me-1"></i>Group ${li + 1} ·
+                        ${line.afterItems.length} After item ·
+                        Total After: <strong>${fmtNum(tot)}</strong>
+                        ${mm ? `<span class="qmm ms-2">⚠ Selisih ${fmtNum(Math.abs(tot - (line.qtyBefore||0)))}</span>` : ""}
+                    </td>
+                </tr>`;
+
+                if (li < d.lines.length - 1) {
+                    rows += `<tr class="tr-sep"><td colspan="${totalCols}"></td></tr>`;
+                }
+            });
+
+            document.getElementById("lBody").innerHTML = rows;
+        }
+
+        /* ── Price sync ─────────────────────────────────────────── */
+        function syncPB(lineId, val) {
+            const l = draft.lines.find(x => x.id === lineId);
+            if (l) l.priceBefore = parseFloat(val) || null;
+        }
+        function syncPA(lineId, afterId, val) {
+            const l = draft.lines.find(x => x.id === lineId);
+            const a = l && l.afterItems.find(x => x.id === afterId);
+            if (a) a.priceAfter = parseFloat(val) || null;
+        }
+
+        /* ── Actions ────────────────────────────────────────────── */
+        function renderActions(d) {
+            const isDraft = d.status === "Draft";
+            const btns    = [];
+            if (isDraft && isHatch) {
+                btns.push(`<a href="hatchery_doc_draft_add.html?id=${d.id}" class="btn-wrn"><i class="bi bi-pencil me-1"></i> Edit Draft</a>`);
+            }
+            if (isDraft && showPrice) {
+                btns.push(`<button class="btn-suc" onclick="openGen()"><i class="bi bi-lightning-charge-fill me-1"></i> Generate DO</button>`);
+            }
+            document.getElementById("actionFooter").innerHTML = btns.join("");
+        }
+
+        function openGen() {
+            const ext = draft.docType === "external";
+            document.getElementById("modalBody").innerHTML = `
+                <p>Generate DO dari <strong>${draft.id}</strong>:</p>
+                <ul style="font-size:13px;">
+                    <li>Customer: <strong>${draft.customerName}</strong></li>
+                    <li>Warehouse: <strong>${draft.warehouseName || draft.warehouse}</strong></li>
+                    <li>Type: <strong>${ext ? "External" : "Internal"}</strong></li>
+                    <li>Lines: <strong>${draft.lines.length} group</strong></li>
+                    ${ext ? `<li style="color:#7c3aed;"><i class="bi bi-info-circle me-1"></i>External: sistem akan membuat <strong>DO penjualan + GRPO pembelian</strong> sekaligus.</li>` : ""}
+                </ul>
+                <p class="text-muted mb-0" style="font-size:12px;">Pastikan semua Price Before & After sudah terisi.</p>`;
+            new bootstrap.Modal(document.getElementById("modalGen")).show();
+        }
+
+        function confirmGen() {
+            let missing = false;
+            draft.lines.forEach(l => {
+                if (!l.priceBefore) missing = true;
+                l.afterItems.forEach(a => { if (!a.priceAfter) missing = true; });
+            });
+            if (missing) {
+                bootstrap.Modal.getInstance(document.getElementById("modalGen")).hide();
+                alert("Semua Price Before & Price After wajib diisi sebelum Generate DO.");
+                return;
+            }
+            draft.status   = "DO Generated";
+            draft.doNumber = docDraftNextDoNumber();
+            if (draft.docType === "external") draft.grpoNumber = docDraftNextGrpoNumber();
+            docDraftSave(draft);
+            bootstrap.Modal.getInstance(document.getElementById("modalGen")).hide();
+            const ext = draft.docType === "external";
+            document.getElementById("okTitle").textContent = ext ? "DO + GRPO Generated!" : "DO Generated!";
+            document.getElementById("okMsg").textContent   = ext
+                ? `DO penjualan ke ${draft.customerName} & GRPO pembelian dari ${draft.externalVendorName} berhasil dibuat.`
+                : `DO penjualan ke ${draft.customerName} berhasil dibuat.`;
+            new bootstrap.Modal(document.getElementById("modalOk")).show();
+        }
+
+        /* ── Init ───────────────────────────────────────────────── */
+        function init() {
+            const id = new URLSearchParams(location.search).get("id");
+            if (!id) { location.href = "hatchery_doc_draft_list.html"; return; }
+            draft = docDraftGet(id);
+            if (!draft) { alert("DO Draft tidak ditemukan."); location.href = "hatchery_doc_draft_list.html"; return; }
+            renderHeader(draft);
+            renderLines(draft);
+            renderActions(draft);
+        }
+
+        init();
+    </script>
+</body>
+</html>
