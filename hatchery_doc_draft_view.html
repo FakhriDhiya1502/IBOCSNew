@@ -217,9 +217,17 @@
             document.getElementById("pageSubtitle").textContent = d.forecastDesc + " | " + d.customerName;
 
             const isDone = d.status === "DO Generated";
-            document.getElementById("statusBanner").innerHTML = isDone
-                ? `<div class="s-banner s-done"><i class="bi bi-check-circle-fill"></i> DO Generated — Nomor DO: <strong>${d.doNumber || "—"}</strong></div>`
-                : `<div class="s-banner s-draft"><i class="bi bi-clock-history"></i> Draft — Menunggu pengisian price oleh Admin Sales.</div>`;
+            const isConfirmed = d.status === "Confirmed";
+            
+            let bannerHtml = "";
+            if (isDone) {
+                bannerHtml = `<div class="s-banner s-done"><i class="bi bi-check-circle-fill"></i> DO Generated — Nomor DO: <strong>${d.doNumber || "—"}</strong></div>`;
+            } else if (isConfirmed) {
+                bannerHtml = `<div class="s-banner" style="background:#e0e7ff; color:#3730a3; border:1px solid #c7d2fe;"><i class="bi bi-check-circle-fill"></i> Confirmed — Menunggu Generate DO oleh Admin Sales.</div>`;
+            } else {
+                bannerHtml = `<div class="s-banner s-draft"><i class="bi bi-clock-history"></i> Draft — Menunggu confirm atau pengisian price oleh Admin Sales.</div>`;
+            }
+            document.getElementById("statusBanner").innerHTML = bannerHtml;
 
             if (showPrice && !isDone) {
                 document.getElementById("salesNotice").innerHTML =
@@ -250,7 +258,8 @@
         /* ── Render lines table ─────────────────────────────────── */
         function renderLines(d) {
             const isDraft   = d.status === "Draft";
-            const canEdit   = showPrice && isDraft;  // editable price inputs
+            const isConfirmed = d.status === "Confirmed";
+            const canEdit   = showPrice && (isDraft || isConfirmed);  // editable price inputs
 
             // Header columns
             let hCols = `
@@ -361,14 +370,25 @@
         /* ── Actions ────────────────────────────────────────────── */
         function renderActions(d) {
             const isDraft = d.status === "Draft";
+            const isConfirmed = d.status === "Confirmed";
             const btns    = [];
+            
             if (isDraft && isHatch) {
                 btns.push(`<a href="hatchery_doc_draft_add.html?id=${d.id}" class="btn-wrn"><i class="bi bi-pencil me-1"></i> Edit Draft</a>`);
+                btns.push(`<button class="btn-pri" onclick="confirmDraft()"><i class="bi bi-check2-circle me-1"></i> Confirm Draft</button>`);
             }
-            if (isDraft && showPrice) {
+            if ((isConfirmed || isDraft) && showPrice) {
                 btns.push(`<button class="btn-suc" onclick="openGen()"><i class="bi bi-lightning-charge-fill me-1"></i> Generate DO</button>`);
             }
             document.getElementById("actionFooter").innerHTML = btns.join("");
+        }
+
+        function confirmDraft() {
+            if (confirm("Apakah Anda yakin ingin melakukan Confirm Draft ini?")) {
+                draft.status = "Confirmed";
+                docDraftSave(draft);
+                location.reload();
+            }
         }
 
         function openGen() {
