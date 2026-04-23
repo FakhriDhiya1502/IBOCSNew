@@ -290,6 +290,10 @@
                                     <option value="WH-KDG01">WH-KDG01</option>
                                     <option value="WH-KDG02">WH-KDG02</option>
                                     <option value="WH-KDG03">WH-KDG03</option>
+                                    <option value="WH-KDG04">WH-KDG04</option>
+                                    <option value="WH-KDG05">WH-KDG05</option>
+                                    <option value="WH-KDG06">WH-KDG06</option>
+                                    <option value="WH-KDG07">WH-KDG07</option>
                                     <option value="WH-MAIN">WH-MAIN (Main Warehouse)</option>
                                     <option value="WH-NORTH">WH-NORTH (North Facility)</option>
                                     <option value="WH-EAST">WH-EAST (East Facility)</option>
@@ -305,18 +309,7 @@
                                 <label class="form-label">Forecast Ref</label>
                                 <input type="text" id="fcRefInput" class="form-control bg-light" readonly placeholder="Auto-filled">
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Week / Period</label>
-                                <select id="weekSelect" class="form-select">
-                                    <option value="">-- Select Week --</option>
-                                    <option value="Week 17">Week 17</option>
-                                    <option value="Week 18">Week 18</option>
-                                    <option value="Week 19">Week 19</option>
-                                    <option value="Week 20">Week 20</option>
-                                    <option value="Week 21">Week 21</option>
-                                    <option value="Week 22">Week 22</option>
-                                </select>
-                            </div>
+                            <select id="weekSelect" style="display:none;"></select>
                             <div class="col-md-4">
                                 <label class="form-label">Posting Date</label>
                                 <input type="date" id="docDate" class="form-control">
@@ -329,109 +322,48 @@
                     </div>
                 </div>
 
-                <!-- Plan Data Card (hidden until forecast loaded) -->
-                <div class="card mb-4" id="planDataCard" style="display:none!important;">
-                    <div class="section-header d-flex justify-content-between align-items-center" style="cursor:pointer;" onclick="togglePlanData()">
+                <!-- Plan Data Card -->
+                <div class="card mb-4" id="planDataCard" style="display:none;">
+                    <div class="section-header d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-clipboard2-data"></i>
                             <h5 class="section-title mb-0">Plan Data</h5>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-success" id="planDataBadge">Confirmed</span>
-                            <i class="bi bi-chevron-up text-success" id="planDataChevron" style="font-size:1rem; transition:transform .25s;"></i>
-                        </div>
                     </div>
-                    <div class="card-body p-4" id="planDataBody">
-                        <!-- Forecast Header -->
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-2">
-                                <label class="form-label">Forecast No</label>
-                                <input type="text" id="pdFcNo" class="form-control form-control-sm bg-light" readonly>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Plan No</label>
+                                <input type="text" id="pdPlanNo" class="form-control form-control-sm bg-light" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Plan Description</label>
+                                <input type="text" id="pdPlanDesc" class="form-control form-control-sm bg-light" readonly>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Forecast Date</label>
-                                <input type="text" id="pdFcDate" class="form-control form-control-sm bg-light" readonly>
+                                <label class="form-label">Age</label>
+                                <input type="text" id="pdAge" class="form-control form-control-sm bg-light" readonly>
                             </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Period</label>
-                                <input type="text" id="pdPeriod" class="form-control form-control-sm bg-light" readonly>
-                            </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label class="form-label">Company</label>
                                 <input type="text" id="pdCompany" class="form-control form-control-sm bg-light" readonly>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label class="form-label">Farm</label>
                                 <input type="text" id="pdFarm" class="form-control form-control-sm bg-light" readonly>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Status</label>
-                                <input type="text" id="pdStatus" class="form-control form-control-sm bg-light" readonly>
-                            </div>
-                        </div>
-                        <!-- Plan Detail -->
-                        <div class="row g-3 mb-3 p-3 rounded-3" style="background:#f0fdf4; border:1px solid #bbf7d0;">
-                            <div class="col-12 mb-1">
-                                <small class="fw-bold text-success text-uppercase" style="letter-spacing:.5px;">Plan Detail</small>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Plan No</label>
-                                <input type="text" id="pdPlanNo" class="form-control form-control-sm bg-white" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Plan Description</label>
-                                <input type="text" id="pdPlanDesc" class="form-control form-control-sm bg-white" readonly>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Age</label>
-                                <input type="text" id="pdAge" class="form-control form-control-sm bg-white" readonly>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">DOC Code Male</label>
-                                <input type="text" id="pdDocCodeMale" class="form-control form-control-sm bg-white" readonly>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">DOC Code Female</label>
-                                <input type="text" id="pdDocCodeFemale" class="form-control form-control-sm bg-white" readonly>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Initial Stock (M/F)</label>
-                                <input type="text" id="pdInitialStock" class="form-control form-control-sm bg-white" readonly>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Current Population (M/F)</label>
-                                <input type="text" id="pdCurrentPop" class="form-control form-control-sm bg-white" readonly>
-                            </div>
-                            <div class="col-md-2">
                                 <label class="form-label">Total Population</label>
-                                <input type="text" id="pdTotalPop" class="form-control form-control-sm bg-white" readonly>
+                                <input type="text" id="pdTotalPop" class="form-control form-control-sm bg-light" readonly>
                             </div>
-                        </div>
-                        <!-- Forecast Lines Table -->
-                        <div class="table-responsive" style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
-                            <table class="table table-sm mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Item Code</th>
-                                        <th>Item Name</th>
-                                        <th>Flag</th>
-                                        <th class="text-end">Std Need</th>
-                                        <th class="text-end">Curr Stock</th>
-                                        <th class="text-end">Rec. Qty</th>
-                                        <th class="text-end">Manual Adj.</th>
-                                        <th class="text-end">Final Qty</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pdLinesBody">
-                                    <tr><td colspan="8" class="text-center text-muted py-3">No data</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Summary -->
-                        <div class="d-flex gap-4 mt-3 p-3 rounded-3" style="background:#f8fafc; border:1px solid var(--border);">
-                            <div><small class="text-muted d-block">Total Item</small><strong id="pdTotalItem">0</strong></div>
-                            <div><small class="text-muted d-block">Total Rec. Qty</small><strong id="pdTotalRec">0</strong></div>
-                            <div><small class="text-muted d-block">Total Final Qty</small><strong id="pdTotalFinal">0</strong></div>
+                            <div class="col-md-2">
+                                <label class="form-label">Initial Stock</label>
+                                <input type="text" id="pdInitialStock" class="form-control form-control-sm bg-light" readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Current Population</label>
+                                <input type="text" id="pdCurrentPop" class="form-control form-control-sm bg-light" readonly>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -534,29 +466,7 @@
         const DEMO_FC = window.IBOCS_FORECAST_MASTER || [];
 
         // (legacy inline kept as fallback — will not be used when master file is loaded)
-        const _DEMO_FC_FALLBACK = [
-            {
-                fcNo: "FC-001", warehouse: "WH-KDG01", planNo: "PL-001", planDesc: "Broiler Cycle 18", status: "Confirmed",
-                lines: [
-                    { itemCode: "FD-ST-001", itemName: "Starter Feed",  recommendedQty: 7500, manualAdjustment: 300 },
-                    { itemCode: "FD-GR-003", itemName: "Grower Feed",   recommendedQty: 5500, manualAdjustment: 200 }
-                ]
-            },
-            {
-                fcNo: "FC-002", warehouse: "WH-KDG02", planNo: "PL-002", planDesc: "Broiler Cycle 18", status: "Confirmed",
-                lines: [
-                    { itemCode: "FD-ST-001", itemName: "Starter Feed",  recommendedQty: 8000, manualAdjustment: 0 },
-                    { itemCode: "FD-FN-002", itemName: "Finisher Feed", recommendedQty: 7000, manualAdjustment: 0 }
-                ]
-            },
-            {
-                fcNo: "FC-003", warehouse: "WH-KDG03", planNo: "PL-008", planDesc: "Broiler Cycle 21", status: "PO Created",
-                lines: [
-                    { itemCode: "FD-ST-001", itemName: "Starter Feed", recommendedQty: 6200, manualAdjustment: 0 },
-                    { itemCode: "FD-GR-003", itemName: "Grower Feed",  recommendedQty: 0,    manualAdjustment: 4300 }
-                ]
-            }
-        ];
+        const _DEMO_FC_FALLBACK = [];
 
         function getAllFc() {
             const stored = JSON.parse(localStorage.getItem("IBOCS_fc_list") || "[]");
@@ -569,8 +479,8 @@
             const planSel = document.getElementById("planSelect");
             const oldPlan = planSel.value;
 
-            // Rebuild plan options based on Confirmed forecasts for this warehouse
-            const confirmed = whse ? getAllFc().filter(f => f.warehouse === whse && f.status === "Confirmed") : [];
+            const VALID_FC_STATUS = ["Confirmed", "Forecast Created", "PO Created", "Draft"];
+            const confirmed = whse ? getAllFc().filter(f => f.warehouse === whse && VALID_FC_STATUS.includes(f.status)) : [];
             planSel.innerHTML = '<option value="">-- Select Plan --</option>';
             confirmed.forEach(f => {
                 const opt = document.createElement("option");
@@ -601,14 +511,40 @@
             const planNo = document.getElementById("planSelect").value;
             if (!whse || !planNo) return;
 
-            const fc = getAllFc().find(f => f.warehouse === whse && f.planNo === planNo && f.status === "Confirmed");
+            const fc = getAllFc().find(f => f.warehouse === whse && f.planNo === planNo);
             if (!fc) {
-                alert(`Tidak ada forecast Confirmed untuk Whse ${whse} / Plan ${planNo}.`);
+                alert(`Tidak ada forecast untuk Whse ${whse} / Plan ${planNo}.`);
                 return;
             }
 
-            // Build rows from forecast lines (finalQty = recommendedQty + manualAdjustment)
-            const items = (fc.lines || []).map(l => ({
+            // Build rows from forecast lines; fallback to rekom localStorage if lines empty
+            let fcLines = fc.lines || [];
+            if (!fcLines.length) {
+                const savedRekom = localStorage.getItem("IBOCS_rekom_" + fc.planNo);
+                if (savedRekom) {
+                    try {
+                        fcLines = JSON.parse(savedRekom).map(r => ({
+                            itemCode: r.itemCode,
+                            itemName: r.itemName,
+                            recommendedQty: r.qty,
+                            manualAdjustment: 0
+                        }));
+                    } catch(e) {}
+                }
+                // also try from auto-created PO lines
+                if (!fcLines.length && fc.poRef) {
+                    const orderLines = JSON.parse(localStorage.getItem("IBOCS_customer_order_lines") || "{}");
+                    const poLines = orderLines[fc.poRef] || [];
+                    fcLines = poLines.map(l => ({
+                        itemCode: l.sku,
+                        itemName: l.name,
+                        recommendedQty: l.qty,
+                        manualAdjustment: 0
+                    }));
+                }
+            }
+
+            const items = fcLines.map(l => ({
                 itemCode: l.itemCode,
                 itemName: l.itemName,
                 qty: (Number(l.recommendedQty) || 0) + (Number(l.manualAdjustment) || 0)
@@ -636,7 +572,7 @@
                 }
             }
 
-            // Populate Plan Data card
+            // Populate plan data card
             populatePlanData(fc);
 
             // Clear existing rows and populate from forecast
@@ -648,61 +584,15 @@
         }
 
         function populatePlanData(fc) {
-            document.getElementById("pdFcNo").value      = fc.fcNo || "";
-            document.getElementById("pdFcDate").value    = fc.fcDate || "";
-            document.getElementById("pdPeriod").value    = fc.period || "";
-            document.getElementById("pdCompany").value   = fc.company || "";
-            document.getElementById("pdFarm").value      = fc.farm || "";
-            document.getElementById("pdStatus").value    = fc.status || "";
-            document.getElementById("pdPlanNo").value    = fc.planNo || "";
-            document.getElementById("pdPlanDesc").value  = fc.planDesc || "";
-            document.getElementById("pdAge").value           = fc.age || "";
-            document.getElementById("pdDocCodeMale").value   = fc.docCodeMale || "";
-            document.getElementById("pdDocCodeFemale").value = fc.docCodeFemale || "";
-            document.getElementById("pdInitialStock").value  = fc.initialStock || "";
-            document.getElementById("pdCurrentPop").value    = fc.currentPop || "";
-            document.getElementById("pdTotalPop").value      = fc.totalPop || "";
-
-            // Lines table
-            const lines = fc.lines || [];
-            const tbody = document.getElementById("pdLinesBody");
-            let totalRec = 0, totalFinal = 0;
-            tbody.innerHTML = lines.map(l => {
-                const finalQty = (Number(l.recommendedQty) || 0) + (Number(l.manualAdjustment) || 0);
-                totalRec   += Number(l.recommendedQty) || 0;
-                totalFinal += finalQty;
-                const flagCls = l.flag === "Manual" ? "badge bg-warning text-dark" : "badge bg-primary";
-                return `<tr>
-                    <td class="mono small">${l.itemCode}</td>
-                    <td>${l.itemName}</td>
-                    <td><span class="${flagCls}">${l.flag || "Auto"}</span></td>
-                    <td class="text-end">${(l.standardNeed||0).toLocaleString()}</td>
-                    <td class="text-end">${(l.currentStock||0).toLocaleString()}</td>
-                    <td class="text-end">${(l.recommendedQty||0).toLocaleString()}</td>
-                    <td class="text-end">${(l.manualAdjustment||0).toLocaleString()}</td>
-                    <td class="text-end fw-bold text-success">${finalQty.toLocaleString()}</td>
-                </tr>`;
-            }).join("") || '<tr><td colspan="8" class="text-center text-muted py-3">No lines</td></tr>';
-
-            document.getElementById("pdTotalItem").textContent  = lines.length;
-            document.getElementById("pdTotalRec").textContent   = totalRec.toLocaleString();
-            document.getElementById("pdTotalFinal").textContent = totalFinal.toLocaleString();
-
-            // Show the card (expanded by default)
-            const card = document.getElementById("planDataCard");
-            card.style.cssText = ""; // remove !important hide
-            card.style.display = "block";
-            document.getElementById("planDataBody").style.display = "block";
-            const chev = document.getElementById("planDataChevron");
-            if (chev) chev.style.transform = "rotate(0deg)";
-        }
-
-        function togglePlanData() {
-            const body = document.getElementById("planDataBody");
-            const chev = document.getElementById("planDataChevron");
-            const collapsed = body.style.display === "none";
-            body.style.display = collapsed ? "block" : "none";
-            if (chev) chev.style.transform = collapsed ? "rotate(0deg)" : "rotate(180deg)";
+            document.getElementById("pdPlanNo").value      = fc.planNo || "";
+            document.getElementById("pdPlanDesc").value    = fc.planDesc || "";
+            document.getElementById("pdAge").value         = fc.age || "";
+            document.getElementById("pdCompany").value     = fc.company || "";
+            document.getElementById("pdFarm").value        = fc.farm || "";
+            document.getElementById("pdTotalPop").value    = fc.totalPop ? Number(fc.totalPop).toLocaleString() : "";
+            document.getElementById("pdInitialStock").value = fc.initialStock ? Number(fc.initialStock).toLocaleString() : "";
+            document.getElementById("pdCurrentPop").value  = fc.currentPop ? Number(fc.currentPop).toLocaleString() : "";
+            document.getElementById("planDataCard").style.display = "block";
         }
 
         function addRowFromForecast(itemCode, itemName, qty) {
@@ -979,6 +869,33 @@
 
             localStorage.setItem(LS_ORDERS, JSON.stringify(orders));
             localStorage.setItem(LS_ORDER_LINES, JSON.stringify(orderLines));
+
+            // Auto-create SO on vendor/SI side
+            const soList = JSON.parse(localStorage.getItem("IBOCS_so_list") || "[]");
+            const soNo = "SO-" + date.replace(/-/g, "").slice(0,6) + "-" + String(soList.length + 1).padStart(4, "0");
+            soList.unshift({
+                soNo: soNo,
+                soDate: date,
+                deliveryDate: document.getElementById('docDelivery').value || date,
+                store: newOrder.customerName,
+                customer: newOrder.customerName,
+                type: "FROM_PO",
+                slot: "-",
+                totalQty: lines.reduce((s, l) => s + (l.qty || 0), 0),
+                status: "Draft",
+                sourcePoNo: poNo,
+                planNo: planNo,
+                fcRef: fcRef,
+                warehouse: whse,
+                lines: lines.map(l => ({
+                    itemCode: l.sku,
+                    itemName: l.name,
+                    qty: l.qty,
+                    uom: "Kg",
+                    source: "Customer PO"
+                }))
+            });
+            localStorage.setItem("IBOCS_so_list", JSON.stringify(soList));
 
             // Success Animation
             document.getElementById('successOverlay').style.display = 'flex';

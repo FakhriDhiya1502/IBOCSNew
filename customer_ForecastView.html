@@ -14,77 +14,79 @@
         .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
         h1 { margin: 0; font-size: 22px; }
         .subtext { margin-top: 6px; font-size: 13px; color: #6b7280; }
-        .btn-action { padding: 10px 16px; border-radius: 8px; border: 0; font-weight: 700; cursor: pointer; font-size: 13px; background: #2563eb; color: #fff; text-decoration: none; display: inline-block; }
-        .btn-success-action { padding: 10px 16px; border-radius: 8px; border: 0; font-weight: 700; cursor: pointer; font-size: 13px; background: #16a34a; color: #fff; }
-        .btn-secondary-action { padding: 10px 16px; border-radius: 8px; border: 0; font-weight: 700; cursor: pointer; font-size: 13px; background: #e5e7eb; color: #111827; text-decoration: none; display: inline-block; }
-        .btn-info-action { padding: 10px 16px; border-radius: 8px; border: 0; font-weight: 700; cursor: pointer; font-size: 13px; background: #dbeafe; color: #1d4ed8; }
-        .card { background: #fff; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
-        .card-header { padding: 14px 16px; font-weight: 700; border-bottom: 1px solid #eef0f4; font-size: 13px; background: #fafbfe; }
-        .card-body { padding: 16px; }
-        .grid-5 { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
-        .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-        .field label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 6px; }
-        .field input { width: 100%; height: 38px; border: 1px solid #d5dae3; border-radius: 8px; padding: 0 11px; font-size: 13px; background: #f8fafc; color: #444; }
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 820px; }
-        th, td { padding: 10px 12px; border-bottom: 1px solid #edf0f5; font-size: 13px; text-align: left; vertical-align: middle; }
-        th { background: #f9fafc; font-size: 12px; color: #555; font-weight: 700; white-space: nowrap; }
-        tbody tr:hover { background: #fafcff; }
-        .tag { display: inline-block; padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
-        .tag-auto   { background: #dbeafe; color: #1d4ed8; }
-        .tag-manual { background: #fef3c7; color: #92400e; }
-        .tag-yellow { background: #fef9c3; color: #92400e; }
-        .tag-green  { background: #dcfce7; color: #166534; }
-        .tag-blue   { background: #dbeafe; color: #1d4ed8; }
-        .tag-gray   { background: #f3f4f6; color: #4b5563; }
-        .info-panel { background: #f8fafc; border-radius: 10px; padding: 14px; border: 1px solid #e8ebf1; }
-        .info-panel .label { font-size: 11px; color: #666; margin-bottom: 4px; }
-        .info-panel .value { font-size: 18px; font-weight: 700; }
-        .action-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
-        .showmore-toggle { font-size: 12px; color: #2563eb; cursor: pointer; background: none; border: none; padding: 0; font-weight: 700; }
-        .showmore-box { display: none; }
-        .showmore-box.active { display: block; }
-        .mode-chip { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-left: 8px; background: #dcfce7; color: #166534; }
 
-        /* Feed Forecast View styles */
-        .ff-stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 0; }
-        .ff-stat { border: 1px solid #e8ebf1; border-radius: 10px; padding: 13px 14px; background: #fafbfe; }
-        .ff-stat .fs-lbl { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
-        .ff-stat .fs-val { font-size: 20px; font-weight: 700; }
-        .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; margin: 2px; }
-        .chip-green  { background: #dcfce7; color: #166534; }
-        .chip-blue   { background: #dbeafe; color: #1d4ed8; }
-        .chip-orange { background: #fef3c7; color: #92400e; }
+        .btn-secondary-action { padding: 9px 16px; border-radius: 8px; border: 1px solid #d1d5db; font-weight: 700; cursor: pointer; font-size: 13px; background: #fff; color: #374151; text-decoration: none; display: inline-block; }
+        .btn-secondary-action:hover { background: #f3f4f6; color: #111; }
 
-        /* Feed table */
-        .feed-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px; }
-        .feed-table th { background: #1a237e; color: #fff; padding: 9px 12px; font-size: 12px; white-space: nowrap; }
-        .feed-table td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; vertical-align: middle; }
-        .feed-table tr:hover td { background: #f8faff; }
-        .feed-table tr.row-total td { background: #fef9c3; font-weight: 700; font-size: 13px; }
+        /* Cards */
+        .v-card { background: #fff; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #eef0f4; }
+        .v-card-header { padding: 13px 18px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #fafbfe; display: flex; align-items: center; gap: 8px; }
+        .v-card-header .vc-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .v-card-body { padding: 16px 18px; }
 
-        /* Day breakdown table */
-        .day-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 700px; }
-        .day-table th { background: #374151; color: #fff; padding: 8px 10px; font-size: 11px; white-space: nowrap; text-align: right; }
-        .day-table th:first-child, .day-table th:nth-child(2) { text-align: center; }
-        .day-table td { padding: 7px 10px; border-bottom: 1px solid #f3f4f6; font-size: 12px; text-align: right; }
-        .day-table td:first-child { text-align: center; font-weight: 700; color: #374151; }
-        .day-table td:nth-child(2) { text-align: left; }
-        .day-table tr.phase-hdr td { background: #eff6ff; font-weight: 700; color: #1d4ed8; font-size: 11px; text-align: left !important; }
-        .day-table tr.phase-sub td { background: #f0fdf4; font-weight: 700; color: #166534; }
-        .day-table tr.grand-total td { background: #fef9c3; font-weight: 700; font-size: 13px; }
-        .day-table tr.past-day td { color: #9ca3af; background: #fafafa; }
-        .formula-box { background: #f8faff; border: 1px solid #dbeafe; border-radius: 8px; padding: 11px 14px; font-size: 12px; color: #374151; margin-bottom: 14px; }
-        .formula-box code { background: #e0e7ff; border-radius: 4px; padding: 1px 5px; font-size: 11px; color: #3730a3; }
+        /* Info grid */
+        .info-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+        .info-item { background: #f8f9ff; border-radius: 10px; padding: 10px 14px; }
+        .info-item .ik { font-size: 10px; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+        .info-item .iv { font-size: 13px; color: #111; font-weight: 600; }
+        .info-item .iv.num { color: #1a237e; font-weight: 700; font-size: 15px; }
+        .info-item.yellow { background: #fefce8; }
+        .info-item.yellow .ik { color: #92400e; }
+        .info-item.yellow .iv { color: #713f12; font-weight: 700; }
 
-        @media (max-width: 1100px) { .grid-5, .grid-4, .ff-stat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-        @media (max-width: 700px) { .topbar { flex-direction: column; align-items: stretch; } .grid-5, .grid-4, .ff-stat-grid { grid-template-columns: 1fr; } }
+        /* SAP grid: 4 cols */
+        .sap-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+        .sap-item { background: #f0f4ff; border-radius: 10px; padding: 10px 14px; }
+        .sap-item .sk { font-size: 10px; font-weight: 700; color: #3730a3; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 4px; }
+        .sap-item .sv { font-size: 14px; font-weight: 700; color: #1a237e; }
+        .sap-item.yellow { background: #fefce8; }
+        .sap-item.yellow .sk { color: #92400e; }
+        .sap-item.yellow .sv { color: #713f12; }
+        .sap-item.green { background: #f0fdf4; }
+        .sap-item.green .sk { color: #166534; }
+        .sap-item.green .sv { color: #166534; }
+
+        /* Phase table */
+        .phase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .phase-table th { background: #1a237e; color: #fff; padding: 10px 12px; font-size: 12px; white-space: nowrap; text-align: left; }
+        .phase-table th.r { text-align: right; }
+        .phase-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+        .phase-table td.r { text-align: right; }
+        .phase-table tr:hover td { background: #f8faff; }
+        .phase-table tr.row-total td { background: #fef9c3; font-weight: 700; }
+        .phase-table tr.skipped td { color: #9ca3af; background: #fafafa; }
+
+        /* Rekom items */
+        .rekom-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+        .rekom-card { background: #f0f6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px 16px; }
+        .rekom-card .rc-no { font-size: 10px; font-weight: 700; color: #6366f1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .4px; }
+        .rekom-card .rc-name { font-size: 14px; font-weight: 700; color: #1e3a8a; margin-bottom: 2px; }
+        .rekom-card .rc-code { font-size: 11px; color: #6b7280; margin-bottom: 10px; }
+        .rekom-card .rc-qty { font-size: 26px; font-weight: 700; color: #2563eb; }
+        .rekom-card .rc-uom { font-size: 12px; color: #6b7280; }
+
+        .empty-state { text-align: center; padding: 28px; color: #9ca3af; font-size: 13px; }
+        .badge-status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .badge-draft { background: #f3f4f6; color: #374151; }
+        .badge-fc { background: #dbeafe; color: #1d4ed8; }
+        .badge-po { background: #dcfce7; color: #166534; }
+
+        /* Matrix table (sama dengan ForecastList) */
+        .matrix-table { width:100%; border-collapse:collapse; font-size:12px; }
+        .matrix-table th, .matrix-table td { border:1px solid #e5e7eb; padding:8px 10px; vertical-align:middle; white-space:nowrap; }
+        .matrix-table thead tr:first-child th { background:#1a237e; color:#fff; text-align:center; font-size:12px; }
+        .matrix-table thead tr:nth-child(2) th { background:#f1f3f9; color:#374151; font-size:11px; text-align:center; }
+        .matrix-table td { text-align:center; }
+        .matrix-table tbody tr:hover { background:#f8faff; }
+        .matrix-table th.th-yellow { background:#fef08a !important; color:#713f12 !important; }
+        .matrix-table td.td-yellow { background:#fefce8; color:#713f12; font-weight:600; }
+
+        @media (max-width: 900px) { .info-grid, .sap-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .rekom-list { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .info-grid, .sap-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 
 <body>
-    <!-- Topbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid px-3">
             <a class="navbar-brand fw-bold" href="customer_dashboard.html">IBOCS</a>
@@ -105,116 +107,26 @@
 
     <div class="container-fluid py-3">
         <div class="row g-3">
-            <!-- Sidebar -->
             <div class="col-lg-2" id="sidebar-container"></div>
-
-            <!-- Main -->
             <div class="col-lg-10">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0 text-primary fw-bold"><i class="bi bi-graph-up-arrow me-2"></i>Forecast</h4>
+                    <h4 class="mb-0 fw-bold" style="color:#1a237e;"><i class="bi bi-graph-up-arrow me-2"></i>Forecast View</h4>
                 </div>
 
                 <div class="page shadow-sm">
                     <div class="topbar">
                         <div>
-                            <h1>View Forecast <span class="mode-chip">View</span></h1>
-                            <div class="subtext">Detail forecast readonly. Confirm dan Generate PO dilakukan dari halaman ini.</div>
+                            <h1 id="pageTitle">Detail Plan</h1>
+                            <div class="subtext" id="pageSubtext">Informasi kalkulator dan rekomendasi item per plan.</div>
                         </div>
-                        <div class="d-flex gap-2">
+                        <div>
                             <a href="customer_ForecastList.html" class="btn-secondary-action"><i class="bi bi-arrow-left me-1"></i>Back to List</a>
-                            <button class="btn-secondary-action" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
                         </div>
                     </div>
 
-                    <!-- Status Banner -->
-                    <div id="statusBanner" class="mb-3"></div>
-
-                    <!-- Header -->
-                    <div class="card">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <div class="grid-5" style="margin-bottom:14px;">
-                                <div class="field"><label>Forecast No</label><input id="fcNo" readonly></div>
-                                <div class="field"><label>Forecast Date</label><input id="fcDate" readonly></div>
-                                <div class="field"><label>Period</label><input id="period" readonly></div>
-                                <div class="field"><label>Plan No</label><input id="planNo" readonly></div>
-                                <div class="field"><label>Plan Description</label><input id="planDesc" readonly></div>
-                            </div>
-                            <div class="grid-4">
-                                <div class="field"><label>Company</label><input id="company" readonly></div>
-                                <div class="field"><label>Farm</label><input id="farm" readonly></div>
-                                <div class="field"><label>Warehouse</label><input id="warehouse" readonly></div>
-                                <div class="field"><label>Status</label><input id="status" readonly></div>
-                            </div>
-
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button class="showmore-toggle" onclick="toggleShowMore()">
-                                    <i class="bi bi-chevron-down" id="showmoreIcon"></i> Show More Plan Detail
-                                </button>
-                            </div>
-                            <div id="planDetail" class="showmore-box mt-3 p-3" style="background:#f8fafc;border-radius:10px;border:1px solid #e8ebf1;">
-                                <div class="grid-5" style="margin-bottom:12px;">
-                                    <div class="field"><label>Age</label><input id="age" readonly></div>
-                                    <div class="field"><label>DOC Code Male</label><input id="docCodeMale" readonly></div>
-                                    <div class="field"><label>DOC Code Female</label><input id="docCodeFemale" readonly></div>
-                                    <div class="field"><label>DOC Name Male</label><input id="docNameMale" readonly></div>
-                                    <div class="field"><label>DOC Name Female</label><input id="docNameFemale" readonly></div>
-                                </div>
-                                <div class="grid-4">
-                                    <div class="field"><label>Initial Stock (M/F)</label><input id="initialStock" readonly></div>
-                                    <div class="field"><label>Current Population (M/F)</label><input id="currentPop" readonly></div>
-                                    <div class="field"><label>Total Current Population</label><input id="totalPop" readonly></div>
-                                    <div class="field"><label>Plan Source</label><input value="SAP Plan" readonly></div>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="mainContent">
+                        <div class="empty-state"><i class="bi bi-hourglass-split" style="font-size:28px;display:block;margin-bottom:8px;"></i>Memuat data...</div>
                     </div>
-
-                    <!-- Lines -->
-                    <div class="card">
-                        <div class="card-header">Forecast Lines</div>
-                        <div class="card-body">
-                            <div class="table-wrap">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Item Code</th>
-                                            <th>Item Name</th>
-                                            <th>Flag</th>
-                                            <th>Standard Need</th>
-                                            <th>Current Stock</th>
-                                            <th>Recommended Qty</th>
-                                            <th>Manual Adjustment</th>
-                                            <th>Final Qty</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="linesBody">
-                                        <tr><td colspan="8" style="text-align:center;padding:24px;color:#6b7280;">Loading...</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="info-panel mt-3">
-                                <div class="row g-3">
-                                    <div class="col-sm-4">
-                                        <div class="label">Total Item</div>
-                                        <div class="value" id="totalItem">0</div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="label">Total Recommended Qty</div>
-                                        <div class="value" id="totalRecommended">0</div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="label">Total Final Qty</div>
-                                        <div class="value" id="totalFinal">0</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Action Footer -->
-                    <div class="action-footer" id="actionFooter"></div>
                 </div>
 
                 <div class="text-center text-muted small mt-4 mb-2">© 2026 IBOCS — Customer Portal</div>
@@ -237,381 +149,431 @@
             window.location.href = "index.html";
         });
 
-        const urlParams  = new URLSearchParams(window.location.search);
-        const fcNoParam  = urlParams.get("fcNo");
-        const kdgIdParam = urlParams.get("kdgId");
-
-        document.addEventListener("DOMContentLoaded", () => {
-            new SidebarSystem(null, 'forecast').render();
-            if (kdgIdParam) {
-                loadFeedForecast(kdgIdParam);
-            } else if (fcNoParam) {
-                loadForecast(fcNoParam);
-            } else {
-                alert("Parameter tidak ditemukan.");
-                window.location.href = "customer_ForecastList.html";
-            }
-        });
-
-        // ══════════════════════════════════════════════════════════════════════
-        //  FEED FORECAST VIEW MODE
-        // ══════════════════════════════════════════════════════════════════════
-
+        // ─── DATA (sama dengan ForecastList) ─────────────────────────────────
         const STD = [
-            {d:  1, m: 0.00, v:100.00, fd: 0.0010},
-            {d:  2, m: 0.10, v: 99.90, fd: 0.0020},
-            {d:  3, m: 0.10, v: 99.80, fd: 0.0030},
-            {d:  4, m: 0.10, v: 99.70, fd: 0.0040},
-            {d:  5, m: 0.10, v: 99.60, fd: 0.0050},
-            {d:  6, m: 0.10, v: 99.50, fd: 0.0060},
-            {d:  7, m: 0.10, v: 99.40, fd: 0.0070},
-            {d:  8, m: 0.20, v: 99.20, fd: 0.0090},
-            {d:  9, m: 0.20, v: 99.00, fd: 0.0120},
-            {d: 10, m: 0.20, v: 98.80, fd: 0.0150},
-            {d: 11, m: 0.20, v: 98.60, fd: 0.0180},
-            {d: 12, m: 0.20, v: 98.40, fd: 0.0220},
-            {d: 13, m: 0.20, v: 98.20, fd: 0.0260},
-            {d: 14, m: 0.20, v: 98.00, fd: 0.0300},
-            {d: 15, m: 0.20, v: 97.80, fd: 0.0350},
-            {d: 16, m: 0.20, v: 97.60, fd: 0.0400},
-            {d: 17, m: 0.20, v: 97.40, fd: 0.0450},
-            {d: 18, m: 0.20, v: 97.20, fd: 0.0500},
-            {d: 19, m: 0.20, v: 97.00, fd: 0.0560},
-            {d: 20, m: 0.20, v: 96.80, fd: 0.0620},
-            {d: 21, m: 0.20, v: 96.60, fd: 0.0680},
-            {d: 22, m: 0.30, v: 96.30, fd: 0.0750},
-            {d: 23, m: 0.30, v: 96.00, fd: 0.0820},
-            {d: 24, m: 0.30, v: 95.70, fd: 0.0890},
-            {d: 25, m: 0.30, v: 95.40, fd: 0.0960},
-            {d: 26, m: 0.30, v: 95.10, fd: 0.1030},
-            {d: 27, m: 0.30, v: 94.80, fd: 0.1100},
-            {d: 28, m: 0.30, v: 94.50, fd: 0.1160},
-            {d: 29, m: 0.30, v: 94.20, fd: 0.1220},
-            {d: 30, m: 0.30, v: 93.90, fd: 0.1280},
-            {d: 31, m: 0.30, v: 93.60, fd: 0.1330},
-            {d: 32, m: 0.30, v: 93.30, fd: 0.1380},
-            {d: 33, m: 0.30, v: 93.00, fd: 0.1420},
-            {d: 34, m: 0.30, v: 92.70, fd: 0.1460},
-            {d: 35, m: 0.30, v: 92.40, fd: 0.1500},
+            { d: 1,  m: 0.00, v: 100.00, fd: 0.0010 }, { d: 2,  m: 0.10, v: 99.90,  fd: 0.0020 },
+            { d: 3,  m: 0.10, v: 99.80,  fd: 0.0030 }, { d: 4,  m: 0.10, v: 99.70,  fd: 0.0040 },
+            { d: 5,  m: 0.10, v: 99.60,  fd: 0.0050 }, { d: 6,  m: 0.10, v: 99.50,  fd: 0.0060 },
+            { d: 7,  m: 0.10, v: 99.40,  fd: 0.0070 }, { d: 8,  m: 0.20, v: 99.20,  fd: 0.0090 },
+            { d: 9,  m: 0.20, v: 99.00,  fd: 0.0120 }, { d: 10, m: 0.20, v: 98.80,  fd: 0.0150 },
+            { d: 11, m: 0.20, v: 98.60,  fd: 0.0180 }, { d: 12, m: 0.20, v: 98.40,  fd: 0.0220 },
+            { d: 13, m: 0.20, v: 98.20,  fd: 0.0260 }, { d: 14, m: 0.20, v: 98.00,  fd: 0.0300 },
+            { d: 15, m: 0.20, v: 97.80,  fd: 0.0350 }, { d: 16, m: 0.20, v: 97.60,  fd: 0.0400 },
+            { d: 17, m: 0.20, v: 97.40,  fd: 0.0450 }, { d: 18, m: 0.20, v: 97.20,  fd: 0.0500 },
+            { d: 19, m: 0.20, v: 97.00,  fd: 0.0560 }, { d: 20, m: 0.20, v: 96.80,  fd: 0.0620 },
+            { d: 21, m: 0.20, v: 96.60,  fd: 0.0680 }, { d: 22, m: 0.30, v: 96.30,  fd: 0.0750 },
+            { d: 23, m: 0.30, v: 96.00,  fd: 0.0820 }, { d: 24, m: 0.30, v: 95.70,  fd: 0.0890 },
+            { d: 25, m: 0.30, v: 95.40,  fd: 0.0960 }, { d: 26, m: 0.30, v: 95.10,  fd: 0.1030 },
+            { d: 27, m: 0.30, v: 94.80,  fd: 0.1100 }, { d: 28, m: 0.30, v: 94.50,  fd: 0.1160 },
+            { d: 29, m: 0.30, v: 94.20,  fd: 0.1220 }, { d: 30, m: 0.30, v: 93.90,  fd: 0.1280 },
+            { d: 31, m: 0.30, v: 93.60,  fd: 0.1330 }, { d: 32, m: 0.30, v: 93.30,  fd: 0.1380 },
+            { d: 33, m: 0.30, v: 93.00,  fd: 0.1420 }, { d: 34, m: 0.30, v: 92.70,  fd: 0.1460 },
+            { d: 35, m: 0.30, v: 92.40,  fd: 0.1500 },
         ];
 
         const PHASES = [
-            { code: "FEED-001", name: "Pakan Pre-Starter (S-0)", dayFrom:  1, dayTo:  7 },
-            { code: "FEED-002", name: "Pakan Starter (BR-1)",    dayFrom:  8, dayTo: 21 },
-            { code: "FEED-004", name: "Pakan Finisher (BR-3)",   dayFrom: 22, dayTo: 35 },
+            { code: "FEED-001", name: "Pakan Pre-Starter (S-0)", dayFrom: 1,  dayTo: 7,  uom: "Kg" },
+            { code: "FEED-002", name: "Pakan Starter (BR-1)",    dayFrom: 8,  dayTo: 21, uom: "Kg" },
+            { code: "FEED-004", name: "Pakan Finisher (BR-3)",   dayFrom: 22, dayTo: 35, uom: "Kg" },
         ];
 
-        const ALL_KANDANG = [
-            { id:"KDG-01", farm:"Farm Deli",   wh:"WH-KDG01", company:"PT TOP Distribusi", docQty:20000, docType:"DOC Broiler Cobb 500", age:  7 },
-            { id:"KDG-02", farm:"Farm Deli",   wh:"WH-KDG02", company:"PT TOP Distribusi", docQty:24000, docType:"DOC Broiler Ross 308", age:  9 },
-            { id:"KDG-03", farm:"Farm Binjai", wh:"WH-KDG03", company:"PT AYM",            docQty:12000, docType:"DOC Broiler Cobb 500", age: 19 },
-            { id:"KDG-04", farm:"Farm BMAX",   wh:"WH-KDG04", company:"PT BMAX",           docQty:15000, docType:"DOC Broiler Ross 308", age: 23 },
-            { id:"KDG-05", farm:"Farm Deli",   wh:"WH-KDG05", company:"PT TOP Distribusi", docQty:18000, docType:"DOC Broiler Cobb 500", age:  3 },
-            { id:"KDG-06", farm:"Farm Binjai", wh:"WH-KDG06", company:"PT AYM",            docQty:10000, docType:"DOC Broiler Ross 308", age: 14 },
-            { id:"KDG-07", farm:"Farm BMAX",   wh:"WH-KDG07", company:"PT BMAX",           docQty:22000, docType:"DOC Broiler Cobb 500", age: 28 },
+        const DEMO_PLANS = [
+            { planNo: "PLAN-2026-001", fcStatus: "Draft",            status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-01", wh: "WH-KDG01", docQty: 20000, docType: "DOC Broiler Cobb 500",  age: 7  },
+            { planNo: "PLAN-2026-002", fcStatus: "Forecast Created",  status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-02", wh: "WH-KDG02", docQty: 24000, docType: "DOC Broiler Ross 308",  age: 9  },
+            { planNo: "PLAN-2026-003", fcStatus: "Draft",            status: "Active", company: "PT AYM",            farm: "Farm Binjai", id: "KDG-03", wh: "WH-KDG03", docQty: 12000, docType: "DOC Broiler Cobb 500",  age: 19 },
+            { planNo: "PLAN-2026-004", fcStatus: "PO Created",       status: "Active", company: "PT BMAX",           farm: "Farm BMAX",   id: "KDG-04", wh: "WH-KDG04", docQty: 15000, docType: "DOC Broiler Ross 308",  age: 23 },
+            { planNo: "PLAN-2026-005", fcStatus: "Draft",            status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-05", wh: "WH-KDG05", docQty: 18000, docType: "DOC Broiler Cobb 500",  age: 3  },
+            { planNo: "PLAN-2026-006", fcStatus: "Forecast Created",  status: "Active", company: "PT AYM",            farm: "Farm Binjai", id: "KDG-06", wh: "WH-KDG06", docQty: 10000, docType: "DOC Broiler Ross 308",  age: 14 },
+            { planNo: "PLAN-2026-007", fcStatus: "Draft",            status: "Active", company: "PT BMAX",           farm: "Farm BMAX",   id: "KDG-07", wh: "WH-KDG07", docQty: 22000, docType: "DOC Broiler Cobb 500",  age: 28 },
         ];
 
-        function fmt(n, dec = 0) { return n.toLocaleString("id-ID", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+        const HARVEST_DAY = 35;
 
-        function loadFeedForecast(kdgId) {
-            const k = ALL_KANDANG.find(x => x.id === kdgId);
-            if (!k) { alert("Kandang tidak ditemukan."); window.location.href = "customer_ForecastList.html"; return; }
+        function fmt(n, dec = 0) { return Number(n).toLocaleString("id-ID", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
 
-            const HARVEST = 35;
-            const page = document.querySelector(".page");
+        function calcFeedNeed(plan) {
+            const phaseResults = PHASES.map((ph, idx) => {
+                const startDay = Math.max(ph.dayFrom, plan.age + 1);
+                const endDay   = Math.min(ph.dayTo, HARVEST_DAY);
+                if (startDay > endDay) return { phaseIdx: idx, qty: 0, avgVitality: null, avgFeedCons: null, days: 0, skipped: true };
+                let totalQty = 0, sumV = 0, sumFc = 0, count = 0;
+                for (let d = startDay; d <= endDay; d++) {
+                    const row = STD[d - 1];
+                    totalQty += plan.docQty * (row.v / 100) * row.fd;
+                    sumV += row.v; sumFc += row.fd; count++;
+                }
+                return { phaseIdx: idx, qty: totalQty, avgVitality: sumV / count, avgFeedCons: sumFc / count, days: count, skipped: false };
+            });
+            return { phaseResults, totalQty: phaseResults.reduce((s, r) => s + r.qty, 0) };
+        }
 
-            // Update topbar title
-            document.querySelector("h1").innerHTML =
-                `Feed Forecast <span class="mode-chip">View</span>`;
-            document.querySelector(".subtext").textContent =
-                `Detail proyeksi kebutuhan pakan sisa siklus — ${k.id} ${k.farm}`;
+        function sapMock(plan, calc) {
+            const sisaHari = HARVEST_DAY - plan.age;
+            const mort = Math.round(plan.docQty * 0.003 * plan.age);
+            const lastPop = plan.docQty - mort;
+            const bw = (0.045 + plan.age * 0.055).toFixed(3);
+            const fcr = (1.4 + plan.age * 0.01).toFixed(3);
+            const fiAct = Math.round(plan.docQty * parseFloat(bw) * parseFloat(fcr) / Math.max(plan.age, 1));
+            const fiCum = fiAct * plan.age;
+            const grpo = Math.ceil(fiCum / 1000);
+            const poItr = grpo + 2;
+            const lastStok = Math.max(0, Math.round(fiCum * 0.12));
+            const kebutuhanMinggu = Math.round(Math.min(calc.totalQty, calc.totalQty / Math.max(sisaHari, 1) * 7));
+            const sisaKebutuhan = Math.round(calc.totalQty);
+            const hariHabis = lastStok > 0 && fiAct > 0 ? Math.floor(lastStok / (fiAct / Math.max(plan.age, 1))) : 3;
+            const tglHabis = new Date(2026, 3, 20 + hariHabis);
+            const tglHabisStr = tglHabis.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+            const ageHabis = plan.age + hariHabis;
+            const lastPostStr = new Date(2026, 3, 20).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+            const statusKalang = plan.age < 7 ? "Normal" : plan.age < 25 ? "Growing" : "Pre-Panen";
+            const bwPanen = (parseFloat(bw) + (HARVEST_DAY - plan.age) * 0.055).toFixed(2) + " kg";
+            return { mort, lastPop, bw, fcr, fiAct, fiCum, grpo, poItr, lastStok, kebutuhanMinggu, sisaKebutuhan, hariHabis, tglHabisStr, ageHabis, lastPostStr, statusKalang, pakanHabis: tglHabisStr, bwPanen };
+        }
 
-            // Hide old document sections, replace with feed forecast content
-            page.querySelector("#statusBanner").remove();
-            page.querySelectorAll(".card").forEach(c => c.remove());
-            page.querySelector(".action-footer").remove();
+        // ─── RENDER ───────────────────────────────────────────────────────────
+        function renderView(plan) {
+            const calc  = calcFeedNeed(plan);
+            const sap   = sapMock(plan, calc);
+            const phase = PHASES.find(ph => plan.age + 1 >= ph.dayFrom && plan.age + 1 <= ph.dayTo) || PHASES[PHASES.length - 1];
+            const vit   = STD[plan.age] ? STD[plan.age].v.toFixed(1) : "-";
+            const sisaHari = HARVEST_DAY - plan.age;
 
-            const currentPhase = PHASES.find(p => k.age + 1 >= p.dayFrom && k.age + 1 <= p.dayTo) || PHASES[PHASES.length - 1];
-            const currentVit   = STD[k.age] ? STD[k.age].v.toFixed(2) : "-";
+            // Update topbar
+            const fcBadge = plan.fcStatus === "Draft"
+                ? `<span class="badge-status badge-draft">${plan.fcStatus}</span>`
+                : plan.fcStatus === "Forecast Created"
+                ? `<span class="badge-status badge-fc">${plan.fcStatus}</span>`
+                : `<span class="badge-status badge-po">${plan.fcStatus}</span>`;
+            document.getElementById("pageTitle").innerHTML = `${plan.planNo} &nbsp;${fcBadge}`;
+            document.getElementById("pageSubtext").textContent = `${plan.company} · ${plan.farm} · ${plan.id}`;
 
-            // ── Kandang Info ──────────────────────────────────────────────────
-            let html = `
-            <div class="card">
-                <div class="card-header"><i class="bi bi-house me-1"></i>Info Kandang</div>
-                <div class="card-body">
-                    <div class="ff-stat-grid">
-                        <div class="ff-stat"><div class="fs-lbl">Kandang</div><div class="fs-val" style="color:#1a237e;">${k.id}</div></div>
-                        <div class="ff-stat"><div class="fs-lbl">Farm / Warehouse</div><div class="fs-val" style="font-size:14px;">${k.farm} — ${k.wh}</div></div>
-                        <div class="ff-stat"><div class="fs-lbl">Company</div><div class="fs-val" style="font-size:14px;">${k.company}</div></div>
-                        <div class="ff-stat"><div class="fs-lbl">DOC Type</div><div class="fs-val" style="font-size:13px;">${k.docType}</div></div>
-                        <div class="ff-stat"><div class="fs-lbl">DOC Awal</div><div class="fs-val">${fmt(k.docQty)}</div></div>
-                        <div class="ff-stat"><div class="fs-lbl">Umur Saat Ini</div><div class="fs-val" style="color:#1a237e;">Hari ${k.age}</div></div>
-                        <div class="ff-stat"><div class="fs-lbl">Sisa Hari</div><div class="fs-val" style="color:#92400e;">${HARVEST - k.age} hari</div></div>
-                        <div class="ff-stat"><div class="fs-lbl">Vitality Kini</div><div class="fs-val" style="color:#166534;">${currentVit}%</div></div>
-                    </div>
-                    <div class="mt-3">
-                        <span class="chip chip-orange">Fase Sekarang: ${currentPhase.name}</span>
-                        <span class="chip chip-blue">Target Panen: Hari ${HARVEST}</span>
+            // ── Section 1: Info Plan ──────────────────────────────────────────
+            const infoCard = `
+            <div class="v-card">
+                <div class="v-card-header">
+                    <div class="vc-icon" style="background:#ede9fe;color:#7c3aed;"><i class="bi bi-clipboard-data"></i></div>
+                    Info Plan
+                </div>
+                <div class="v-card-body">
+                    <div class="info-grid">
+                        <div class="info-item"><div class="ik">Plan No</div><div class="iv">${plan.planNo}</div></div>
+                        <div class="info-item"><div class="ik">Status FC</div><div class="iv">${plan.fcStatus}</div></div>
+                        <div class="info-item"><div class="ik">Status Plan</div><div class="iv">${plan.status}</div></div>
+                        <div class="info-item"><div class="ik">Company</div><div class="iv">${plan.company}</div></div>
+                        <div class="info-item"><div class="ik">Farm</div><div class="iv">${plan.farm}</div></div>
+                        <div class="info-item"><div class="ik">Warehouse</div><div class="iv">${plan.wh}</div></div>
+                        <div class="info-item"><div class="ik">Kandang</div><div class="iv">${plan.id}</div></div>
+                        <div class="info-item"><div class="ik">DOC Type</div><div class="iv">${plan.docType || "-"}</div></div>
+                        <div class="info-item"><div class="ik">DOC Awal</div><div class="iv num">${fmt(plan.docQty)} ekor</div></div>
+                        <div class="info-item"><div class="ik">Umur Saat Ini</div><div class="iv num" style="color:#92400e;">Hari ${plan.age}</div></div>
+                        <div class="info-item"><div class="ik">Sisa Hari ke Panen</div><div class="iv num" style="color:#dc2626;">${sisaHari} hari</div></div>
+                        <div class="info-item"><div class="ik">Fase Pakan</div><div class="iv">${phase.name}</div></div>
                     </div>
                 </div>
             </div>`;
 
-            // ── Feed Summary Table ────────────────────────────────────────────
+            // ── Section 2: Kalkulator Kebutuhan Pakan (input SAP + hasil kalkulasi) ──
+            let phaseRows = "";
             let grandTotal = 0;
-            let phaseRows  = "";
-            const phaseCalc = PHASES.map(ph => {
-                const startDay = Math.max(ph.dayFrom, k.age + 1);
-                const endDay   = Math.min(ph.dayTo, HARVEST);
-                if (startDay > endDay) return { ph, qty: 0, avgV: null, avgFd: null, days: 0, skipped: true };
-                let qty = 0, sv = 0, sfd = 0, cnt = 0;
-                for (let d = startDay; d <= endDay; d++) {
-                    const r = STD[d - 1];
-                    qty += k.docQty * (r.v / 100) * r.fd;
-                    sv  += r.v; sfd += r.fd; cnt++;
-                }
-                return { ph, qty, avgV: sv/cnt, avgFd: sfd/cnt, days: cnt, skipped: false };
-            });
-
-            phaseCalc.forEach(pc => {
+            calc.phaseResults.forEach((pc, idx) => {
                 grandTotal += pc.qty;
                 if (pc.skipped) {
-                    phaseRows += `<tr>
-                        <td>${pc.ph.name}</td>
-                        <td style="color:#9ca3af;">Hari ${pc.ph.dayFrom}–${pc.ph.dayTo}</td>
-                        <td style="color:#9ca3af;text-align:center;">—</td>
-                        <td style="color:#9ca3af;text-align:center;">—</td>
-                        <td style="color:#9ca3af;text-align:center;">—</td>
-                        <td style="text-align:center;"><span class="chip chip-gray" style="background:#f3f4f6;color:#6b7280;">Sudah lewat</span></td>
+                    phaseRows += `<tr class="skipped">
+                        <td>${PHASES[idx].name}</td>
+                        <td>Hari ${PHASES[idx].dayFrom}–${PHASES[idx].dayTo}</td>
+                        <td class="r">—</td><td class="r">—</td><td class="r">—</td>
+                        <td class="r" style="font-size:11px;">Sudah lewat</td>
                     </tr>`;
                 } else {
                     phaseRows += `<tr>
-                        <td><strong>${pc.ph.name}</strong></td>
-                        <td>Hari ${pc.ph.dayFrom}–${pc.ph.dayTo}</td>
-                        <td style="text-align:right;color:#166534;">${pc.avgV.toFixed(2)}%</td>
-                        <td style="text-align:right;color:#1d4ed8;">${pc.avgFd.toFixed(4)}</td>
-                        <td style="text-align:center;"><span class="chip chip-orange">${pc.days} hari</span></td>
-                        <td style="text-align:right;font-weight:700;font-size:14px;">${fmt(pc.qty, 2)} kg</td>
+                        <td><strong>${PHASES[idx].name}</strong></td>
+                        <td>Hari ${PHASES[idx].dayFrom}–${PHASES[idx].dayTo}</td>
+                        <td class="r" style="color:#166534;">${pc.avgVitality.toFixed(2)}%</td>
+                        <td class="r" style="color:#1d4ed8;">${pc.avgFeedCons.toFixed(4)}</td>
+                        <td class="r"><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">${pc.days} hari</span></td>
+                        <td class="r" style="font-weight:700;font-size:14px;">${fmt(pc.qty, 2)} kg</td>
                     </tr>`;
                 }
             });
 
-            html += `
-            <div class="card">
-                <div class="card-header"><i class="bi bi-table me-1"></i>Ringkasan Kebutuhan Pakan per Fase</div>
-                <div class="card-body">
-                    <div class="formula-box">
-                        <strong>Formula:</strong> &nbsp;
-                        Qty per hari = DOC Awal × <code>Vitality% / 100</code> × <code>Feed Cons Daily</code> &nbsp;|&nbsp;
-                        Total fase = Σ qty per hari pada rentang fase
+            const calcCard = `
+            <div class="v-card">
+                <div class="v-card-header">
+                    <div class="vc-icon" style="background:#f0fdf4;color:#166534;"><i class="bi bi-calculator"></i></div>
+                    Kalkulator Kebutuhan Pakan
+                    <span class="ms-auto" style="font-size:11px;font-weight:400;color:#6b7280;">Data SAP: ${sap.lastPostStr}</span>
+                </div>
+                <div class="v-card-body">
+
+                    <!-- Parameter Input dari SAP — tabel mirip ForecastList -->
+                    <div style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">
+                        <i class="bi bi-database-check me-1" style="color:#1d4ed8;"></i>Parameter Input (Last Posting SAP)
                     </div>
-                    <div class="table-wrap">
-                        <table class="feed-table">
+                    <div style="overflow-x:auto;margin-bottom:0;">
+                        <table class="matrix-table" style="width:auto;min-width:100%;font-size:12px;">
                             <thead>
                                 <tr>
-                                    <th style="min-width:200px;">Item Pakan</th>
-                                    <th>Fase (Hari)</th>
-                                    <th style="text-align:right;">Avg Vitality%</th>
-                                    <th style="text-align:right;">Avg Feed Cons Daily<br><small style="font-weight:400;">(kg/ekor/hari)</small></th>
-                                    <th style="text-align:center;">Sisa Hari</th>
-                                    <th style="text-align:right;">Qty Needed (kg)</th>
+                                    <th rowspan="2">Populasi</th>
+                                    <th rowspan="2">Last Posting Date</th>
+                                    <th colspan="11">Last Posting</th>
+                                    <th rowspan="2" class="th-yellow">Status Kalang</th>
+                                    <th rowspan="2" class="th-yellow">Pakan Habis</th>
+                                    <th rowspan="2" class="th-yellow">BW/PANEN</th>
+                                    <th rowspan="2">Kebutuhan Minggu Depan</th>
+                                    <th rowspan="2">Sisa Kebutuhan</th>
+                                    <th colspan="2">Estimate Habis Kapan</th>
+                                </tr>
+                                <tr>
+                                    <th>Age</th><th>Mort</th><th>Last Populasi</th><th>BW</th><th>FCR</th>
+                                    <th>FI Act</th><th>FI Cum Pakan Terima</th><th>GRPO/IT</th><th>PO/ITR</th>
+                                    <th>Last Stok</th><th>Age</th>
+                                    <th>Date</th><th>Age</th>
                                 </tr>
                             </thead>
-                            <tbody>${phaseRows}</tbody>
-                            <tfoot>
-                                <tr class="row-total">
-                                    <td colspan="5">TOTAL SEMUA PAKAN</td>
-                                    <td style="text-align:right;font-size:16px;">${fmt(grandTotal, 2)} kg</td>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight:700;">${fmt(plan.docQty)}</td>
+                                    <td>${sap.lastPostStr}</td>
+                                    <td>${plan.age}</td>
+                                    <td>${sap.mort}</td>
+                                    <td>${fmt(sap.lastPop)}</td>
+                                    <td>${sap.bw} kg</td>
+                                    <td>${sap.fcr}</td>
+                                    <td>${fmt(sap.fiAct)} kg</td>
+                                    <td>${fmt(sap.fiCum)} kg</td>
+                                    <td>${sap.grpo}</td>
+                                    <td>${sap.poItr}</td>
+                                    <td>${fmt(sap.lastStok)} kg</td>
+                                    <td>${plan.age}</td>
+                                    <td class="td-yellow">${sap.statusKalang}</td>
+                                    <td class="td-yellow">${sap.pakanHabis}</td>
+                                    <td class="td-yellow">${sap.bwPanen}</td>
+                                    <td style="font-weight:700;color:#1a237e;">${fmt(sap.kebutuhanMinggu)} kg</td>
+                                    <td style="font-weight:700;color:#92400e;">${fmt(sap.sisaKebutuhan)} kg</td>
+                                    <td>${sap.tglHabisStr}</td>
+                                    <td>Hari ${sap.ageHabis}</td>
                                 </tr>
-                            </tfoot>
+                            </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>`;
 
-            // ── Day-by-Day Breakdown ──────────────────────────────────────────
-            let dayRows = "";
-            let phaseTotals = {};
-            PHASES.forEach(ph => phaseTotals[ph.code] = 0);
+            // ── Section 4: Rekomendasi Item ───────────────────────────────────
+            let rekRows = [];
+            try {
+                const saved = localStorage.getItem("IBOCS_rekom_" + plan.planNo);
+                if (saved) rekRows = JSON.parse(saved);
+            } catch(e) {}
 
-            for (let d = 1; d <= HARVEST; d++) {
-                const r        = STD[d - 1];
-                const ph       = PHASES.find(p => d >= p.dayFrom && d <= p.dayTo);
-                const isPast   = d <= k.age;
-                const liveB    = k.docQty * (r.v / 100);
-                const feedQty  = liveB * r.fd;
-
-                // Phase header row
-                if (ph && d === ph.dayFrom) {
-                    dayRows += `<tr class="phase-hdr">
-                        <td colspan="8">
-                            <i class="bi bi-chevron-right me-1"></i>${ph.name} &nbsp;
-                            <span style="font-weight:400;color:#6b7280;">(Hari ${ph.dayFrom}–${ph.dayTo})</span>
-                        </td>
-                    </tr>`;
-                }
-
-                if (!isPast) phaseTotals[ph ? ph.code : ""] = (phaseTotals[ph ? ph.code : ""] || 0) + feedQty;
-
-                dayRows += `<tr class="${isPast ? 'past-day' : ''}">
-                    <td>${d}</td>
-                    <td>${ph ? ph.name.split("(")[0].trim() : "-"}</td>
-                    <td style="text-align:right;">${fmt(k.docQty)}</td>
-                    <td style="text-align:right;color:#166534;">${r.v.toFixed(2)}%</td>
-                    <td style="text-align:right;color:#166534;">${fmt(Math.round(liveB))}</td>
-                    <td style="text-align:right;color:#1d4ed8;">${r.fd.toFixed(4)}</td>
-                    <td style="text-align:right;font-weight:${isPast ? '400' : '700'};">${isPast ? '<span style="color:#9ca3af;">—</span>' : fmt(feedQty, 2)}</td>
-                    <td style="font-size:11px;color:#9ca3af;">${isPast ? 'Sudah lewat (umur ' + d + ')' : fmt(k.docQty) + ' × ' + r.v.toFixed(2) + '% × ' + r.fd.toFixed(4)}</td>
-                </tr>`;
-
-                // Phase subtotal at end of phase
-                if (ph && d === ph.dayTo) {
-                    dayRows += `<tr class="phase-sub">
-                        <td colspan="6" style="text-align:right;">Subtotal ${ph.name.split("(")[0].trim()}</td>
-                        <td style="text-align:right;">${fmt(phaseTotals[ph.code] || 0, 2)} kg</td>
-                        <td></td>
-                    </tr>`;
-                }
+            let rekContent = "";
+            if (rekRows.length === 0) {
+                rekContent = `<div class="empty-state">
+                    <i class="bi bi-stars" style="font-size:28px;display:block;margin-bottom:8px;color:#d1d5db;"></i>
+                    Belum ada rekomendasi item untuk plan ini.<br>
+                    <a href="customer_ForecastList.html" style="font-size:12px;color:#2563eb;font-weight:700;">Buka ForecastList → ★ Rekom</a> untuk mengisi.
+                </div>`;
+            } else {
+                const totalQty = rekRows.reduce((s, r) => s + (parseFloat(r.qty) || 0), 0);
+                rekContent = `
+                <div class="rekom-list mb-3">
+                    ${rekRows.map((r, i) => `
+                    <div class="rekom-card">
+                        <div class="rc-no">Item ${i + 1}</div>
+                        <div class="rc-name">${r.itemName || "-"}</div>
+                        <div class="rc-code">${r.itemCode || "-"} · ${r.uom || "Kg"}</div>
+                        <div class="rc-qty">${fmt(parseFloat(r.qty) || 0)}</div>
+                        <div class="rc-uom">${r.uom || "Kg"}</div>
+                    </div>`).join("")}
+                </div>
+                <div style="background:#fef9c3;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:12px;font-weight:700;color:#92400e;">Total ${rekRows.length} item</span>
+                    <span style="font-size:18px;font-weight:700;color:#92400e;">${fmt(totalQty, 0)} kg</span>
+                </div>`;
             }
 
-            dayRows += `<tr class="grand-total">
-                <td colspan="6" style="text-align:right;">GRAND TOTAL</td>
-                <td style="text-align:right;">${fmt(grandTotal, 2)} kg</td>
-                <td></td>
-            </tr>`;
-
-            html += `
-            <div class="card">
-                <div class="card-header"><i class="bi bi-calculator me-1"></i>Detail Kalkulasi Hari per Hari
-                    <span class="text-muted fw-normal ms-2" style="font-size:11px;">Baris abu-abu = hari yang sudah lewat (tidak dihitung)</span>
+            const rekCard = `
+            <div class="v-card">
+                <div class="v-card-header">
+                    <div class="vc-icon" style="background:#fef3c7;color:#d97706;"><i class="bi bi-stars"></i></div>
+                    Rekomendasi Item Pakan
                 </div>
-                <div class="card-body">
-                    <div class="table-wrap">
-                        <table class="day-table">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center;">Hari</th>
-                                    <th style="text-align:left;">Fase Pakan</th>
-                                    <th>DOC Awal</th>
-                                    <th>Vitality (%)</th>
-                                    <th>Ayam Hidup</th>
-                                    <th>Feed Cons Daily<br><small style="font-weight:400;">(kg/ekor)</small></th>
-                                    <th>Feed Qty (kg)</th>
-                                    <th style="text-align:left;">Kalkulasi</th>
-                                </tr>
-                            </thead>
-                            <tbody>${dayRows}</tbody>
-                        </table>
-                    </div>
-                </div>
+                <div class="v-card-body">${rekContent}</div>
             </div>`;
 
-            // Inject into page
-            page.querySelector(".topbar").insertAdjacentHTML("afterend", html);
-
-            // Action footer (back button)
-            page.insertAdjacentHTML("beforeend", `
-                <div class="action-footer" style="margin-top:8px;">
-                    <a href="customer_ForecastList.html" class="btn-secondary-action">
-                        <i class="bi bi-arrow-left me-1"></i>Back to Forecast
-                    </a>
-                </div>`);
+            document.getElementById("mainContent").innerHTML = infoCard + calcCard + rekCard;
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  FORECAST DOCUMENT VIEW MODE (existing behavior)
-        // ══════════════════════════════════════════════════════════════════════
-
+        // ─── FC MODE (dari ForecastHistory) ──────────────────────────────────
         function getFcList() {
             const DEMO_FC = [
-                { fcNo: "FC-001", fcDate: "2026-04-29", period: "Week 18", company: "PT TOP",  farm: "Farm Deli",   warehouse: "WH-KDG01", planNo: "PL-001", planDesc: "Broiler Cycle 18", status: "Draft",      age: "21 Hari", docCodeMale: "DOC-M-001", docCodeFemale: "DOC-F-001", docNameMale: "DOC Male Premium", docNameFemale: "DOC Female Premium", initialStock: "5,000 / 5,000", currentPop: "4,900 / 4,950", totalPop: "9,850", lines: [{ itemCode: "FD-ST-001", itemName: "Starter Feed", flag: "Auto",   standardNeed: 7000, currentStock: 500, recommendedQty: 7500, manualAdjustment: 300 }, { itemCode: "FD-GR-003", itemName: "Grower Feed",  flag: "Auto",   standardNeed: 5000, currentStock: 200, recommendedQty: 5500, manualAdjustment: 200 }] },
-                { fcNo: "FC-002", fcDate: "2026-04-29", period: "Week 18", company: "PT TOP",  farm: "Farm Deli",   warehouse: "WH-KDG02", planNo: "PL-002", planDesc: "Broiler Cycle 18", status: "Confirmed",  age: "23 Hari", docCodeMale: "DOC-M-001", docCodeFemale: "DOC-F-001", docNameMale: "DOC Male Premium", docNameFemale: "DOC Female Premium", initialStock: "5,000 / 5,000", currentPop: "4,850 / 4,900", totalPop: "9,750", lines: [{ itemCode: "FD-ST-001", itemName: "Starter Feed",  flag: "Auto",   standardNeed: 8000, currentStock: 400, recommendedQty: 8000, manualAdjustment: 0  }, { itemCode: "FD-FN-002", itemName: "Finisher Feed", flag: "Auto",   standardNeed: 7000, currentStock: 300, recommendedQty: 7000, manualAdjustment: 0  }] },
-                { fcNo: "FC-003", fcDate: "2026-04-28", period: "Week 18", company: "PT AYM",  farm: "Farm Binjai", warehouse: "WH-KDG03", planNo: "PL-008", planDesc: "Broiler Cycle 21", status: "PO Created", age: "18 Hari", docCodeMale: "DOC-M-008", docCodeFemale: "DOC-F-008", docNameMale: "DOC Male Select",  docNameFemale: "DOC Female Select",  initialStock: "4,800 / 4,800", currentPop: "4,600 / 4,650", totalPop: "9,250", lines: [{ itemCode: "FD-ST-001", itemName: "Starter Feed", flag: "Auto",   standardNeed: 6200, currentStock: 200, recommendedQty: 6200, manualAdjustment: 0  }, { itemCode: "FD-GR-003", itemName: "Grower Feed",  flag: "Manual", standardNeed: 0,    currentStock: 0,   recommendedQty: 0,    manualAdjustment: 4300}] }
+                { fcNo:"FC-001", fcDate:"2026-04-29", company:"PT TOP Distribusi", farm:"Farm Deli",   warehouse:"WH-KDG01", planNo:"PL-001", status:"Draft",           lines:[] },
+                { fcNo:"FC-002", fcDate:"2026-04-29", company:"PT TOP Distribusi", farm:"Farm Deli",   warehouse:"WH-KDG02", planNo:"PL-002", status:"Forecast Created", lines:[] },
+                { fcNo:"FC-003", fcDate:"2026-04-28", company:"PT AYM",            farm:"Farm Binjai", warehouse:"WH-KDG03", planNo:"PL-008", status:"PO Created",       lines:[] },
             ];
             const stored = JSON.parse(localStorage.getItem("IBOCS_fc_list") || "[]");
             const storedNos = new Set(stored.map(f => f.fcNo));
             return [...stored, ...DEMO_FC.filter(d => !storedNos.has(d.fcNo))];
         }
 
-        function loadForecast(fcNo) {
-            const data = getFcList().find(f => f.fcNo === fcNo);
-            if (!data) { alert("Forecast tidak ditemukan."); window.location.href = "customer_ForecastList.html"; return; }
-            document.getElementById("fcNo").value          = data.fcNo;
-            document.getElementById("fcDate").value        = data.fcDate;
-            document.getElementById("period").value        = data.period;
-            document.getElementById("planNo").value        = data.planNo;
-            document.getElementById("planDesc").value      = data.planDesc;
-            document.getElementById("company").value       = data.company;
-            document.getElementById("farm").value          = data.farm;
-            document.getElementById("warehouse").value     = data.warehouse;
-            document.getElementById("status").value        = data.status;
-            document.getElementById("age").value           = data.age || "";
-            document.getElementById("docCodeMale").value   = data.docCodeMale || "";
-            document.getElementById("docCodeFemale").value = data.docCodeFemale || "";
-            document.getElementById("docNameMale").value   = data.docNameMale || "";
-            document.getElementById("docNameFemale").value = data.docNameFemale || "";
-            document.getElementById("initialStock").value  = data.initialStock || "";
-            document.getElementById("currentPop").value    = data.currentPop || "";
-            document.getElementById("totalPop").value      = data.totalPop || "";
-            const bannerMap = {
-                Draft:        { cls: "alert alert-warning",   icon: "bi-pencil",      msg: "Status: <strong>Draft</strong> — Forecast belum dikonfirmasi." },
-                Confirmed:    { cls: "alert alert-success",   icon: "bi-check-circle", msg: "Status: <strong>Confirmed</strong> — Forecast telah dikonfirmasi. Generate PO untuk melanjutkan." },
-                "PO Created": { cls: "alert alert-info",      icon: "bi-bag-check",    msg: "Status: <strong>PO Created</strong> — PO sudah dibuat dari forecast ini." },
-                Closed:       { cls: "alert alert-secondary", icon: "bi-lock",         msg: "Status: <strong>Closed</strong> — Forecast sudah ditutup." }
+        function renderFcView(fc) {
+            const statusColor = { Draft:"#374151", "Forecast Created":"#1d4ed8", Confirmed:"#166534", "PO Created":"#92400e", Closed:"#6b7280" };
+            const statusBg    = { Draft:"#f3f4f6", "Forecast Created":"#dbeafe", Confirmed:"#dcfce7", "PO Created":"#fef3c7", Closed:"#f3f4f6" };
+
+            document.getElementById("pageTitle").innerHTML = `${fc.fcNo} <span style="background:${statusBg[fc.status]||'#f3f4f6'};color:${statusColor[fc.status]||'#374151'};padding:3px 10px;border-radius:12px;font-size:13px;font-weight:700;margin-left:8px;">${fc.status}</span>`;
+            document.getElementById("pageSubtext").textContent = `${fc.company} · ${fc.farm} · ${fc.warehouse} · ${fc.fcDate}`;
+
+            const lines = fc.lines || [];
+            const totalQty = lines.reduce((s, l) => s + (parseFloat(l.recommendedQty || l.standardNeed || 0)), 0);
+
+            const linesRows = lines.length ? lines.map(l => {
+                const qty = parseFloat(l.recommendedQty || l.standardNeed || 0);
+                return `<tr>
+                    <td style="font-weight:700;color:#6366f1;">${l.itemCode || "-"}</td>
+                    <td>${l.itemName || "-"}</td>
+                    <td style="text-align:right;font-weight:700;color:#1a237e;">${fmt(qty)} kg</td>
+                </tr>`;
+            }).join("") : `<tr><td colspan="3" style="text-align:center;color:#9ca3af;padding:20px;">Tidak ada item</td></tr>`;
+
+            let actionBtn = "";
+            if (fc.status === "Draft" || fc.status === "Forecast Created") {
+                actionBtn = `<button onclick="doConfirmFc('${fc.fcNo}')" style="padding:10px 20px;background:#16a34a;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;"><i class="bi bi-check-circle me-1"></i>Confirm Forecast</button>`;
+            } else if (fc.status === "Confirmed") {
+                actionBtn = `<button onclick="doGeneratePO('${fc.fcNo}')" style="padding:10px 20px;background:#2563eb;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;"><i class="bi bi-bag-plus me-1"></i>Generate PO</button>`;
+            } else if (fc.status === "PO Created") {
+                actionBtn = `<a href="customer_orders.html" style="padding:10px 20px;background:#f0f6ff;color:#1d4ed8;border:1.5px solid #bfdbfe;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;"><i class="bi bi-box-arrow-up-right me-1"></i>Lihat PO</a>`;
+            }
+
+            document.getElementById("mainContent").innerHTML = `
+            <div class="v-card">
+                <div class="v-card-header">
+                    <div class="vc-icon" style="background:#dbeafe;color:#1d4ed8;"><i class="bi bi-file-earmark-text"></i></div>
+                    Detail Forecast
+                </div>
+                <div class="v-card-body">
+                    <div class="info-grid mb-4">
+                        <div class="info-item"><div class="ik">Forecast No</div><div class="iv">${fc.fcNo}</div></div>
+                        <div class="info-item"><div class="ik">Tanggal</div><div class="iv">${fc.fcDate}</div></div>
+                        <div class="info-item"><div class="ik">Status</div><div class="iv">${fc.status}</div></div>
+                        <div class="info-item"><div class="ik">Plan No</div><div class="iv">${fc.planNo || "-"}</div></div>
+                        <div class="info-item"><div class="ik">Company</div><div class="iv">${fc.company}</div></div>
+                        <div class="info-item"><div class="ik">Warehouse</div><div class="iv">${fc.warehouse}</div></div>
+                    </div>
+                    <div style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">
+                        <i class="bi bi-box-seam me-1" style="color:#2563eb;"></i>Item Forecast
+                    </div>
+                    <div style="overflow-x:auto;margin-bottom:16px;">
+                        <table class="phase-table">
+                            <thead><tr><th>Item Code</th><th>Item Name</th><th class="r">Qty (kg)</th></tr></thead>
+                            <tbody>${linesRows}</tbody>
+                            <tfoot><tr class="row-total"><td colspan="2">Total</td><td class="r" style="font-size:15px;">${fmt(totalQty)} kg</td></tr></tfoot>
+                        </table>
+                    </div>
+                    <div style="display:flex;justify-content:flex-end;gap:10px;">
+                        <a href="customer_ForecastHistory.html" class="btn-secondary-action"><i class="bi bi-arrow-left me-1"></i>Back</a>
+                        ${actionBtn}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function doConfirmFc(fcNo) {
+            if (!confirm(`Konfirmasi forecast ${fcNo}?`)) return;
+            updateFcStatus(fcNo, "Confirmed");
+        }
+
+        function doGeneratePO(fcNo) {
+            if (!confirm(`Generate PO dari forecast ${fcNo}?`)) return;
+
+            const fc = getFcList().find(f => f.fcNo === fcNo);
+            if (!fc || !fc.lines || fc.lines.length === 0) {
+                alert("Forecast tidak memiliki item. Tidak bisa generate PO.");
+                return;
+            }
+
+            const LS_ORDERS      = "IBOCS_customer_orders";
+            const LS_ORDER_LINES = "IBOCS_customer_order_lines";
+
+            const orders     = JSON.parse(localStorage.getItem(LS_ORDERS)      || "[]");
+            const orderLines = JSON.parse(localStorage.getItem(LS_ORDER_LINES) || "{}");
+
+            const today = new Date();
+            const yyyy  = today.getFullYear();
+            const mm    = String(today.getMonth() + 1).padStart(2, "0");
+            const dd    = String(today.getDate()).padStart(2, "0");
+            const dateStr = `${yyyy}-${mm}-${dd}`;
+            const poNo = "PO-FC-" + fcNo.replace(/[^0-9]/g, "");
+
+            const newOrder = {
+                no:           poNo,
+                customerName: fc.company || "-",
+                customer:     fc.company || "-",
+                date:         dateStr,
+                requiredDate: dateStr,
+                status:       "Open",
+                warehouse:    fc.warehouse || "-",
+                planNo:       fc.planNo    || "-",
+                fcRef:        fcNo,
+                week:         fc.period    || "-",
+                sourceType:   "Feed",
+                total:        0
             };
-            const b = bannerMap[data.status] || bannerMap.Draft;
-            document.getElementById("statusBanner").innerHTML =
-                `<div class="${b.cls} d-flex align-items-center gap-2 mb-0"><i class="bi ${b.icon}"></i><span>${b.msg}</span></div>`;
-            buildLines(data.lines);
-            buildFooter(data);
+
+            const poLines = fc.lines.map(l => ({
+                sku:   l.itemCode || "-",
+                name:  l.itemName || "-",
+                qty:   parseFloat(l.recommendedQty || l.standardNeed || 0),
+                price: 0,
+                uom:   l.uom || "Kg"
+            }));
+
+            orders.unshift(newOrder);
+            orderLines[poNo] = poLines;
+
+            localStorage.setItem(LS_ORDERS,      JSON.stringify(orders));
+            localStorage.setItem(LS_ORDER_LINES, JSON.stringify(orderLines));
+
+            updateFcStatus(fcNo, "PO Created");
         }
 
-        function buildLines(lines) {
-            const tbody = document.getElementById("linesBody");
-            tbody.innerHTML = "";
-            let totalItem = 0, totalRec = 0, totalFinal = 0;
-            (lines || []).forEach(l => {
-                const finalQty = (l.recommendedQty || 0) + (l.manualAdjustment || 0);
-                totalItem++; totalRec += (l.recommendedQty || 0); totalFinal += finalQty;
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${l.itemCode}</td><td>${l.itemName}</td>
-                    <td><span class="${l.flag === 'Manual' ? 'tag-manual' : 'tag-auto'}">${l.flag}</span></td>
-                    <td>${l.flag === 'Manual' ? '-' : (l.standardNeed || 0).toLocaleString()}</td>
-                    <td>${l.flag === 'Manual' ? '-' : (l.currentStock || 0).toLocaleString()}</td>
-                    <td>${l.flag === 'Manual' ? '-' : (l.recommendedQty || 0).toLocaleString()}</td>
-                    <td>${(l.manualAdjustment || 0).toLocaleString()}</td>
-                    <td>${finalQty.toLocaleString()}</td>`;
-                tbody.appendChild(tr);
-            });
-            document.getElementById("totalItem").textContent        = totalItem;
-            document.getElementById("totalRecommended").textContent = totalRec.toLocaleString();
-            document.getElementById("totalFinal").textContent       = totalFinal.toLocaleString();
-        }
-
-        function buildFooter(data) {
-            const footer = document.getElementById("actionFooter");
-            const editBtn = data.status === "Draft"
-                ? `<a href="customer_ForecastAdd.html?fcNo=${encodeURIComponent(data.fcNo)}" class="btn-secondary-action"><i class="bi bi-pencil me-1"></i>Edit</a>` : "";
-            let primaryBtn = "";
-            if (data.status === "Draft")        primaryBtn = `<button class="btn-success-action" onclick="doConfirm('${data.fcNo}')"><i class="bi bi-check-circle me-1"></i>Confirm Forecast</button>`;
-            else if (data.status === "Confirmed") primaryBtn = `<button class="btn-success-action" onclick="doGeneratePO('${data.fcNo}')"><i class="bi bi-bag-plus me-1"></i>Generate PO</button>`;
-            else if (data.status === "PO Created") primaryBtn = `<button class="btn-info-action" onclick="window.location.href='customer_orders.html'"><i class="bi bi-box-arrow-up-right me-1"></i>Open PO</button>`;
-            footer.innerHTML = editBtn + primaryBtn;
-        }
-
-        function doConfirm(fcNo)    { if (!confirm(`Konfirmasi forecast ${fcNo}?`)) return; updateStatus(fcNo, "Confirmed"); }
-        function doGeneratePO(fcNo) { if (!confirm(`Generate PO dari forecast ${fcNo}?`)) return; updateStatus(fcNo, "PO Created"); }
-        function updateStatus(fcNo, newStatus) {
+        function updateFcStatus(fcNo, newStatus) {
             const list = getFcList().map(f => f.fcNo === fcNo ? { ...f, status: newStatus } : f);
             localStorage.setItem("IBOCS_fc_list", JSON.stringify(list.filter(f => !["FC-001","FC-002","FC-003"].includes(f.fcNo))));
             window.location.reload();
         }
-        function toggleShowMore() {
-            const box = document.getElementById("planDetail");
-            const icon = document.getElementById("showmoreIcon");
-            box.classList.toggle("active");
-            icon.className = box.classList.contains("active") ? "bi bi-chevron-up" : "bi bi-chevron-down";
-        }
+
+        // ─── INIT ─────────────────────────────────────────────────────────────
+        document.addEventListener("DOMContentLoaded", () => {
+            new SidebarSystem(null, 'forecast').render();
+
+            const params = new URLSearchParams(window.location.search);
+            const planNo = params.get("planNo");
+            const fcNo   = params.get("fcNo");
+
+            if (fcNo) {
+                const fc = getFcList().find(f => f.fcNo === fcNo);
+                if (!fc) {
+                    document.getElementById("mainContent").innerHTML = `<div class="empty-state"><i class="bi bi-exclamation-circle" style="font-size:28px;display:block;margin-bottom:8px;color:#f87171;"></i>Forecast <strong>${fcNo}</strong> tidak ditemukan.</div>`;
+                    return;
+                }
+                renderFcView(fc);
+                return;
+            }
+
+            if (!planNo) {
+                document.getElementById("mainContent").innerHTML = `<div class="empty-state"><i class="bi bi-exclamation-circle" style="font-size:28px;display:block;margin-bottom:8px;color:#f87171;"></i>Parameter tidak ditemukan.</div>`;
+                return;
+            }
+
+            const plan = DEMO_PLANS.find(p => p.planNo === planNo);
+            if (!plan) {
+                document.getElementById("mainContent").innerHTML = `<div class="empty-state"><i class="bi bi-exclamation-circle" style="font-size:28px;display:block;margin-bottom:8px;color:#f87171;"></i>Plan <strong>${planNo}</strong> tidak ditemukan.</div>`;
+                return;
+            }
+
+            renderView(plan);
+        });
     </script>
 </body>
 </html>

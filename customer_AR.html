@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts Receivable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="sidebar.js"></script>
+    <style>
+        body {
+            background: #f4f6fb;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+        }
+
+        .card-header-custom {
+            background: #fff;
+            border-bottom: 1.5px solid #e8ecf4;
+            padding: 16px 20px;
+            border-radius: 14px 14px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-label {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #1a237e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            font-size: 13.5px;
+        }
+
+        th {
+            background: #f8faff;
+            color: #374151;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            border-bottom: 1.5px solid #e0e7ef !important;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+
+        .s-open {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .s-draft {
+            background: #fefce8;
+            color: #854d0e;
+        }
+
+        .s-posted {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .s-generated {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .bulk-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 2px solid #e0e7ef;
+            padding: 14px 32px;
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, .08);
+        }
+
+        .bulk-bar.visible {
+            display: flex;
+        }
+
+        .btn-generate {
+            background: #1a237e;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 22px;
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        .btn-generate:hover {
+            background: #283593;
+            color: #fff;
+        }
+
+        .toast-wrap {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast-item {
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
+            animation: slideIn .25s ease;
+        }
+
+        .toast-success {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1.5px solid #bbf7d0;
+        }
+
+        .toast-warning {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1.5px solid #fde68a;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: .9rem;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            color: #1a237e;
+            border-bottom-color: #1a237e;
+        }
+
+        .empty-state {
+            padding: 48px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            padding: 0 6px;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 13px;
+            transition: transform .2s;
+        }
+
+        .expand-btn.open {
+            color: #1a237e;
+        }
+
+        .expand-row td {
+            background: #f8faff;
+            padding: 0 !important;
+        }
+
+        .expand-inner {
+            padding: 10px 16px 14px 56px;
+            border-top: 1px solid #e0e7ef;
+        }
+
+        .item-mini-table {
+            width: 100%;
+            font-size: 12.5px;
+        }
+
+        .item-mini-table th {
+            background: #eef2ff;
+            font-size: 11px;
+            padding: 5px 10px;
+        }
+
+        .item-mini-table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .item-mini-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark" style="background:#1a237e; padding:10px 24px;">
+        <a class="navbar-brand fw-bold" href="customer_dashboard.html">IBOCS</a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <span class="text-white-50 small" id="navUser"></span>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2" id="sidebar-container"></div>
+            <div class="col-lg-10 py-4 px-4">
+
+                <div class="mb-4">
+                    <h4 class="fw-bold text-dark mb-1"><i class="bi bi-file-earmark-plus me-2"
+                            style="color:#1a237e;"></i>Accounts Receivable</h4>
+                    <p class="text-muted small mb-0">Generate AR dokumen dari Delivery Order (DO) yang sudah terkirim. 1
+                        DO = 1 AR.</p>
+                </div>
+
+                <!-- Tabs -->
+                <div style="border-bottom:2px solid #e0e7ef; margin-bottom:20px;">
+                    <button class="tab-btn active" id="tabDo" onclick="switchTab('do')">
+                        <i class="bi bi-truck me-1"></i>DO Belum di-AR
+                    </button>
+                    <button class="tab-btn" id="tabAr" onclick="switchTab('ar')">
+                        <i class="bi bi-file-earmark-check me-1"></i>Dokumen AR
+                    </button>
+                </div>
+
+                <!-- DO Tab -->
+                <div id="panelDo">
+                    <div class="card">
+                        <div class="card-header-custom">
+                            <span class="section-label"><i class="bi bi-truck"></i> Delivery Order Tersedia</span>
+                            <input type="text" id="fDoSearch" class="form-control form-control-sm"
+                                placeholder="Cari DO No / Order No..." oninput="renderDoTable()"
+                                style="width:220px; border-radius:8px;">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:40px;"><input type="checkbox" id="checkAll"
+                                                onchange="toggleAll(this)"></th>
+                                        <th style="width:36px;"></th>
+                                        <th>DO No</th>
+                                        <th>Order / PO Ref</th>
+                                        <th>Vendor</th>
+                                        <th>ETA</th>
+                                        <th class="text-end">Total Qty</th>
+                                        <th class="text-end">Open Qty</th>
+                                        <th>Status AR</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AR Tab -->
+                <div id="panelAr" style="display:none;">
+                    <div class="card">
+                        <div class="card-header-custom">
+                            <span class="section-label"><i class="bi bi-file-earmark-check"></i> Dokumen AR</span>
+                            <input type="text" id="fArSearch" class="form-control form-control-sm"
+                                placeholder="Cari AR No / DO..." oninput="renderArTable()"
+                                style="width:220px; border-radius:8px;">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>AR No</th>
+                                        <th>Tanggal</th>
+                                        <th>DO Ref</th>
+                                        <th>Order Ref</th>
+                                        <th>Vendor</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="arBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Bar -->
+    <div class="bulk-bar" id="bulkBar">
+        <span class="text-muted small me-auto"><span id="bulkCount">0</span> DO dipilih — akan dibuat 1 AR per DO</span>
+        <button class="btn btn-outline-secondary btn-sm" onclick="clearSelection()">Batal</button>
+        <button class="btn-generate" onclick="generateAR()"><i class="bi bi-plus-circle me-2"></i>Generate AR</button>
+    </div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script>
+        const sess = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
+        if (!sess || !sess.role) window.location.href = "login.html";
+        document.getElementById("navUser").textContent = sess.name || sess.username || "";
+        new SidebarSystem(null, 'ar_list').render();
+
+        const DEMO_DO = [
+            {
+                doNo: "DO-77821", orderNo: "ORD-000128", vendor: "Vendor A", status: "Shipped", eta: "2026-01-09",
+                items: [
+                    { sku: "FEED-002", itemCode: "FEED-002", name: "Pakan Starter (BR-1)", itemName: "Pakan Starter (BR-1)", qty: 9514, uom: "Kg" },
+                    { sku: "FEED-004", itemCode: "FEED-004", name: "Pakan Finisher (BR-3)", itemName: "Pakan Finisher (BR-3)", qty: 3067, uom: "Kg" }
+                ]
+            },
+            {
+                doNo: "DO-77819", orderNo: "ORD-000127", vendor: "Vendor B", status: "DO Issued", eta: "2026-01-08",
+                items: [
+                    { sku: "FEED-001", itemCode: "FEED-001", name: "Pakan Pre-Starter (BR-0)", itemName: "Pakan Pre-Starter (BR-0)", qty: 4200, uom: "Kg" }
+                ]
+            },
+            {
+                doNo: "DO-77821-B", orderNo: "ORD-000128", vendor: "Vendor A", status: "In Transit", eta: "2026-01-11",
+                items: [
+                    { sku: "FEED-003", itemCode: "FEED-003", name: "Pakan Grower (BR-2)", itemName: "Pakan Grower (BR-2)", qty: 6800, uom: "Kg" },
+                    { sku: "FEED-004", itemCode: "FEED-004", name: "Pakan Finisher (BR-3)", itemName: "Pakan Finisher (BR-3)", qty: 2500, uom: "Kg" }
+                ]
+            }
+        ];
+
+        function getDoList() {
+            const stored = JSON.parse(localStorage.getItem("IBOCS_customer_deliveries") || "[]");
+            const storedNos = new Set(stored.map(d => d.doNo));
+            return [...stored, ...DEMO_DO.filter(d => !storedNos.has(d.doNo))];
+        }
+
+        function getArList() {
+            return JSON.parse(localStorage.getItem("IBOCS_ar_list") || "[]");
+        }
+
+        function generatedDoNos() {
+            return new Set(getArList().map(a => a.doRef));
+        }
+
+        // ── Tabs ──────────────────────────────────────────────────────────────────
+        function switchTab(tab) {
+            document.getElementById("tabDo").classList.toggle("active", tab === "do");
+            document.getElementById("tabAr").classList.toggle("active", tab === "ar");
+            document.getElementById("panelDo").style.display = tab === "do" ? "" : "none";
+            document.getElementById("panelAr").style.display = tab === "ar" ? "" : "none";
+            if (tab === "ar") renderArTable();
+            clearSelection();
+        }
+
+        // ── Delivery Status Badge ─────────────────────────────────────────────────
+        function deliveryBadge(status) {
+            const s = (status || "").toLowerCase();
+            if (s.includes("shipped") || s.includes("delivered")) return `<span class="status-badge s-posted">${status}</span>`;
+            if (s.includes("transit")) return `<span class="status-badge" style="background:#fff7ed;color:#9a3412;">${status}</span>`;
+            return `<span class="status-badge s-open">${status}</span>`;
+        }
+
+        // ── AR Status Badge ───────────────────────────────────────────────────────
+        function statusBadge(status) {
+            const text = (!status || status === "Draft") ? "Open" : status;
+            const cls = text === "Open" ? "s-open" : text === "Closed" ? "s-posted" : text === "Paid" ? "s-paid" : "s-open";
+            return `<span class="status-badge ${cls}">${text}</span>`;
+        }
+
+        // ── DO Table ──────────────────────────────────────────────────────────────
+        function renderDoTable() {
+            const q = (document.getElementById("fDoSearch").value || "").toLowerCase();
+            const done = generatedDoNos();
+            const rows = getDoList().filter(d => {
+                if (!q) return true;
+                return d.doNo.toLowerCase().includes(q) || (d.orderNo || "").toLowerCase().includes(q) || (d.vendor || "").toLowerCase().includes(q);
+            });
+
+            const tbody = document.getElementById("doBody");
+            if (!rows.length) {
+                tbody.innerHTML = `<tr><td colspan="9" class="empty-state"><i class="bi bi-truck"></i>Tidak ada DO tersedia.</td></tr>`;
+                return;
+            }
+
+            // Enrich DO with order lines for expand
+            const orderLines = JSON.parse(localStorage.getItem("IBOCS_customer_order_lines") || "{}");
+
+            tbody.innerHTML = rows.map((d, idx) => {
+                const isDone = done.has(d.doNo);
+                const expandId = `exp-do-${idx}`;
+                const cb = isDone
+                    ? `<input type="checkbox" disabled title="Sudah di-AR">`
+                    : `<input type="checkbox" class="row-check" data-do="${d.doNo}" onchange="updateBulkBar()">`;
+                const arStatus = isDone
+                    ? `<span class="status-badge s-generated">Closed</span>`
+                    : `<span class="status-badge s-open">Open</span>`;
+                const note = isDone ? `<span class="text-muted small">Sudah ada AR</span>` : `<span class="text-muted small">Siap di-generate</span>`;
+
+                const lines = d.items || orderLines[d.orderNo] || [];
+                const itemRows = lines.length
+                    ? lines.map(l => `<tr>
+                    <td>${l.sku || l.itemCode || "-"}</td>
+                    <td>${l.name || l.itemName || "-"}</td>
+                    <td class="text-end">${(l.qty || 0).toLocaleString()}</td>
+                    <td class="text-end text-primary fw-semibold">${(l.openQty !== undefined ? l.openQty : (l.qty || 0)).toLocaleString()}</td>
+                    <td>${l.uom || "Kg"}</td>
+                  </tr>`).join("")
+                    : `<tr><td colspan="5" class="text-muted text-center py-2">Tidak ada item detail.</td></tr>`;
+
+                const totalQty = lines.reduce((s, l) => s + (l.qty || 0), 0);
+                const totalOpenQty = lines.reduce((s, l) => s + (l.openQty !== undefined ? l.openQty : (l.qty || 0)), 0);
+                const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
+                <td colspan="10">
+                    <div class="expand-inner">
+                        <table class="item-mini-table">
+                            <thead><tr><th>Item Code</th><th>Item Name</th><th class="text-end">Qty</th><th class="text-end">Open Qty</th><th>UOM</th></tr></thead>
+                            <tbody>${itemRows}</tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>`;
+                const mainRow = `<tr style="${isDone ? 'opacity:.6;' : ''}">
+                <td>${cb}</td>
+                <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
+                <td class="fw-semibold">${d.doNo}</td>
+                <td><span class="text-primary">${d.orderNo || "-"}</span></td>
+                <td>${d.vendor || "-"}</td>
+                <td>${d.eta || "-"}</td>
+                <td class="text-end">${totalQty.toLocaleString()}</td>
+                <td class="text-end text-primary fw-semibold">${totalOpenQty.toLocaleString()}</td>
+                <td>${arStatus}</td>
+                <td>${note}</td>
+            </tr>`;
+                return mainRow + expandRow;
+            }).join("");
+        }
+
+        function toggleExpand(expandId) {
+            const row = document.getElementById(expandId);
+            const btn = document.getElementById("btn-" + expandId);
+            const isOpen = row.style.display !== "none";
+            row.style.display = isOpen ? "none" : "";
+            btn.classList.toggle("open", !isOpen);
+            btn.innerHTML = isOpen ? `<i class="bi bi-chevron-right"></i>` : `<i class="bi bi-chevron-down"></i>`;
+        }
+
+        // ── AR Table ──────────────────────────────────────────────────────────────
+        function renderArTable() {
+            const q = (document.getElementById("fArSearch").value || "").toLowerCase();
+            const list = getArList().filter(a => {
+                if (!q) return true;
+                return a.arNo.toLowerCase().includes(q) || (a.doRef || "").toLowerCase().includes(q) || (a.orderRef || "").toLowerCase().includes(q);
+            });
+
+            const tbody = document.getElementById("arBody");
+            if (!list.length) {
+                tbody.innerHTML = `<tr><td colspan="6" class="empty-state"><i class="bi bi-file-earmark-x"></i>Belum ada dokumen AR.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = list.map(a => `<tr style="cursor:pointer;" onclick="window.location.href='customer_ar_view.html?no=${encodeURIComponent(a.arNo)}'">
+            <td class="fw-semibold text-primary">${a.arNo} <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;opacity:.5;"></i></td>
+            <td>${a.arDate || "-"}</td>
+            <td>${a.doRef || "-"}</td>
+            <td>${a.orderRef || "-"}</td>
+            <td>${a.vendor || "-"}</td>
+            <td>${statusBadge(a.status)}</td>
+        </tr>`).join("");
+        }
+
+        // ── Selection ─────────────────────────────────────────────────────────────
+        function updateBulkBar() {
+            const n = document.querySelectorAll(".row-check:checked").length;
+            document.getElementById("bulkBar").classList.toggle("visible", n > 0);
+            document.getElementById("bulkCount").textContent = n;
+            document.getElementById("checkAll").indeterminate = n > 0 && n < document.querySelectorAll(".row-check").length;
+            document.getElementById("checkAll").checked = n > 0 && n === document.querySelectorAll(".row-check").length;
+        }
+
+        function toggleAll(cb) {
+            document.querySelectorAll(".row-check").forEach(c => c.checked = cb.checked);
+            updateBulkBar();
+        }
+
+        function clearSelection() {
+            document.querySelectorAll(".row-check, #checkAll").forEach(c => { c.checked = false; c.indeterminate = false; });
+            document.getElementById("bulkBar").classList.remove("visible");
+        }
+
+        // ── Generate AR ───────────────────────────────────────────────────────────
+        function generateAR() {
+            const selected = [...document.querySelectorAll(".row-check:checked")].map(c => c.dataset.do);
+            if (!selected.length) return;
+            localStorage.setItem("IBOCS_bulk_do_refs", JSON.stringify(selected));
+            window.location.href = "customer_bulk_ar_process.html";
+        }
+
+        // ── Toast ─────────────────────────────────────────────────────────────────
+        function showToast(msg, type = "success") {
+            const wrap = document.getElementById("toastWrap");
+            const el = document.createElement("div");
+            el.className = `toast-item toast-${type}`;
+            el.innerHTML = msg;
+            wrap.appendChild(el);
+            setTimeout(() => el.remove(), 3500);
+        }
+
+        // ── Init ──────────────────────────────────────────────────────────────────
+        renderDoTable();
+    </script>
+</body>
+
+</html>

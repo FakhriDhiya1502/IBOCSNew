@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts Payable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="sidebar.js"></script>
+    <style>
+        body {
+            background: #f4f6fb;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .page-header {
+            background: #1a237e;
+            color: #fff;
+            padding: 20px 32px;
+        }
+
+        .page-header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .page-header p {
+            font-size: .85rem;
+            opacity: .8;
+            margin: 4px 0 0;
+        }
+
+        .card {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+        }
+
+        .card-header-custom {
+            background: #fff;
+            border-bottom: 1.5px solid #e8ecf4;
+            padding: 16px 20px;
+            border-radius: 14px 14px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-label {
+            font-weight: 700;
+            font-size: .95rem;
+            color: #1a237e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            font-size: 13.5px;
+        }
+
+        th {
+            background: #f8faff;
+            color: #374151;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            border-bottom: 1.5px solid #e0e7ef !important;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+
+        .s-open {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .s-draft {
+            background: #fefce8;
+            color: #854d0e;
+        }
+
+        .s-posted {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .s-paid {
+            background: #f5f3ff;
+            color: #5b21b6;
+        }
+
+        .s-generated {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .bulk-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 2px solid #e0e7ef;
+            padding: 14px 32px;
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, .08);
+        }
+
+        .bulk-bar.visible {
+            display: flex;
+        }
+
+        .btn-generate {
+            background: #1a237e;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 22px;
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        .btn-generate:hover {
+            background: #283593;
+            color: #fff;
+        }
+
+        .toast-wrap {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast-item {
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
+            animation: slideIn .25s ease;
+        }
+
+        .toast-success {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1.5px solid #bbf7d0;
+        }
+
+        .toast-warning {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1.5px solid #fde68a;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: .9rem;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            color: #1a237e;
+            border-bottom-color: #1a237e;
+        }
+
+        .empty-state {
+            padding: 48px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            padding: 0 6px;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 13px;
+            transition: transform .2s;
+        }
+
+        .expand-btn.open {
+            color: #1a237e;
+        }
+
+        .expand-row td {
+            background: #f8faff;
+            padding: 0 !important;
+        }
+
+        .expand-inner {
+            padding: 10px 16px 14px 56px;
+            border-top: 1px solid #e0e7ef;
+        }
+
+        .item-mini-table {
+            width: 100%;
+            font-size: 12.5px;
+        }
+
+        .item-mini-table th {
+            background: #eef2ff;
+            font-size: 11px;
+            padding: 5px 10px;
+        }
+
+        .item-mini-table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .item-mini-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark" style="background:#1a237e; padding:10px 24px;">
+        <a class="navbar-brand fw-bold" href="customer_dashboard.html">IBOCS</a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <span class="text-white-50 small" id="navUser"></span>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2" id="sidebar-container"></div>
+            <div class="col-lg-10 py-4 px-4">
+
+                <div class="mb-4">
+                    <h4 class="fw-bold text-dark mb-1"><i class="bi bi-file-earmark-minus me-2"
+                            style="color:#1a237e;"></i>Accounts Payable</h4>
+                    <p class="text-muted small mb-0">Generate AP dokumen dari GRPO yang sudah diterima. 1 GRPO = 1 AP.
+                    </p>
+                </div>
+
+                <!-- Tabs -->
+                <div style="border-bottom:2px solid #e0e7ef; margin-bottom:20px;">
+                    <button class="tab-btn active" id="tabGrpo" onclick="switchTab('grpo')">
+                        <i class="bi bi-box-seam me-1"></i>GRPO Belum di-AP
+                    </button>
+                    <button class="tab-btn" id="tabAp" onclick="switchTab('ap')">
+                        <i class="bi bi-file-earmark-check me-1"></i>Dokumen AP
+                    </button>
+                </div>
+
+                <!-- GRPO Tab -->
+                <div id="panelGrpo">
+                    <div class="card">
+                        <div class="card-header-custom">
+                            <span class="section-label"><i class="bi bi-inbox"></i> GRPO Tersedia</span>
+                            <div class="d-flex gap-2">
+                                <input type="text" id="fGrpoSearch" class="form-control form-control-sm"
+                                    placeholder="Cari GRPO / PO No..." oninput="renderGrpoTable()"
+                                    style="width:220px; border-radius:8px;">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:40px;"><input type="checkbox" id="checkAll"
+                                                onchange="toggleAll(this)"></th>
+                                        <th style="width:36px;"></th>
+                                        <th>GRPO No</th>
+                                        <th>Tanggal</th>
+                                        <th>PO Ref</th>
+                                        <th>Vendor / Company</th>
+                                        <th class="text-end">Total Qty</th>
+                                        <th class="text-end">Open Qty</th>
+                                        <th>Status</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="grpoBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AP Tab -->
+                <div id="panelAp" style="display:none;">
+                    <div class="card">
+                        <div class="card-header-custom">
+                            <span class="section-label"><i class="bi bi-file-earmark-check"></i> Dokumen AP</span>
+                            <input type="text" id="fApSearch" class="form-control form-control-sm"
+                                placeholder="Cari AP No / GRPO..." oninput="renderApTable()"
+                                style="width:220px; border-radius:8px;">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>AP No</th>
+                                        <th>Tanggal</th>
+                                        <th>GRPO Ref</th>
+                                        <th>PO Ref</th>
+                                        <th>Vendor</th>
+                                        <th class="text-end">Total Qty</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="apBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Bar -->
+    <div class="bulk-bar" id="bulkBar">
+        <span class="text-muted small me-auto"><span id="bulkCount">0</span> GRPO dipilih — akan dibuat 1 AP per
+            GRPO</span>
+        <button class="btn btn-outline-secondary btn-sm" onclick="clearSelection()">Batal</button>
+        <button class="btn-generate" onclick="generateAP()"><i class="bi bi-plus-circle me-2"></i>Generate AP</button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script>
+        const sess = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
+        if (!sess || !sess.role) window.location.href = "login.html";
+        document.getElementById("navUser").textContent = sess.name || sess.username || "";
+        new SidebarSystem(null, 'ap_list').render();
+
+        const DEMO_GRPO = [
+            {
+                grpoNo: "GRPO-0001", grpoDate: "2026-04-05", poNo: "PO-FC-2604-001",
+                store: "Farm Deli", customer: "PT TOP Distribusi", totalQty: 12581, status: "Closed",
+                rows: [
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qtyOrder: 9514, qtyReceived: 9514 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 3067, qtyReceived: 3067 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-0002", grpoDate: "2026-04-10", poNo: "PO-FC-2604-002",
+                store: "Farm Makmur", customer: "CV. Makmur Sejahtera", totalQty: 11000, status: "Open",
+                rows: [
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 4200, qtyReceived: 4200 },
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)", qtyOrder: 6800, qtyReceived: 6800 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-0003", grpoDate: "2026-04-15", poNo: "PO-FC-2604-003",
+                store: "Farm Sejahtera", customer: "PT Agro Maju", totalQty: 5500, status: "Open",
+                rows: [
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 5500, qtyReceived: 5500 }
+                ]
+            }
+        ];
+
+        function getGrpoList() {
+            const stored = JSON.parse(localStorage.getItem("IBOCS_grpo_list") || "[]");
+            const storedNos = new Set(stored.map(g => g.grpoNo));
+            return [...stored, ...DEMO_GRPO.filter(d => !storedNos.has(d.grpoNo))];
+        }
+
+        function getApList() {
+            return JSON.parse(localStorage.getItem("IBOCS_ap_list") || "[]");
+        }
+
+        function generatedGrpoNos() {
+            return new Set(getApList().map(a => a.grpoRef));
+        }
+
+        // ── AP Status Badge ───────────────────────────────────────────────────────
+        function statusBadge(status) {
+            const text = (!status || status === "Draft") ? "Open" : status;
+            const cls = text === "Open" ? "s-open" : text === "Closed" ? "s-posted" : text === "Paid" ? "s-paid" : "s-open";
+            return `<span class="status-badge ${cls}">${text}</span>`;
+        }
+
+        // ── Tabs ─────────────────────────────────────────────────────────────────
+        function switchTab(tab) {
+            document.getElementById("tabGrpo").classList.toggle("active", tab === "grpo");
+            document.getElementById("tabAp").classList.toggle("active", tab === "ap");
+            document.getElementById("panelGrpo").style.display = tab === "grpo" ? "" : "none";
+            document.getElementById("panelAp").style.display = tab === "ap" ? "" : "none";
+            if (tab === "ap") renderApTable();
+            clearSelection();
+        }
+
+        // ── GRPO Table ────────────────────────────────────────────────────────────
+        function renderGrpoTable() {
+            const q = (document.getElementById("fGrpoSearch").value || "").toLowerCase();
+            const done = generatedGrpoNos();
+            const rows = getGrpoList().filter(g => {
+                if (q && !g.grpoNo.toLowerCase().includes(q) && !(g.poNo || "").toLowerCase().includes(q) && !(g.customer || "").toLowerCase().includes(q)) return false;
+                return true;
+            });
+
+            const tbody = document.getElementById("grpoBody");
+            if (!rows.length) {
+                tbody.innerHTML = `<tr><td colspan="9" class="empty-state"><i class="bi bi-inbox"></i>Tidak ada GRPO tersedia.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = rows.map((g, idx) => {
+                const isDone = done.has(g.grpoNo);
+                const expandId = `exp-grpo-${idx}`;
+                const cb = isDone
+                    ? `<input type="checkbox" disabled title="Sudah di-AP">`
+                    : `<input type="checkbox" class="row-check" data-grpo="${g.grpoNo}" onchange="updateBulkBar()">`;
+                const statusHtml = isDone
+                    ? `<span class="status-badge s-generated">AP Generated</span>`
+                    : `<span class="status-badge s-open">${g.status || "Open"}</span>`;
+                const note = isDone ? `<span class="text-muted small">Sudah ada AP</span>` : `<span class="text-muted small">Siap di-generate</span>`;
+                const itemRows = (g.rows || []).map(r => `<tr>
+                    <td>${r.itemCode || "-"}</td>
+                    <td>${r.itemName || "-"}</td>
+                    <td class="text-end">${(r.qtyReceived || r.qty || 0).toLocaleString()}</td>
+                    <td class="text-end">${(r.qtyOrder || 0).toLocaleString()}</td>
+                    <td class="text-end text-primary fw-semibold">${(r.openQty !== undefined ? r.openQty : (r.qtyReceived || r.qty || 0)).toLocaleString()}</td>
+                </tr>`).join("") || `<tr><td colspan="5" class="text-muted text-center">Tidak ada item.</td></tr>`;
+                const totalOpenQty = (g.rows || []).reduce((s, r) => s + (r.openQty !== undefined ? r.openQty : (r.qtyReceived || r.qty || 0)), 0);
+                const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
+                    <td colspan="10">
+                        <div class="expand-inner">
+                            <table class="item-mini-table">
+                                <thead><tr><th>Item Code</th><th>Item Name</th><th class="text-end">Qty Received</th><th class="text-end">Qty Order</th><th class="text-end">Open Qty</th></tr></thead>
+                                <tbody>${itemRows}</tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>`;
+                const mainRow = `<tr style="${isDone ? 'opacity:.6;' : ''}">
+                    <td>${cb}</td>
+                    <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
+                    <td class="fw-semibold">${g.grpoNo}</td>
+                    <td>${g.grpoDate || "-"}</td>
+                    <td><span class="text-primary">${g.poNo || "-"}</span></td>
+                    <td>${g.customer || g.store || "-"}</td>
+                    <td class="text-end">${(g.totalQty || 0).toLocaleString()}</td>
+                    <td class="text-end text-primary fw-semibold">${totalOpenQty.toLocaleString()}</td>
+                    <td>${statusHtml}</td>
+                    <td>${note}</td>
+                </tr>`;
+                return mainRow + expandRow;
+            }).join("");
+        }
+
+        function toggleExpand(expandId) {
+            const row = document.getElementById(expandId);
+            const btn = document.getElementById("btn-" + expandId);
+            const isOpen = row.style.display !== "none";
+            row.style.display = isOpen ? "none" : "";
+            btn.classList.toggle("open", !isOpen);
+            btn.innerHTML = isOpen ? `<i class="bi bi-chevron-right"></i>` : `<i class="bi bi-chevron-down"></i>`;
+        }
+
+        // ── AP Table ──────────────────────────────────────────────────────────────
+        function renderApTable() {
+            const q = (document.getElementById("fApSearch").value || "").toLowerCase();
+            const list = getApList().filter(a => {
+                if (!q) return true;
+                return a.apNo.toLowerCase().includes(q) || (a.grpoRef || "").toLowerCase().includes(q) || (a.poRef || "").toLowerCase().includes(q);
+            });
+
+            const tbody = document.getElementById("apBody");
+            if (!list.length) {
+                tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><i class="bi bi-file-earmark-x"></i>Belum ada dokumen AP.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = list.map(a => `<tr style="cursor:pointer;" onclick="window.location.href='customer_ap_view.html?no=${encodeURIComponent(a.apNo)}'">
+            <td class="fw-semibold text-primary">${a.apNo} <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;opacity:.5;"></i></td>
+            <td>${a.apDate || "-"}</td>
+            <td>${a.grpoRef || "-"}</td>
+            <td>${a.poRef || "-"}</td>
+            <td>${a.vendor || "-"}</td>
+            <td class="text-end">${(a.totalQty || 0).toLocaleString()}</td>
+            <td>${statusBadge(a.status)}</td>
+        </tr>`).join("");
+        }
+
+        // ── Selection ─────────────────────────────────────────────────────────────
+        function updateBulkBar() {
+            const n = document.querySelectorAll(".row-check:checked").length;
+            document.getElementById("bulkBar").classList.toggle("visible", n > 0);
+            document.getElementById("bulkCount").textContent = n;
+            document.getElementById("checkAll").indeterminate = n > 0 && n < document.querySelectorAll(".row-check").length;
+            document.getElementById("checkAll").checked = n > 0 && n === document.querySelectorAll(".row-check").length;
+        }
+
+        function toggleAll(cb) {
+            document.querySelectorAll(".row-check").forEach(c => c.checked = cb.checked);
+            updateBulkBar();
+        }
+
+        function clearSelection() {
+            document.querySelectorAll(".row-check, #checkAll").forEach(c => { c.checked = false; c.indeterminate = false; });
+            document.getElementById("bulkBar").classList.remove("visible");
+        }
+
+        // ── Generate AP ───────────────────────────────────────────────────────────
+        function generateAP() {
+            const selected = [...document.querySelectorAll(".row-check:checked")].map(c => c.dataset.grpo);
+            if (!selected.length) return;
+            localStorage.setItem("IBOCS_bulk_grpo_refs", JSON.stringify(selected));
+            window.location.href = "customer_bulk_ap_process.html";
+        }
+
+        // ── Toast ─────────────────────────────────────────────────────────────────
+        function showToast(msg, type = "success") {
+            const wrap = document.getElementById("toastWrap");
+            const el = document.createElement("div");
+            el.className = `toast-item toast-${type}`;
+            el.innerHTML = msg;
+            wrap.appendChild(el);
+            setTimeout(() => el.remove(), 3500);
+        }
+
+        // ── Init ──────────────────────────────────────────────────────────────────
+        renderGrpoTable();
+    </script>
+</body>
+
+</html>

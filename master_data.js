@@ -115,6 +115,120 @@ window.IBOCS_MASTER = {
     ],
 
     /* ─────────────────────────────────────────────────────────────
+       PLANS
+       owner     : code dari customers atau vendors
+       ownerType : "customer" | "vendor"
+    ───────────────────────────────────────────────────────────── */
+    plans: [
+        // ── CTU (Vendor) ────────────────────────────────────────
+        {
+            code: "100001101", description: "CTU-BROILER COBB BATCH-01",
+            no: "81", documentDate: "2025-03-01", startDate: "2025-03-10", endDate: "2025-04-20",
+            project: "", distRules: "PROD;R001;CTU;F00001",
+            initialStock: 15000, totalDocIn: 15200,
+            typeOfChicken: "11001", descOfChicken: "AYAM BROILER",
+            docWeight: 40, batchNumber: "BTH-2025-001",
+            warehouseCode: "WH-KDG01", warehouseName: "Gudang Kandang 01",
+            hatchery: "Star",
+            owner: "VND-CTU", ownerType: "vendor"
+        },
+        {
+            code: "100001102", description: "CTU-LAYER LOHMANN BATCH-01",
+            no: "82", documentDate: "2025-03-05", startDate: "2025-03-15", endDate: "2025-05-01",
+            project: "", distRules: "PROD;R001;CTU;F00002",
+            initialStock: 8000, totalDocIn: 8050,
+            typeOfChicken: "11002", descOfChicken: "AYAM LAYER",
+            docWeight: 38, batchNumber: "BTH-2025-002",
+            warehouseCode: "WH-KDG02", warehouseName: "Gudang Kandang 02",
+            hatchery: "Star",
+            owner: "VND-CTU", ownerType: "vendor"
+        },
+        {
+            code: "100001103", description: "CTU-BROILER ROSS BATCH-02",
+            no: "83", documentDate: "2025-04-01", startDate: "2025-04-10", endDate: "2025-05-20",
+            project: "P-2025-Q2", distRules: "PROD;R002;CTU;F00003",
+            initialStock: 20000, totalDocIn: 20300,
+            typeOfChicken: "11001", descOfChicken: "AYAM BROILER",
+            docWeight: 42, batchNumber: "",
+            warehouseCode: "WH-KDG01", warehouseName: "Gudang Kandang 01",
+            hatchery: "Gemilang",
+            owner: "VND-CTU", ownerType: "vendor"
+        },
+
+        // ── TOP (Customer CUST-001) ──────────────────────────────
+        {
+            code: "100001111", description: "TOP-BROILER COBB PERIODE-01",
+            no: "91", documentDate: "2025-03-10", startDate: "2025-03-20", endDate: "2025-04-30",
+            project: "", distRules: "PROD;R003;TOP;F00010",
+            initialStock: 10000, totalDocIn: 10120,
+            typeOfChicken: "11001", descOfChicken: "AYAM",
+            docWeight: 40, batchNumber: "BTH-TOP-001",
+            warehouseCode: "WH-KDG01", warehouseName: "Gudang Kandang 01",
+            hatchery: "Star",
+            owner: "CUST-001", ownerType: "customer"
+        },
+        {
+            code: "100001112", description: "TOP-BROILER ROSS PERIODE-02",
+            no: "92", documentDate: "2025-04-05", startDate: "2025-04-15", endDate: "2025-05-25",
+            project: "", distRules: "PROD;R003;TOP;F00011",
+            initialStock: 12000, totalDocIn: 12200,
+            typeOfChicken: "11001", descOfChicken: "AYAM",
+            docWeight: 41, batchNumber: "",
+            warehouseCode: "WH-KDG02", warehouseName: "Gudang Kandang 02",
+            hatchery: "Star",
+            owner: "CUST-001", ownerType: "customer"
+        },
+
+        // ── AYM (Customer CUST-002) ──────────────────────────────
+        {
+            code: "100001119", description: "AYM-BROILER COBB BATCH-03",
+            no: "95", documentDate: "2025-04-09", startDate: "2025-04-12", endDate: "2025-05-18",
+            project: "", distRules: "PROD;R003;AYM;F00009",
+            initialStock: 21700, totalDocIn: 21917,
+            typeOfChicken: "11001", descOfChicken: "AYAM",
+            docWeight: 38, batchNumber: "",
+            warehouseCode: "WH-KDG03", warehouseName: "Gudang Kandang 03",
+            hatchery: "Star",
+            owner: "CUST-002", ownerType: "customer"
+        },
+        {
+            code: "100001120", description: "AYM-LAYER LOHMANN BATCH-01",
+            no: "96", documentDate: "2025-04-10", startDate: "2025-04-20", endDate: "2025-06-01",
+            project: "P-2025-LAYER", distRules: "PROD;R003;AYM;F00010",
+            initialStock: 5000, totalDocIn: 5080,
+            typeOfChicken: "11002", descOfChicken: "AYAM LAYER",
+            docWeight: 36, batchNumber: "BTH-AYM-002",
+            warehouseCode: "WH-KDG03", warehouseName: "Gudang Kandang 03",
+            hatchery: "Gemilang",
+            owner: "CUST-002", ownerType: "customer"
+        },
+
+        // ── BMAX (Customer CUST-003) ─────────────────────────────
+        {
+            code: "100001131", description: "BMAX-BROILER HUBBARD BATCH-01",
+            no: "101", documentDate: "2025-03-15", startDate: "2025-03-25", endDate: "2025-05-05",
+            project: "", distRules: "PROD;R004;BMAX;F00020",
+            initialStock: 18000, totalDocIn: 18150,
+            typeOfChicken: "11001", descOfChicken: "AYAM",
+            docWeight: 39, batchNumber: "BTH-BMAX-001",
+            warehouseCode: "WH-KDG02", warehouseName: "Gudang Kandang 02",
+            hatchery: "Star",
+            owner: "CUST-003", ownerType: "customer"
+        },
+        {
+            code: "100001132", description: "BMAX-BROILER COBB BATCH-02",
+            no: "102", documentDate: "2025-04-12", startDate: "2025-04-22", endDate: "2025-06-02",
+            project: "P-2025-BMAX", distRules: "PROD;R004;BMAX;F00021",
+            initialStock: 25000, totalDocIn: 25400,
+            typeOfChicken: "11001", descOfChicken: "AYAM",
+            docWeight: 41, batchNumber: "",
+            warehouseCode: "WH-KDG02", warehouseName: "Gudang Kandang 02",
+            hatchery: "Gemilang",
+            owner: "CUST-003", ownerType: "customer"
+        }
+    ],
+
+    /* ─────────────────────────────────────────────────────────────
        WAREHOUSES
     ───────────────────────────────────────────────────────────── */
     warehouses: [
@@ -175,6 +289,18 @@ M.getExternalVendor = code => M.externalVendors.find(v => v.code === code) || nu
 M.buildExternalVendorOptions = () =>
     M.externalVendors.map(v => `<option value="${v.code}">${v.name}</option>`).join("");
 
+/** Lookup single plan by code */
+M.getPlan = code => M.plans.find(p => p.code === code) || null;
+
+/** Filter plans by owner code (customer or vendor) */
+M.getPlansByOwner = ownerCode => M.plans.filter(p => p.owner === ownerCode);
+
+/** Build <option> list for plans filtered by owner */
+M.buildPlanOptions = (ownerCode = null) => {
+    const list = ownerCode ? M.getPlansByOwner(ownerCode) : M.plans;
+    return list.map(p => `<option value="${p.code}">${p.code} — ${p.description}</option>`).join("");
+};
+
 /** Lookup single brand by code */
 M.getBrand = code => M.brands.find(b => b.code === code) || null;
 
@@ -192,4 +318,5 @@ console.log("[IBOCS] master_data.js loaded —",
     M.customers.length, "customers,",
     M.vendors.length, "vendors,",
     M.warehouses.length, "warehouses,",
-    M.brands.length, "brands");
+    M.brands.length, "brands,",
+    M.plans.length, "plans");

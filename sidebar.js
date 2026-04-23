@@ -7,6 +7,7 @@
  *   vendor         — supplier (VND-SIC = Feed, VND-CTU = DOC)
  *   admin_hatchery — admin CTU, kelola DO Draft DOC
  *   admin_sales    — sales, review DO Draft & generate DO
+ *   admin_top      — TOP/AYM/BMAX, PO Generation dari DO Draft
  *   admin          — system admin, settings only
  *   super_admin    — all access
  */
@@ -17,7 +18,7 @@ class SidebarSystem {
             try {
                 const userData = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
                 this.role = userData.role || "vendor";
-            } catch(e) {
+            } catch (e) {
                 this.role = "vendor";
             }
         } else {
@@ -38,7 +39,7 @@ class SidebarSystem {
                 label: "Dashboard",
                 icon: "bi-speedometer2",
                 url: "forecast_dashboard.html",
-                roles: ["customer", "vendor", "admin_hatchery", "admin_sales", "super_admin"]
+                roles: ["customer", "vendor", "admin_hatchery", "admin_sales", "admin_top", "super_admin"]
             },
 
             // ── Feed ───────────────────────────────────────────────────
@@ -50,11 +51,18 @@ class SidebarSystem {
                 children: [
                     {
                         id: "forecast_feed",
-                        label: "Forecast",
+                        label: "Feed Forecast",
                         icon: "bi-graph-up-arrow",
                         url: "customer_ForecastList.html",
                         roles: ["customer", "super_admin"]
                     },
+                    // {
+                    //     id: "forecast_history",
+                    //     label: "Forecast History",
+                    //     icon: "bi-clock-history",
+                    //     url: "customer_ForecastHistory.html",
+                    //     roles: ["customer", "super_admin"]
+                    // },
                     {
                         id: "orders",
                         label: "Purchase Order",
@@ -77,11 +85,11 @@ class SidebarSystem {
                 id: "doc_parent",
                 label: "DOC",
                 icon: "bi-egg",
-                roles: ["customer", "admin_hatchery", "admin_sales", "super_admin"],
+                roles: ["customer", "admin_hatchery", "admin_sales", "admin_top", "super_admin"],
                 children: [
                     {
                         id: "forecast_doc",
-                        label: "DOC Forecast",
+                        label: "Plan Report",
                         icon: "bi-graph-up-arrow",
                         url: "DOCForecast.html",
                         roles: ["customer", "super_admin"]
@@ -92,6 +100,45 @@ class SidebarSystem {
                         icon: "bi-file-earmark-text",
                         url: "hatchery_doc_draft_list.html",
                         roles: ["admin_hatchery", "admin_sales", "super_admin"]
+                    },
+                    {
+                        id: "po_generation_list",
+                        label: "PO Generation",
+                        icon: "bi-file-earmark-plus",
+                        url: "top_po_generation_list.html",
+                        roles: ["admin_top", "super_admin"]
+                    }
+                    // },
+                    // {
+                    //     id: "po_list",
+                    //     label: "Purchase Order",
+                    //     icon: "bi-file-earmark-plus",
+                    //     url: "top_po_list.html",
+                    //     roles: ["admin_top", "super_admin"]
+                    // }
+                ]
+            },
+
+            // ── Finance (AR / AP) ───────────────────────────────────────
+            {
+                id: "finance_parent",
+                label: "Finance",
+                icon: "bi-credit-card-2-front",
+                roles: ["customer", "vendor", "super_admin"],
+                children: [
+                    {
+                        id: "ap_list",
+                        label: "Accounts Payable",
+                        icon: "bi-file-earmark-minus",
+                        url: "customer_AP.html",
+                        roles: ["customer", "super_admin"]
+                    },
+                    {
+                        id: "ar_list",
+                        label: "Accounts Receivable",
+                        icon: "bi-file-earmark-plus",
+                        url: "customer_AR.html",
+                        roles: ["vendor", "super_admin"]
                     }
                 ]
             },

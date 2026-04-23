@@ -3,7 +3,7 @@
  * Shared storage & demo data untuk DO Draft DOC.
  */
 
-const DOC_DRAFT_KEY = "IBOCS_doc_drafts";
+const DOC_DRAFT_KEY = "IBOCS_doc_drafts_v2";
 
 /* ─── Demo Data ─────────────────────────────────────────────── */
 const DOC_DRAFT_DEMO = [
@@ -23,20 +23,10 @@ const DOC_DRAFT_DEMO = [
             {
                 id: "L1",
                 brand: "BRD-001", brandName: "Cobb 500",
-                itemBefore: "DOC Broiler Cobb 500 (M)", uomBefore: "Ekor",
-                qtyBefore: 5000, priceBefore: null,
+                itemBefore: "DOC Broiler Cobb 500", uomBefore: "Ekor",
+                qtyBefore: 10000, priceBefore: null,
                 afterItems: [
-                    { id: "A1", itemAfter: "DOC Broiler Cobb 500 (M)", uomAfter: "Ekor", qtyAfter: 3000, priceAfter: null },
-                    { id: "A2", itemAfter: "DOC Broiler Cobb 500 (F)", uomAfter: "Ekor", qtyAfter: 2000, priceAfter: null }
-                ]
-            },
-            {
-                id: "L2",
-                brand: "BRD-001", brandName: "Cobb 500",
-                itemBefore: "DOC Broiler Cobb 500 (F)", uomBefore: "Ekor",
-                qtyBefore: 5000, priceBefore: null,
-                afterItems: [
-                    { id: "A3", itemAfter: "DOC Broiler Cobb 500 (F)", uomAfter: "Ekor", qtyAfter: 5500, priceAfter: null }
+                    { id: "A1", itemAfter: "DOC Broiler Cobb 500", uomAfter: "Ekor", qtyAfter: 10500, priceAfter: null }
                 ]
             }
         ],
@@ -65,19 +55,10 @@ const DOC_DRAFT_DEMO = [
             {
                 id: "L1",
                 brand: "BRD-002", brandName: "Ross 308",
-                itemBefore: "DOC Broiler Ross 308 (M)", uomBefore: "Ekor",
-                qtyBefore: 3000, priceBefore: 8000,
+                itemBefore: "DOC Broiler Ross 308", uomBefore: "Ekor",
+                qtyBefore: 5000, priceBefore: 8000,
                 afterItems: [
-                    { id: "A1", itemAfter: "DOC Broiler Ross 308 (M)", uomAfter: "Ekor", qtyAfter: 3000, priceAfter: 9500 }
-                ]
-            },
-            {
-                id: "L2",
-                brand: "BRD-002", brandName: "Ross 308",
-                itemBefore: "DOC Broiler Ross 308 (F)", uomBefore: "Ekor",
-                qtyBefore: 2000, priceBefore: 7500,
-                afterItems: [
-                    { id: "A2", itemAfter: "DOC Broiler Ross 308 (F)", uomAfter: "Ekor", qtyAfter: 2000, priceAfter: 9000 }
+                    { id: "A1", itemAfter: "DOC Broiler Ross 308", uomAfter: "Ekor", qtyAfter: 5000, priceAfter: 9500 }
                 ]
             }
         ],
@@ -104,19 +85,10 @@ const DOC_DRAFT_DEMO = [
             {
                 id: "L1",
                 brand: "BRD-004", brandName: "Hubbard",
-                itemBefore: "DOC Broiler Hubbard (M)", uomBefore: "Ekor",
-                qtyBefore: 6000, priceBefore: 9000,
+                itemBefore: "DOC Broiler Hubbard", uomBefore: "Ekor",
+                qtyBefore: 10000, priceBefore: 9000,
                 afterItems: [
-                    { id: "A1", itemAfter: "DOC Broiler Hubbard (M)", uomAfter: "Ekor", qtyAfter: 6200, priceAfter: 9500 }
-                ]
-            },
-            {
-                id: "L2",
-                brand: "BRD-004", brandName: "Hubbard",
-                itemBefore: "DOC Broiler Hubbard (F)", uomBefore: "Ekor",
-                qtyBefore: 4000, priceBefore: 8500,
-                afterItems: [
-                    { id: "A2", itemAfter: "DOC Broiler Hubbard (F)", uomAfter: "Ekor", qtyAfter: 4100, priceAfter: 9000 }
+                    { id: "A1", itemAfter: "DOC Broiler Hubbard", uomAfter: "Ekor", qtyAfter: 10300, priceAfter: 9500 }
                 ]
             }
         ],
@@ -143,19 +115,10 @@ const DOC_DRAFT_DEMO = [
             {
                 id: "L1",
                 brand: "BRD-003", brandName: "Lohmann",
-                itemBefore: "DOC Layer Lohmann (M)", uomBefore: "Ekor",
-                qtyBefore: 2000, priceBefore: 11500,
+                itemBefore: "DOC Layer Lohmann", uomBefore: "Ekor",
+                qtyBefore: 10000, priceBefore: 11500,
                 afterItems: [
-                    { id: "A1", itemAfter: "DOC Layer Lohmann (M)", uomAfter: "Ekor", qtyAfter: 2000, priceAfter: 12000 }
-                ]
-            },
-            {
-                id: "L2",
-                brand: "BRD-003", brandName: "Lohmann",
-                itemBefore: "DOC Layer Lohmann (F)", uomBefore: "Ekor",
-                qtyBefore: 8000, priceBefore: 10500,
-                afterItems: [
-                    { id: "A2", itemAfter: "DOC Layer Lohmann (F)", uomAfter: "Ekor", qtyAfter: 8000, priceAfter: 11000 }
+                    { id: "A1", itemAfter: "DOC Layer Lohmann", uomAfter: "Ekor", qtyAfter: 10000, priceAfter: 12000 }
                 ]
             }
         ],
@@ -181,10 +144,10 @@ const DOC_DRAFT_DEMO = [
             {
                 id: "L1",
                 brand: "BRD-001", brandName: "Cobb 500",
-                itemBefore: "DOC Broiler Cobb 500 (M)", uomBefore: "Ekor",
+                itemBefore: "DOC Broiler Cobb 500", uomBefore: "Ekor",
                 qtyBefore: 4000, priceBefore: null,
                 afterItems: [
-                    { id: "A1", itemAfter: "DOC Broiler Cobb 500 (M)", uomAfter: "Ekor", qtyAfter: 4500, priceAfter: null }
+                    { id: "A1", itemAfter: "DOC Broiler Cobb 500", uomAfter: "Ekor", qtyAfter: 4500, priceAfter: null }
                 ]
             }
         ],

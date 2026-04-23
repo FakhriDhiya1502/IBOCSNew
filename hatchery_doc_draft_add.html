@@ -9,22 +9,42 @@
     <style>
         * { box-sizing: border-box; }
         body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f5f7fb; color: #222; }
+
+        /* Page card */
         .card { background: #fff; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
         .card-header { padding: 13px 16px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #fafbfe; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
         .card-body { padding: 16px; }
         .form-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin-bottom: 14px; }
-        .form-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-bottom: 14px; }
         .field label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; }
         .field label .req { color: #dc2626; }
         .field input, .field select { width: 100%; border: 1px solid #d5dae3; border-radius: 8px; padding: 0 11px; font-size: 13px; background: #fff; height: 38px; }
         .field input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
-        #externalSection { display: none; }
-        #externalSection.show { display: block; }
+        #vendorCol { display: none; }
+        .sub-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: #1a237e; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e0e7ef; display: flex; align-items: center; gap: 6px; }
+        .sub-section-title.vendor { color: #7c3aed; border-color: #c4b5fd; }
+
+        /* SAP Grid */
+        .sap-grid { display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px; align-items: center; margin-bottom: 8px; }
+        .sap-grid label { font-size: 12px; font-weight: 700; color: #555; margin: 0; }
+        .sap-grid input, .sap-grid select { width: 100%; border: 1px solid #d5dae3; border-radius: 6px; padding: 0 10px; font-size: 12px; height: 30px; background: #fff; }
+        .sap-grid input:disabled, .sap-grid select:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+        .sap-grid .d-flex { gap: 6px; }
+        @media (max-width: 900px) { .sap-grid { grid-template-columns: 1fr; } .sap-grid label { margin-top: 6px; } }
+
+        /* Plan card */
+        .plan-card { background: #fff; border-radius: 12px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border: 1.5px solid #e0e7ef; overflow: hidden; }
+        .plan-card-header { background: #ede9fe; padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-bottom: 2px solid #c4b5fd; }
+        .plan-badge { font-size: 11px; font-weight: 700; color: #5b21b6; background: #ddd6fe; border-radius: 5px; padding: 3px 9px; white-space: nowrap; flex-shrink: 0; }
+        .plan-field { display: flex; align-items: center; gap: 6px; }
+        .plan-field label { font-size: 11px; font-weight: 700; color: #6d28d9; white-space: nowrap; margin: 0; }
+        .plan-field input  { border: 1px solid #c4b5fd; border-radius: 6px; padding: 0 8px; font-size: 12px; height: 28px; background: #fff; width: 180px; }
+        .plan-field select { border: 1px solid #c4b5fd; border-radius: 6px; padding: 0 6px; font-size: 12px; height: 28px; background: #fff; width: 200px; }
+        .plan-card-body { padding: 0; }
 
         /* Lines table */
         .lines-wrap { overflow-x: auto; }
         table.lt { width: 100%; border-collapse: collapse; min-width: 700px; }
-        table.lt th { font-size: 11px; color: #4b5563; font-weight: 700; padding: 9px 10px; text-align: left; white-space: nowrap; border-bottom: 2px solid #e0e7ef; }
+        table.lt th { font-size: 11px; color: #4b5563; font-weight: 700; padding: 8px 10px; text-align: left; white-space: nowrap; border-bottom: 2px solid #e0e7ef; }
         table.lt th.hb { background: #e8eaf6; color: #3730a3; }
         table.lt th.ha { background: #f0fdf4; color: #166534; }
         table.lt th.hp { background: #fff7ed; color: #c2410c; }
@@ -32,9 +52,8 @@
         table.lt td.cb { background: #eef2ff; border-right: 2px solid #c7d2fe; vertical-align: top; }
         table.lt td.ca { background: #f8fffe; }
         table.lt td.cp { background: #fffbf5; }
-        table.lt tr.tr-act td { background: #f5f7ff; padding: 5px 10px; border-bottom: 1px solid #e0e7ef; }
-        table.lt tr.tr-sep td { height: 6px; background: #dde3f8; padding: 0; border: none; }
-        table.lt tr.tr-empty td { text-align: center; color: #9ca3af; padding: 24px; font-size: 13px; }
+        table.lt tr.tr-act td { background: #f5f7ff; padding: 6px 10px; }
+        table.lt tr.tr-empty td { text-align: center; color: #9ca3af; padding: 20px; font-size: 13px; }
 
         /* Table inputs */
         .ti  { width: 100%; border: 1px solid #d5dae3; border-radius: 6px; padding: 4px 8px; font-size: 12px; height: 30px; background: #fff; }
@@ -52,11 +71,28 @@
 
         /* Buttons */
         .btn-aa  { padding: 3px 9px; border: 1.5px dashed #16a34a; border-radius: 5px; background: #f0fdf4; color: #15803d; font-size: 11px; font-weight: 700; cursor: pointer; }
-        .btn-dg  { padding: 3px 9px; border: 0; border-radius: 5px; background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 6px; }
         .btn-da  { padding: 2px 7px; border: 0; border-radius: 5px; background: #fee2e2; color: #991b1b; font-size: 11px; cursor: pointer; }
-        .btn-al  { padding: 7px 14px; border: 1.5px dashed #6366f1; border-radius: 8px; background: #eef2ff; color: #4338ca; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .btn-dg  { padding: 3px 9px; border: 0; border-radius: 5px; background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .btn-ap  { padding: 8px 18px; border: 1.5px dashed #7c3aed; border-radius: 8px; background: #f5f3ff; color: #5b21b6; font-size: 12px; font-weight: 700; cursor: pointer; }
         .btn-pri { padding: 9px 18px; border-radius: 8px; border: 0; font-size: 13px; font-weight: 700; background: #1a237e; color: #fff; cursor: pointer; }
         .btn-sec { padding: 9px 18px; border-radius: 8px; border: 1px solid #d1d5db; font-size: 13px; font-weight: 700; background: #fff; color: #374151; cursor: pointer; text-decoration: none; display: inline-block; }
+
+        /* Info button */
+        .btn-info-plan { padding: 0 8px; border: 1px solid #c4b5fd; border-radius: 6px; background: #f5f3ff; cursor: pointer; height: 28px; font-size: 12px; color: #6d28d9; flex-shrink: 0; }
+        .btn-info-plan:hover { background: #ede9fe; }
+
+        /* Plan info modal */
+        .pi-section { padding: 10px 16px 4px; }
+        .pi-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: #6d28d9; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .pi-section-title::after { content:""; flex:1; height:1px; background:#e9d5ff; }
+        .pi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin-bottom: 6px; }
+        .pi-grid.full { grid-template-columns: 1fr; }
+        .pi-item { background: #f8f9ff; border-radius: 8px; padding: 7px 10px; }
+        .pi-item .pik { font-size: 10px; font-weight: 700; color: #7c3aed; margin-bottom: 2px; }
+        .pi-item .piv { font-size: 13px; color: #111; font-weight: 500; word-break: break-word; }
+        .pi-item .piv.num { color: #1a237e; font-weight: 700; font-size: 14px; }
+        .pi-item.hi { background: #ede9fe; }
+        .pi-divider { height: 1px; background: #f1f5f9; margin: 2px 0; }
 
         /* Search modal */
         .item-row { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
@@ -65,7 +101,7 @@
         .item-row .in { font-size: 13px; font-weight: 600; }
         .item-row .im { font-size: 11px; color: #6b7280; }
 
-        @media (max-width: 900px) { .form-grid-3, .form-grid-2 { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .form-grid-3 { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -93,7 +129,7 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                     <div>
-                        <h5 class="fw-bold mb-0" id="pageTitle">Buat DO Draft DOC</h5>
+                        <h5 class="fw-bold mb-0">Buat DO Draft DOC</h5>
                         <div class="text-muted" id="pageSubtitle" style="font-size:13px;">Isi item, qty, dan brand</div>
                     </div>
                     <a href="hatchery_doc_draft_list.html" class="btn-sec"><i class="bi bi-arrow-left me-1"></i> Kembali</a>
@@ -103,97 +139,109 @@
                 <div class="card">
                     <div class="card-header">Informasi Header</div>
                     <div class="card-body">
-                        <div class="form-grid-3">
-                            <div class="field">
-                                <label>No. DO Draft</label>
-                                <input type="text" id="fId" disabled placeholder="Auto-generate">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-3">
+                                <div class="field">
+                                    <label>DOC Type <span class="req">*</span></label>
+                                    <div style="display:flex; gap:16px; padding-top:6px;">
+                                        <label style="font-weight:normal; font-size:13px; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                                            <input type="radio" name="docType" id="fDocTypeInternal" value="internal" onchange="onDocTypeChange()" checked> Internal
+                                        </label>
+                                        <label style="font-weight:normal; font-size:13px; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                                            <input type="radio" name="docType" id="fDocTypeExternal" value="external" onchange="onDocTypeChange()"> External
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="field">
-                                <label>Tanggal <span class="req">*</span></label>
-                                <input type="date" id="fDate">
+                            <div class="col-md-3">
+                                <div class="field">
+                                    <label>Whse Pengirim <span class="req">*</span></label>
+                                    <select id="fWhsePengirim" style="width:100%; border:1px solid #d5dae3; border-radius:8px; padding:0 11px; font-size:13px; background:#fff; height:38px;"><option value="">-- Pilih Whse Pengirim --</option></select>
+                                </div>
                             </div>
-                            <div class="field">
-                                <label>DOC Type <span class="req">*</span></label>
-                                <select id="fDocType" onchange="onDocTypeChange()">
-                                    <option value="">-- Pilih --</option>
-                                    <option value="internal">Internal</option>
-                                    <option value="external">External</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="field">
+                                    <label>Posting Date <span class="req">*</span></label>
+                                    <input type="date" id="fPostingDate" style="width:100%; border:1px solid #d5dae3; border-radius:8px; padding:0 11px; font-size:13px; background:#fff; height:38px;">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-grid-3">
-                            <div class="field">
-                                <label>Referensi Forecast <span class="req">*</span></label>
-                                <select id="fForecastRef" onchange="onForecastChange()">
-                                    <option value="">-- Pilih Forecast --</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>Customer Tujuan <span class="req">*</span></label>
-                                <select id="fCustomer">
-                                    <option value="">-- Pilih Customer --</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>Warehouse <span class="req">*</span></label>
-                                <select id="fWarehouse">
-                                    <option value="">-- Pilih Warehouse --</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="field">
+                                    <label>Delivery Date <span class="req">*</span></label>
+                                    <input type="date" id="fDeliveryDate" style="width:100%; border:1px solid #d5dae3; border-radius:8px; padding:0 11px; font-size:13px; background:#fff; height:38px;">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- External -->
-                <div class="card" id="externalSection">
-                    <div class="card-header"><i class="bi bi-truck me-2"></i>Informasi DOC External</div>
-                    <div class="card-body">
-                        <div class="form-grid-3">
-                            <div class="field">
-                                <label>Vendor External <span class="req">*</span></label>
-                                <select id="fExtVendor"><option value="">-- Pilih Vendor --</option></select>
-                            </div>
-                            <div class="field">
-                                <label>No. Surat Jalan <span class="req">*</span></label>
-                                <input type="text" id="fNoSJ" placeholder="cth: SJ/2026/0042">
-                            </div>
-                            <div class="field">
-                                <label>Tanggal Surat Jalan <span class="req">*</span></label>
-                                <input type="date" id="fTglSJ">
-                            </div>
-                        </div>
-                        <div class="form-grid-3">
-                            <div class="field">
-                                <label>No. Polisi Kendaraan <span class="req">*</span></label>
-                                <input type="text" id="fNoPol" placeholder="cth: BK 1234 AB" style="text-transform:uppercase">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Customer & Vendor Header -->
+                <div class="row g-3" id="customerVendorRow">
+                    <!-- Customer Header -->
+                    <div id="customerCol" class="col-12">
+                        <div class="card mb-0">
+                            <div class="card-header"><i class="bi bi-person-fill me-2"></i>Customer Header</div>
+                            <div class="card-body">
+                                <div class="sap-grid">
+                                    <label>Customer <span class="req">*</span></label>
+                                    <select id="fCustomer" onchange="onCustomerChange()"><option value="">-- Pilih Customer --</option></select>
 
-                <!-- Lines -->
-                <div class="card">
-                    <div class="card-header">
-                        <span>Item Lines — <span style="color:#3730a3">Item Code</span> / <span style="color:#166534">Conversion</span></span>
-                        <button class="btn-al" onclick="addBeforeLine()" style="display:none;"><i class="bi bi-plus-lg me-1"></i> Tambah Item Code</button>
+                                    <label>Contact Person</label>
+                                    <select id="fContactPerson"><option value="">-- Pilih --</option></select>
+
+                                    <label>Customer Ref. No.</label>
+                                    <input type="text" id="fCustRefNo">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="lines-wrap">
-                            <table class="lt">
-                                <thead id="linesHead"></thead>
-                                <tbody id="linesTbody">
-                                    <tr class="tr-empty"><td colspan="10"><i class="bi bi-inbox me-2"></i>Belum ada item. Pilih Forecast atau klik "Tambah Before Item".</td></tr>
-                                </tbody>
-                            </table>
+                    <!-- Vendor Header (external only) -->
+                    <div id="vendorCol" class="col-md-6">
+                        <div class="card mb-0">
+                            <div class="card-header" style="background:#f5f3ff; color:#5b21b6; border-bottom-color:#c4b5fd;"><i class="bi bi-truck me-2"></i>Vendor Header</div>
+                            <div class="card-body">
+                                <div class="sap-grid">
+                                    <label>Vendor External <span class="req">*</span></label>
+                                    <select id="fExtVendor"><option value="">-- Pilih Vendor --</option></select>
+
+                                    <label>Contact Person</label>
+                                    <select id="fExtContactPerson"><option value="">-- Pilih --</option></select>
+
+                                    <label>No. Surat Jalan <span class="req">*</span></label>
+                                    <input type="text" id="fNoSJ" placeholder="cth: SJ/2026/0042">
+
+                                    <label>No. Polisi <span class="req">*</span></label>
+                                    <input type="text" id="fNoPol" placeholder="cth: BK 1234 AB" style="text-transform:uppercase">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end gap-2 mb-4">
-                    <a href="hatchery_doc_draft_list.html" class="btn-sec">Batal</a>
-                    <button class="btn-pri" onclick="saveDraft()"><i class="bi bi-save me-1"></i> Simpan Draft</button>
+                <!-- Plan cards -->
+                <div id="plansContainer"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <button class="btn-ap" onclick="addPlan()"><i class="bi bi-plus-lg me-1"></i> Tambah Dokumen</button>
+                    <div class="d-flex gap-2">
+                        <a href="hatchery_doc_draft_list.html" class="btn-sec">Batal</a>
+                        <button class="btn-pri" onclick="saveDraft()"><i class="bi bi-save me-1"></i> Simpan Semua Draft</button>
+                    </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan Info Modal -->
+    <div class="modal fade" id="planInfoModal" tabindex="-1">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#5b21b6;color:#fff;">
+                    <h5 class="modal-title"><i class="bi bi-info-circle me-2"></i>Detail Plan</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0" id="planInfoBody"></div>
             </div>
         </div>
     </div>
@@ -227,7 +275,6 @@
 
         const userData  = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
         const role      = userData.role || "";
-        // Price visible for admin_sales and super_admin
         const showPrice = role === "admin_sales" || role === "super_admin";
 
         document.getElementById("userInfo").textContent = userData.name || role || "-";
@@ -242,315 +289,373 @@
         }
 
         /* ── State ──────────────────────────────────────────────── */
-        let draftLines = [];
-        let editId     = null;
-        let _searchCb  = null;
-        let _searchCat = null;
+        let plans     = [];
+        let _searchCb = null;
+        let _searchCat= null;
 
         /* ── Helpers ────────────────────────────────────────────── */
         function fmtNum(n) { return n ? Number(n).toLocaleString("id-ID") : "0"; }
 
+        function newAfterItem() {
+            return { id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, whseTujuan: "", priceAfter: null };
+        }
+
+        function newPlan() {
+            return {
+                id: uniqueId(), planCode: "",
+                brand: "", brandName: "", itemBefore: "", uomBefore: "Ekor", qtyBefore: 0, priceBefore: null,
+                afterItems: [newAfterItem()]
+            };
+        }
+
         /* ── Init ───────────────────────────────────────────────── */
         function init() {
-            document.getElementById("fDate").value = new Date().toISOString().slice(0, 10);
+            const today = new Date().toISOString().slice(0, 10);
+            document.getElementById("fPostingDate").value = today;
+            document.getElementById("fDeliveryDate").value = today;
 
-            // Forecast dropdown
-            const fcSel = document.getElementById("fForecastRef");
-            DOC_FORECAST_REFS.forEach(fc => {
-                const opt = document.createElement("option");
-                opt.value = fc.id;
-                opt.textContent = fc.id + " — " + fc.desc + " (" + fc.customerName + ")";
-                opt.dataset.customer = fc.customer;
-                fcSel.appendChild(opt);
-            });
-
-            // Customer dropdown
             const custSel = document.getElementById("fCustomer");
             M.customers.forEach(c => {
                 custSel.innerHTML += `<option value="${c.code}">${c.shortName} — ${c.name}</option>`;
             });
 
-            // Warehouse dropdown
-            const whSel = document.getElementById("fWarehouse");
-            M.warehouses.forEach(w => {
-                whSel.innerHTML += `<option value="${w.code}">${w.code} — ${w.name} (${w.location})</option>`;
-            });
-
-            // External vendor dropdown
             M.externalVendors.forEach(v => {
                 document.getElementById("fExtVendor").innerHTML += `<option value="${v.code}">${v.name}</option>`;
             });
 
-            // Build table header
-            buildHeader();
+            const whseSel = document.getElementById("fWhsePengirim");
+            M.warehouses.forEach(w => {
+                whseSel.innerHTML += `<option value="${w.code}">${w.code} — ${w.name} (${w.location})</option>`;
+            });
 
-            // Edit mode
-            const params = new URLSearchParams(location.search);
-            editId = params.get("id");
-            if (editId) {
-                const draft = docDraftGet(editId);
-                if (!draft) { alert("DO Draft tidak ditemukan."); location.href = "hatchery_doc_draft_list.html"; return; }
-                if (draft.status !== "Draft") { location.href = "hatchery_doc_draft_view.html?id=" + editId; return; }
-                loadIntoForm(draft);
-                document.getElementById("pageTitle").textContent = "Edit DO Draft — " + editId;
-            } else {
-                document.getElementById("fId").value = "Auto (" + docDraftNextId() + ")";
-            }
-        }
-
-        function buildHeader() {
-            const ext = document.getElementById("fDocType").value === "external";
-            let cols = `
-                <th class="hb" style="width:110px;">Brand</th>
-                <th class="hb" style="min-width:170px;">Item Code</th>
-                <th class="hb" style="width:70px;">UoM</th>
-                <th class="hb" style="width:100px;">Qty</th>`;
-            if (showPrice && ext) cols += `<th class="hp" style="width:120px;">Harga Beli</th>`;
-            cols += `
-                <th class="ha" style="min-width:170px;">Conversion</th>
-                <th class="ha" style="width:70px;">UoM</th>
-                <th class="ha" style="width:100px;">Qty</th>`;
-            if (showPrice) cols += `<th class="hp" style="width:120px;">Harga Jual</th>`;
-            cols += `<th style="width:70px;">Aksi</th>`;
-            document.getElementById("linesHead").innerHTML = `<tr>${cols}</tr>`;
-        }
-
-        function loadIntoForm(d) {
-            document.getElementById("fId").value          = d.id;
-            document.getElementById("fDate").value        = d.date;
-            document.getElementById("fDocType").value     = d.docType;
-            document.getElementById("fForecastRef").value = d.forecastRef;
-            document.getElementById("fCustomer").value    = d.customer;
-            document.getElementById("fWarehouse").value   = d.warehouse || "";
-            onDocTypeChange();
-            if (d.docType === "external") {
-                document.getElementById("fExtVendor").value = d.externalVendor  || "";
-                document.getElementById("fNoSJ").value      = d.noSuratJalan    || "";
-                document.getElementById("fTglSJ").value     = d.tglSuratJalan   || "";
-                document.getElementById("fNoPol").value     = d.noPol           || "";
-            }
-            draftLines = d.lines.map(l => ({
-                ...l,
-                afterItems: l.afterItems.map(a => ({ ...a }))
-            }));
-            renderTable();
+            addPlan();
         }
 
         /* ── Toggles ────────────────────────────────────────────── */
+        function getDocType() {
+            return document.querySelector('input[name="docType"]:checked')?.value || "internal";
+        }
+
         function onDocTypeChange() {
-            const v = document.getElementById("fDocType").value;
-            document.getElementById("externalSection").classList.toggle("show", v === "external");
-            buildHeader();
-            renderTable();
-        }
-
-        function onForecastChange() {
-            const sel = document.getElementById("fForecastRef");
-            const opt = sel.options[sel.selectedIndex];
-            // Auto-select customer from forecast
-            if (opt && opt.dataset.customer) {
-                document.getElementById("fCustomer").value = opt.dataset.customer;
-            }
-
-            const fc = DOC_FORECAST_REFS.find(f => f.id === sel.value);
-            if (!fc || !fc.suggestedLines || !fc.suggestedLines.length) return;
-
-            const doPopulate = () => {
-                draftLines = fc.suggestedLines.map(sl => ({
-                    id: uniqueId(),
-                    brand: sl.brand, brandName: sl.brandName,
-                    itemBefore: sl.itemBefore, uomBefore: sl.uomBefore || "Ekor",
-                    qtyBefore: sl.qtyBefore, priceBefore: null,
-                    afterItems: [{ id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, priceAfter: null }]
-                }));
-                renderTable();
-            };
-
-            if (draftLines.length > 0) {
-                if (confirm("Forecast ini punya data item bawaan. Replace lines yang sudah ada?")) doPopulate();
+            const ext = getDocType() === "external";
+            const custCol   = document.getElementById("customerCol");
+            const vendorCol = document.getElementById("vendorCol");
+            if (ext) {
+                custCol.className   = "col-md-6";
+                vendorCol.style.display = "block";
             } else {
-                doPopulate();
+                custCol.className   = "col-12";
+                vendorCol.style.display = "none";
             }
+            renderAllPlans();
         }
 
-        /* ── Line management ────────────────────────────────────── */
-        function addBeforeLine() {
-            draftLines.push({
-                id: uniqueId(), brand: "", brandName: "", itemBefore: "", uomBefore: "Ekor",
-                qtyBefore: 0, priceBefore: null,
-                afterItems: [{ id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, priceAfter: null }]
+        function onCustomerChange() {
+            plans.forEach(p => { 
+                p.planCode = ""; 
+                p.afterItems.forEach(a => a.whseTujuan = "");
             });
-            renderTable();
+            renderAllPlans();
         }
 
-        function removeBeforeLine(lineId) {
-            if (draftLines.length <= 1 && !confirm("Hapus group terakhir?")) return;
-            draftLines = draftLines.filter(l => l.id !== lineId);
-            renderTable();
+        /* ── Plan management ────────────────────────────────────── */
+        function addPlan() {
+            plans.push(newPlan());
+            renderAllPlans();
         }
 
-        function addAfterItem(lineId) {
-            const line = draftLines.find(l => l.id === lineId);
-            if (line) {
-                line.afterItems.push({ id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, priceAfter: null });
-                renderTable();
+        function removePlan(planId) {
+            if (plans.length <= 1 && !confirm("Hapus plan terakhir?")) return;
+            plans = plans.filter(p => p.id !== planId);
+            renderAllPlans();
+        }
+
+        function setPlan(planId, f, v) {
+            const p = plans.find(x => x.id === planId);
+            if (p) p[f] = v;
+        }
+
+        function setPlanCode(planId, code) {
+            const p = plans.find(x => x.id === planId);
+            if (!p) return;
+            p.planCode = code;
+            const md = M.getPlan(code);
+            if (md) {
+                p.brandName    = md.hatchery || "";
+                p.brand        = md.hatchery || "";
+                p.afterItems.forEach(a => a.whseTujuan = md.warehouseCode);
+            } else {
+                p.brandName    = "";
+                p.brand        = "";
+                p.afterItems.forEach(a => a.whseTujuan = "");
+            }
+            renderPlan(planId);
+        }
+
+        function showPlanInfo(planId) {
+            const p  = plans.find(x => x.id === planId);
+            const md = p && M.getPlan(p.planCode);
+            if (!md) { alert("Pilih plan terlebih dahulu."); return; }
+
+            const item     = (k, v, num, hi) =>
+                `<div class="pi-item${hi?" hi":""}"><div class="pik">${k}</div><div class="piv${num?" num":""}">${v || "—"}</div></div>`;
+            const section  = (icon, title, html) =>
+                `<div class="pi-section"><div class="pi-section-title"><i class="bi ${icon}"></i>${title}</div>${html}</div>`;
+
+            document.getElementById("planInfoBody").innerHTML = `
+                ${section("bi-file-earmark-text", "Identitas Plan", `
+                    <div class="pi-grid">
+                        ${item("Plan Document", `<strong>${md.code}</strong>`, false, true)}
+                        ${item("No.", md.no)}
+                        ${item("Document Date", md.documentDate)}
+                        ${item("Project", md.project || "—")}
+                    </div>
+                    <div class="pi-grid full">
+                        ${item("Description", md.description, false, true)}
+                    </div>
+                    <div class="pi-grid">
+                        ${item("Start Date", md.startDate)}
+                        ${item("End Date", md.endDate)}
+                    </div>
+                `)}
+                <div class="pi-divider"></div>
+                ${section("bi-egg", "Info Ayam", `
+                    <div class="pi-grid">
+                        ${item("Type of Chicken", md.typeOfChicken)}
+                        ${item("Desc of Chicken", md.descOfChicken)}
+                        ${item("DOC Weight", md.docWeight ? md.docWeight + " gram" : "—")}
+                        ${item("Batch Number", md.batchNumber || "—")}
+                    </div>
+                `)}
+                <div class="pi-divider"></div>
+                ${section("bi-bar-chart", "Stok", `
+                    <div class="pi-grid">
+                        ${item("Initial Stock",  md.initialStock ? Number(md.initialStock).toLocaleString("id-ID") + " ekor" : "—", true, true)}
+                        ${item("Total DOC In",   md.totalDocIn   ? Number(md.totalDocIn).toLocaleString("id-ID")   + " ekor" : "—", true, true)}
+                    </div>
+                `)}
+                <div class="pi-divider"></div>
+                ${section("bi-geo-alt", "Lokasi", `
+                    <div class="pi-grid">
+                        ${item("Warehouse", md.warehouseCode + " — " + md.warehouseName, false, true)}
+                        ${item("Hatchery", md.hatchery)}
+                    </div>
+                    <div class="pi-grid full">
+                        ${item("Dist. Rules", md.distRules)}
+                    </div>
+                `)}
+                <div style="height:8px;"></div>`;
+            new bootstrap.Modal(document.getElementById("planInfoModal")).show();
+        }
+
+        function setBrand(planId, v) {
+            const p = plans.find(x => x.id === planId);
+            if (!p) return;
+            p.brand     = v;
+            p.brandName = (M.brands.find(b => b.code === v) || {}).name || v;
+        }
+
+        function setB(planId, f, v) {
+            const p = plans.find(x => x.id === planId);
+            if (!p) return;
+            p[f] = (f === "qtyBefore" || f === "priceBefore") ? (parseFloat(v) || 0) : v;
+            if (f === "qtyBefore") updateBadge(planId);
+        }
+
+        function addAfterItem(planId) {
+            const p = plans.find(x => x.id === planId);
+            if (p) { 
+                const newItem = newAfterItem();
+                const md = M.getPlan(p.planCode);
+                newItem.whseTujuan = md ? md.warehouseCode : "";
+                p.afterItems.push(newItem); 
+                renderPlan(planId); 
             }
         }
 
-        function removeAfterItem(lineId, afterId) {
-            const line = draftLines.find(l => l.id === lineId);
-            if (!line || line.afterItems.length <= 1) return;
-            line.afterItems = line.afterItems.filter(a => a.id !== afterId);
-            renderTable();
+        function removeAfterItem(planId, afterId) {
+            const p = plans.find(x => x.id === planId);
+            if (!p || p.afterItems.length <= 1) return;
+            p.afterItems = p.afterItems.filter(a => a.id !== afterId);
+            renderPlan(planId);
         }
 
-        /* ── Field setters (called by oninput/onchange) ─────────── */
-        function setB(lineId, f, v) { // before field setter
-            const l = draftLines.find(x => x.id === lineId);
-            if (!l) return;
-            l[f] = (f === "qtyBefore" || f === "priceBefore") ? (parseFloat(v) || 0) : v;
-            if (f === "qtyBefore") updateBadge(lineId);
-        }
-        function setBrand(lineId, v) {
-            const l = draftLines.find(x => x.id === lineId);
-            if (!l) return;
-            l.brand = v;
-            l.brandName = (M.brands.find(b => b.code === v) || {}).name || v;
-        }
-        function setA(lineId, afterId, f, v) { // after field setter
-            const l = draftLines.find(x => x.id === lineId);
-            const a = l && l.afterItems.find(x => x.id === afterId);
+        function setA(planId, afterId, f, v) {
+            const p = plans.find(x => x.id === planId);
+            const a = p && p.afterItems.find(x => x.id === afterId);
             if (!a) return;
             a[f] = (f === "qtyAfter" || f === "priceAfter") ? (parseFloat(v) || 0) : v;
-            if (f === "qtyAfter") updateBadge(lineId);
+            if (f === "qtyAfter") updateBadge(planId);
         }
 
-        function updateBadge(lineId) {
-            const line = draftLines.find(l => l.id === lineId);
-            if (!line) return;
-            const tot = line.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
-            const mm  = tot !== (line.qtyBefore || 0);
-            const el  = document.getElementById("qb_bdg_" + lineId);
+        function updateBadge(planId) {
+            const p   = plans.find(x => x.id === planId);
+            if (!p) return;
+            const tot = p.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
+            const mm  = tot !== (p.qtyBefore || 0);
+            const el  = document.getElementById("qbdg_" + planId);
             if (!el) return;
             el.className   = mm ? "qmm" : "qok";
             el.textContent = mm
-                ? `⚠ After: ${fmtNum(tot)} ≠ Before: ${fmtNum(line.qtyBefore)}`
+                ? `⚠ After: ${fmtNum(tot)} ≠ Before: ${fmtNum(p.qtyBefore)}`
                 : `✓ After: ${fmtNum(tot)}`;
         }
 
-        /* ── Render table ───────────────────────────────────────── */
-        function renderTable() {
-            const tbody = document.getElementById("linesTbody");
-            const ext = document.getElementById("fDocType").value === "external";
-            const showPriceBefore = showPrice && ext;
-            // brand+item+uom+qty[+priceBefore] + conversion+uom+qty[+priceAfter]+aksi
-            const totalCols = 8 + (showPriceBefore ? 1 : 0) + (showPrice ? 1 : 0);
+        /* ── Render ─────────────────────────────────────────────── */
+        function renderAllPlans() {
+            const container = document.getElementById("plansContainer");
+            container.innerHTML = "";
+            plans.forEach((p, i) => {
+                const div = document.createElement("div");
+                div.id = "pc_" + p.id;
+                container.appendChild(div);
+                renderPlanInto(p, i, div);
+            });
+        }
 
-            if (!draftLines.length) {
-                tbody.innerHTML = `<tr class="tr-empty"><td colspan="${totalCols}"><i class="bi bi-inbox me-2"></i>Belum ada item. Pilih Forecast atau klik "Tambah Item Code".</td></tr>`;
-                return;
-            }
+        function renderPlan(planId) {
+            const p   = plans.find(x => x.id === planId);
+            const idx = plans.findIndex(x => x.id === planId);
+            const el  = document.getElementById("pc_" + planId);
+            if (p && el) renderPlanInto(p, idx, el);
+        }
 
-            const brandOpts = M.brands.map(b =>
-                `<option value="${b.code}">${b.name} (${b.type})</option>`
+        function renderPlanInto(plan, idx, el) {
+            const ext    = getDocType() === "external";
+            const showPB = showPrice && ext;
+            const tot    = plan.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
+            const mm     = tot !== (plan.qtyBefore || 0);
+            const rs     = plan.afterItems.length;
+
+            const custCode = document.getElementById("fCustomer").value;
+            const planOpts = custCode
+                ? M.getPlansByOwner(custCode).map(p =>
+                    `<option value="${p.code}">${p.code} — ${p.description}</option>`
+                  ).join("")
+                : `<option value="" disabled>Pilih customer dulu</option>`;
+
+            const warehouseOpts = M.warehouses.map(w =>
+                `<option value="${w.code}">${w.code} — ${w.name} (${w.location})</option>`
             ).join("");
 
-            // colspan for action row
-            const bcCols = 4 + (showPriceBefore ? 1 : 0); // before cols with rowspan
-            const acCols = 3 + (showPrice ? 1 : 0);       // after cols per row (incl aksi)
-
-            let rows = "";
-            draftLines.forEach((line, li) => {
-                const tot = line.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
-                const mm  = tot !== (line.qtyBefore || 0);
-                const rs  = line.afterItems.length;
-
-                line.afterItems.forEach((a, ai) => {
-                    rows += `<tr>`;
-                    if (ai === 0) {
-                        rows += `
-                        <td class="cb" rowspan="${rs}">
-                            <select class="ts" onchange="setBrand('${line.id}',this.value)">
-                                <option value="">--</option>${brandOpts}
-                            </select>
-                        </td>
-                        <td class="cb" rowspan="${rs}">
-                            <div class="inp-s">
-                                <input class="ti" type="text" value="${line.itemBefore.replace(/"/g,'&quot;')}"
-                                    placeholder="Nama item CTU"
-                                    onchange="setB('${line.id}','itemBefore',this.value)">
-                                <button class="btn-s" onclick="openSearch('DOC',v=>fillIB('${line.id}',v))" title="Cari"><i class="bi bi-search"></i></button>
-                            </div>
-                        </td>
-                        <td class="cb" rowspan="${rs}" style="text-align:center;">
-                            <input class="tuom" type="text" value="${line.uomBefore || 'Ekor'}"
-                                onchange="setB('${line.id}','uomBefore',this.value)">
-                        </td>
-                        <td class="cb" rowspan="${rs}" style="text-align:center;">
-                            <input class="tn" type="number" value="${line.qtyBefore || ''}" min="0" placeholder="0"
-                                oninput="setB('${line.id}','qtyBefore',this.value)">
-                            <span id="qb_bdg_${line.id}" class="${mm ? 'qmm' : 'qok'}">
-                                ${mm ? `⚠ After: ${fmtNum(tot)} ≠ Before: ${fmtNum(line.qtyBefore)}` : `✓ After: ${fmtNum(tot)}`}
-                            </span>
-                        </td>`;
-                        if (showPriceBefore) {
-                            rows += `<td class="cp cb" rowspan="${rs}" style="text-align:center;">
-                                <input class="tp" type="number" value="${line.priceBefore || ''}" min="0" placeholder="0"
-                                    oninput="setB('${line.id}','priceBefore',this.value)">
-                            </td>`;
-                        }
-                    }
-
-                    // Conversion cells
-                    rows += `
-                        <td class="ca">
-                            <div class="inp-s">
-                                <input class="ti" type="text" value="${a.itemAfter.replace(/"/g,'&quot;')}"
-                                    placeholder="Nama item customer"
-                                    onchange="setA('${line.id}','${a.id}','itemAfter',this.value)">
-                                <button class="btn-s" onclick="openSearch(null,v=>fillIA('${line.id}','${a.id}',v))" title="Cari"><i class="bi bi-search"></i></button>
-                            </div>
-                        </td>
-                        <td class="ca" style="text-align:center;">
-                            <input class="tuom" type="text" value="${a.uomAfter || 'Ekor'}"
-                                onchange="setA('${line.id}','${a.id}','uomAfter',this.value)">
-                        </td>
-                        <td class="ca" style="text-align:center;">
-                            <input class="tn" type="number" value="${a.qtyAfter || ''}" min="0" placeholder="0"
-                                oninput="setA('${line.id}','${a.id}','qtyAfter',this.value)">
-                        </td>`;
-                    if (showPrice) {
-                        rows += `<td class="cp" style="text-align:center;">
-                            <input class="tp" type="number" value="${a.priceAfter || ''}" min="0" placeholder="0"
-                                oninput="setA('${line.id}','${a.id}','priceAfter',this.value)">
-                        </td>`;
-                    }
-                    rows += `<td style="text-align:center;">
-                        ${line.afterItems.length > 1
-                            ? `<button class="btn-da" onclick="removeAfterItem('${line.id}','${a.id}')" title="Hapus"><i class="bi bi-x-lg"></i></button>`
-                            : ""}
-                    </td></tr>`;
-                });
-
-                // Action row
-                rows += `<tr class="tr-act">
-                    <td colspan="${bcCols}"></td>
-                    <td colspan="${acCols}" style="padding:5px 10px;">
-                        <button class="btn-aa" onclick="addAfterItem('${line.id}')"><i class="bi bi-plus-sm"></i> Conversion Item</button>
-                        <button class="btn-dg" onclick="removeBeforeLine('${line.id}')"><i class="bi bi-trash"></i> Hapus Group</button>
+            // After cells builder (reused per row)
+            const afterCells = a => `
+                    ${showPrice ? `<td class="cp" style="text-align:center;">
+                        <input class="tp" type="number" value="${a.priceAfter || ""}" min="0" placeholder="0"
+                            oninput="setA('${plan.id}','${a.id}','priceAfter',this.value)">
+                    </td>` : ""}
+                    <td class="ca">
+                        <div class="inp-s">
+                            <input class="ti" type="text" value="${a.itemAfter.replace(/"/g,"&quot;")}"
+                                placeholder="Nama item customer"
+                                onchange="setA('${plan.id}','${a.id}','itemAfter',this.value)">
+                            <button class="btn-s" onclick="openSearch(null,v=>fillIA('${plan.id}','${a.id}',v))" title="Cari"><i class="bi bi-search"></i></button>
+                        </div>
                     </td>
-                </tr>`;
-                if (li < draftLines.length - 1) {
-                    rows += `<tr class="tr-sep"><td colspan="${totalCols}"></td></tr>`;
-                }
-            });
+                    <td class="ca" style="text-align:center;">
+                        <input class="tn" type="number" value="${a.qtyAfter || ""}" min="0" placeholder="0"
+                            oninput="setA('${plan.id}','${a.id}','qtyAfter',this.value)">
+                    </td>
+                    <td class="ca">
+                        <select class="ts" onchange="setA('${plan.id}','${a.id}','whseTujuan',this.value)" disabled style="background:#f3f4f6;cursor:not-allowed;color:#6b7280;">
+                            <option value="">-- Pilih --</option>${warehouseOpts}
+                        </select>
+                    </td>
+                    <td style="text-align:center;">
+                        ${plan.afterItems.length > 1
+                            ? `<button class="btn-da" onclick="removeAfterItem('${plan.id}','${a.id}')" title="Hapus"><i class="bi bi-x-lg"></i></button>`
+                            : ""}
+                    </td>`;
 
-            tbody.innerHTML = rows;
+            // Extra after rows (2nd onwards, full <tr>)
+            const extraAfterRows = plan.afterItems.slice(1).map(a =>
+                `<tr>${afterCells(a)}</tr>`
+            ).join("");
 
-            // Restore brand select values after innerHTML replacement
-            draftLines.forEach(line => {
-                const bSel = document.querySelector(`[onchange*="setBrand('${line.id}"]`);
-                if (bSel) bSel.value = line.brand;
+            el.innerHTML = `
+            <div class="plan-card">
+                <div class="plan-card-header">
+                    <span class="plan-badge">Dokumen ${idx + 1}</span>
+                    ${plans.length > 1
+                        ? `<button class="btn-dg" style="margin-left:auto;" onclick="removePlan('${plan.id}')"><i class="bi bi-trash me-1"></i> Hapus Dokumen</button>`
+                        : ""}
+                </div>
+                <div class="plan-card-body">
+                    <div class="lines-wrap">
+                        <table class="lt">
+                            <thead>
+                                <tr>
+                                    <th class="hb" colspan="${2 + (showPB?1:0) + (showPrice?1:0)}" style="border-bottom:none; font-size:12px;">Info CTU (Pengirim)</th>
+                                    <th class="ha" colspan="3" style="border-bottom:none; padding:4px 10px;">
+                                        <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                                            <span style="font-size:12px;">Tujuan / Conversion</span>
+                                            <div class="plan-field" style="background:#fff; padding:3px 8px; border-radius:6px; border:1px solid #c4b5fd;">
+                                                <label>Pilih Plan Tujuan :</label>
+                                                <select id="pln_${plan.id}" onchange="setPlanCode('${plan.id}',this.value)" style="border:none; outline:none; font-weight:600; cursor:pointer; font-size:11px;">
+                                                    <option value="">-- Pilih Plan --</option>${planOpts}
+                                                </select>
+                                                <button class="btn-info-plan" style="height:22px; padding:0 5px;" onclick="showPlanInfo('${plan.id}')" title="Lihat detail plan">
+                                                    <i class="bi bi-info-circle"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th style="border-bottom:none;"></th>
+                                </tr>
+                                <tr>
+                                    <th class="hb" style="min-width:180px;">Item Code</th>
+                                    <th class="hb" style="width:100px;">Qty</th>
+                                    ${showPB ? `<th class="hp" style="width:120px;">Harga Beli</th>` : ""}
+                                    ${showPrice ? `<th class="hp" style="width:120px;">Harga Jual</th>` : ""}
+                                    <th class="ha" style="min-width:180px;">Conversion Item</th>
+                                    <th class="ha" style="width:100px;">Qty</th>
+                                    <th class="ha" style="min-width:150px;">Whse Tujuan</th>
+                                    <th style="width:50px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="cb" rowspan="${rs}">
+                                        <div class="inp-s">
+                                            <input class="ti" type="text" value="${plan.itemBefore.replace(/"/g,"&quot;")}"
+                                                placeholder="Nama item CTU"
+                                                onchange="setB('${plan.id}','itemBefore',this.value)">
+                                            <button class="btn-s" onclick="openSearch('DOC',v=>fillIB('${plan.id}',v))" title="Cari"><i class="bi bi-search"></i></button>
+                                        </div>
+                                    </td>
+                                    <td class="cb" rowspan="${rs}" style="text-align:center;">
+                                        <input class="tn" type="number" value="${plan.qtyBefore || ""}" min="0" placeholder="0"
+                                            oninput="setB('${plan.id}','qtyBefore',this.value)">
+                                        <span id="qbdg_${plan.id}" class="${mm ? "qmm" : "qok"}">
+                                            ${mm ? `⚠ After: ${fmtNum(tot)} ≠ Before: ${fmtNum(plan.qtyBefore)}` : `✓ After: ${fmtNum(tot)}`}
+                                        </span>
+                                    </td>
+                                    ${showPB ? `<td class="cp cb" rowspan="${rs}" style="text-align:center;">
+                                        <input class="tp" type="number" value="${plan.priceBefore || ""}" min="0" placeholder="0"
+                                            oninput="setB('${plan.id}','priceBefore',this.value)">
+                                    </td>` : ""}
+                                    ${afterCells(plan.afterItems[0])}
+                                </tr>
+                                ${extraAfterRows}
+                                <tr class="tr-act">
+                                    <td colspan="${2 + (showPB?1:0) + (showPrice?1:0) + 3 + 1}">
+                                        <button class="btn-aa" onclick="addAfterItem('${plan.id}')"><i class="bi bi-plus-sm"></i> Conversion Item</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`;
+
+            // Restore select values
+            const plnSel  = document.getElementById("pln_"  + plan.id);
+            if (plnSel)  plnSel.value  = plan.planCode;
+
+            // Restore whseTujuan per after row
+            plan.afterItems.forEach(a => {
+                const wt = document.querySelector(`select[onchange*="setA('${plan.id}','${a.id}','whseTujuan'"]`);
+                if (wt) wt.value = a.whseTujuan || "";
             });
         }
 
@@ -558,7 +663,7 @@
         function openSearch(cat, cb) {
             _searchCb  = cb;
             _searchCat = cat;
-            document.getElementById("searchQ").value    = "";
+            document.getElementById("searchQ").value = "";
             document.getElementById("searchTitle").textContent = "Cari Item" + (cat ? " (" + cat + ")" : "");
             filterSearch("");
             new bootstrap.Modal(document.getElementById("itemSearchModal")).show();
@@ -586,78 +691,91 @@
             bootstrap.Modal.getInstance(document.getElementById("itemSearchModal")).hide();
         }
 
-        function fillIB(lineId, item) {
-            const line = draftLines.find(l => l.id === lineId);
-            if (!line) return;
-            line.itemBefore = item.name;
-            line.uomBefore  = item.uom || "Ekor";
-            renderTable();
+        function fillIB(planId, item) {
+            const p = plans.find(x => x.id === planId);
+            if (!p) return;
+            p.itemBefore = item.name;
+            p.uomBefore  = item.uom || "Ekor";
+            renderPlan(planId);
         }
 
-        function fillIA(lineId, afterId, item) {
-            const line = draftLines.find(l => l.id === lineId);
-            const a = line && line.afterItems.find(x => x.id === afterId);
+        function fillIA(planId, afterId, item) {
+            const p = plans.find(x => x.id === planId);
+            const a = p && p.afterItems.find(x => x.id === afterId);
             if (!a) return;
             a.itemAfter = item.name;
             a.uomAfter  = item.uom || "Ekor";
-            renderTable();
+            renderPlan(planId);
         }
 
         /* ── Save ───────────────────────────────────────────────── */
         function saveDraft() {
-            const date     = document.getElementById("fDate").value;
-            const docType  = document.getElementById("fDocType").value;
-            const fcRef    = document.getElementById("fForecastRef").value;
+            const date     = document.getElementById("fPostingDate").value;
+            const docType  = getDocType();
             const custCode = document.getElementById("fCustomer").value;
-            const whCode   = document.getElementById("fWarehouse").value;
+            const whsePengirimGlobal = document.getElementById("fWhsePengirim").value;
 
-            if (!date || !docType || !fcRef) { alert("Tanggal, DOC Type, dan Referensi Forecast wajib diisi."); return; }
-            if (!custCode) { alert("Customer Tujuan wajib dipilih."); return; }
-            if (!whCode)   { alert("Warehouse wajib dipilih."); return; }
-            if (!draftLines.length) { alert("Minimal 1 Item Code harus diisi."); return; }
+            if (!date) { alert("Tanggal wajib diisi."); return; }
+            if (!custCode)         { alert("Customer Tujuan wajib dipilih."); return; }
+            if (!whsePengirimGlobal) { alert("Warehouse Pengirim di Informasi Header wajib dipilih."); return; }
+            if (!plans.length)     { alert("Minimal 1 Plan harus ditambahkan."); return; }
 
             if (docType === "external") {
                 if (!document.getElementById("fExtVendor").value ||
                     !document.getElementById("fNoSJ").value      ||
-                    !document.getElementById("fTglSJ").value     ||
                     !document.getElementById("fNoPol").value) {
-                    alert("Semua field External wajib diisi."); return;
+                    alert("Semua field Vendor External wajib diisi."); return;
                 }
             }
 
-            for (const line of draftLines) {
-                if (!line.brand || !line.itemBefore) { alert("Brand dan Item Code wajib diisi di setiap group."); return; }
-                for (const a of line.afterItems) {
-                    if (!a.itemAfter) { alert("Conversion item tidak boleh kosong."); return; }
+            for (const [i, plan] of plans.entries()) {
+                if (!plan.planCode)      { alert(`Dokumen ${i+1}: Plan wajib dipilih.`); return; }
+                if (!plan.brand || !plan.itemBefore) { alert(`Dokumen ${i+1}: Brand dan Item Code wajib diisi.`); return; }
+                for (const a of plan.afterItems) {
+                    if (!a.itemAfter)    { alert(`Dokumen ${i+1}: Conversion item tidak boleh kosong.`); return; }
+                    if (!a.whseTujuan)   { alert(`Dokumen ${i+1}: Warehouse Tujuan wajib dipilih di setiap conversion.`); return; }
                 }
             }
 
-            const custObj = M.getCustomer(custCode);
-            const whObj   = M.getWarehouse(whCode);
-            const fc      = DOC_FORECAST_REFS.find(f => f.id === fcRef) || {};
-            const extCode = docType === "external" ? document.getElementById("fExtVendor").value : null;
-            const brandMap= {};
+            const custObj  = M.getCustomer(custCode);
+            const extCode  = docType === "external" ? document.getElementById("fExtVendor").value : null;
+            const brandMap = {};
             M.brands.forEach(b => { brandMap[b.code] = b.name; });
 
-            const draft = {
-                id: editId || docDraftNextId(),
-                date, docType,
-                forecastRef: fcRef, forecastDesc: fc.desc || "",
-                customer: custCode, customerName: custObj ? custObj.name : custCode,
-                warehouse: whCode,  warehouseName: whObj  ? whObj.name  : whCode,
-                externalVendor:     docType === "external" ? extCode : null,
-                externalVendorName: docType === "external" ? (M.getExternalVendor(extCode)||{}).name : null,
-                noSuratJalan:  docType === "external" ? document.getElementById("fNoSJ").value : null,
-                tglSuratJalan: docType === "external" ? document.getElementById("fTglSJ").value : null,
-                noPol:         docType === "external" ? document.getElementById("fNoPol").value.toUpperCase() : null,
-                lines: draftLines.map(l => ({ ...l, brandName: brandMap[l.brand] || l.brand })),
-                status: "Draft",
-                createdBy: role || "admin_hatchery",
-                createdAt: editId ? (docDraftGet(editId)||{}).createdAt || date : date
-            };
+            plans.forEach(plan => {
+                const draft = {
+                    id: docDraftNextId(),
+                    date, docType,
+                    postingDate: date,
+                    deliveryDate: document.getElementById("fDeliveryDate").value,
+                    contactPerson: document.getElementById("fContactPerson").value,
+                    customerRefNo: document.getElementById("fCustRefNo").value,
+                    forecastRef: null, forecastDesc: "",
+                    planCode: plan.planCode || "",
+                    planName: (M.getPlan(plan.planCode) || {}).description || "",
+                    customer: custCode, customerName: custObj ? custObj.name : custCode,
+                    whsePengirim: whsePengirimGlobal, whsePengirimName: (M.getWarehouse(whsePengirimGlobal)||{}).name || "",
+                    externalVendor:     docType === "external" ? extCode : null,
+                    externalVendorName: docType === "external" ? (M.getExternalVendor(extCode)||{}).name : null,
+                    extContactPerson:   docType === "external" ? document.getElementById("fExtContactPerson").value : null,
+                    noSuratJalan:       docType === "external" ? document.getElementById("fNoSJ").value : null,
+                    noPol:              docType === "external" ? document.getElementById("fNoPol").value.toUpperCase() : null,
+                    lines: [{
+                        id: plan.id,
+                        brand: plan.brand, brandName: brandMap[plan.brand] || plan.brand,
+                        itemBefore: plan.itemBefore, uomBefore: plan.uomBefore,
+                        qtyBefore: plan.qtyBefore, priceBefore: plan.priceBefore,
+                        afterItems: plan.afterItems.map(a => ({ ...a }))
+                    }],
+                    status: "Draft",
+                    createdBy: role || "admin_hatchery",
+                    createdAt: date
+                };
+                docDraftSave(draft);
+            });
 
-            docDraftSave(draft);
-            location.href = "hatchery_doc_draft_view.html?id=" + draft.id;
+            alert(`${plans.length} DO Draft berhasil dibuat.`);
+            location.href = "hatchery_doc_draft_list.html";
         }
 
         init();

@@ -331,7 +331,7 @@
                                     <option value="Partially Receipt">Partially Receipt</option>
                                 </select>
                                 <input id="q" class="form-control form-control-sm" style="width:200px"
-                                    placeholder="Search Order No">
+                                    placeholder="Cari No PO / Plan / FC / Whse">
                                 <div class="vr d-none d-md-block"></div>
                                 <!-- 
                                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
@@ -954,7 +954,12 @@
             container.innerHTML = "";
 
             const filtered = orders.filter(o => {
-                const matchQuery  = !q || o.no.toLowerCase().includes(q);
+                const matchQuery  = !q
+                    || o.no.toLowerCase().includes(q)
+                    || (o.planNo    || "").toLowerCase().includes(q)
+                    || (o.fcRef     || "").toLowerCase().includes(q)
+                    || (o.warehouse || "").toLowerCase().includes(q)
+                    || (o.customer  || o.customerName || "").toLowerCase().includes(q);
                 const matchStatus = statusFilter === 'All' || (o.status || "Open") === statusFilter;
                 return matchQuery && matchStatus;
             });

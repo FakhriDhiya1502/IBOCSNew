@@ -183,6 +183,12 @@
                 role: "customer"
             },
             {
+                email: "top@ibocs.id",
+                password: "123",
+                name: "TOP Admin",
+                role: "admin_top"
+            },
+            {
                 email: "settings@ibocs.id",
                 password: "123",
                 name: "Settings Admin",
@@ -203,7 +209,8 @@
                     const users = JSON.parse(raw);
                     // Re-seed if SIC/CTU users are missing (handles existing localStorage)
                     const hasSic = users.some(u => u.email === "sic@ibocs.id");
-                    if (Array.isArray(users) && users.length > 0 && hasSic) {
+                    const hasTop = users.some(u => u.email === "top@ibocs.id");
+                    if (Array.isArray(users) && users.length > 0 && hasSic && hasTop) {
                         return users;
                     }
                 } catch(e) {}
