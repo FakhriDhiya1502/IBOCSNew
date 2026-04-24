@@ -42,44 +42,6 @@ class SidebarSystem {
                 roles: ["customer", "vendor", "admin_hatchery", "admin_sales", "admin_top", "super_admin"]
             },
 
-            // ── Feed ───────────────────────────────────────────────────
-            {
-                id: "feed_parent",
-                label: "Feed",
-                icon: "bi-box-seam",
-                roles: ["customer", "vendor", "super_admin"],
-                children: [
-                    {
-                        id: "forecast_feed",
-                        label: "Feed Forecast",
-                        icon: "bi-graph-up-arrow",
-                        url: "customer_ForecastList.html",
-                        roles: ["customer", "super_admin"]
-                    },
-                    // {
-                    //     id: "forecast_history",
-                    //     label: "Forecast History",
-                    //     icon: "bi-clock-history",
-                    //     url: "customer_ForecastHistory.html",
-                    //     roles: ["customer", "super_admin"]
-                    // },
-                    {
-                        id: "orders",
-                        label: "Purchase Order",
-                        icon: "bi-list-ul",
-                        url: "customer_orders.html",
-                        roles: ["customer", "super_admin"]
-                    },
-                    {
-                        id: "incoming_po",
-                        label: "Sales Order",
-                        icon: "bi-check2-square",
-                        url: "vendor_incoming_po_list.html",
-                        roles: ["vendor", "super_admin"]
-                    }
-                ]
-            },
-
             // ── DOC ────────────────────────────────────────────────────
             {
                 id: "doc_parent",
@@ -118,6 +80,46 @@ class SidebarSystem {
                     // }
                 ]
             },
+
+            // ── Feed ───────────────────────────────────────────────────
+            {
+                id: "feed_parent",
+                label: "Feed",
+                icon: "bi-box-seam",
+                roles: ["customer", "vendor", "super_admin"],
+                children: [
+                    {
+                        id: "forecast_feed",
+                        label: "Feed Forecast",
+                        icon: "bi-graph-up-arrow",
+                        url: "customer_ForecastList.html",
+                        roles: ["customer", "super_admin"]
+                    },
+                    // {
+                    //     id: "forecast_history",
+                    //     label: "Forecast History",
+                    //     icon: "bi-clock-history",
+                    //     url: "customer_ForecastHistory.html",
+                    //     roles: ["customer", "super_admin"]
+                    // },
+                    {
+                        id: "orders",
+                        label: "Purchase Order",
+                        icon: "bi-list-ul",
+                        url: "customer_orders.html",
+                        roles: ["customer", "super_admin"]
+                    },
+                    {
+                        id: "incoming_po",
+                        label: "Sales Order",
+                        icon: "bi-check2-square",
+                        url: "vendor_incoming_po_list.html",
+                        roles: ["vendor", "super_admin"]
+                    }
+                ]
+            },
+
+
 
             // ── Finance (AR / AP) ───────────────────────────────────────
             {

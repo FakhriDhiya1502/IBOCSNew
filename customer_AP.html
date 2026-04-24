@@ -305,13 +305,12 @@
                             <table class="table mb-0">
                                 <thead>
                                     <tr>
-                                        <th style="width:40px;"><input type="checkbox" id="checkAll"
-                                                onchange="toggleAll(this)"></th>
+                                        <th style="width:40px;"></th>
                                         <th style="width:36px;"></th>
                                         <th>GRPO No</th>
                                         <th>Tanggal</th>
                                         <th>PO Ref</th>
-                                        <th>Vendor / Company</th>
+                                        <th>Vendor</th>
                                         <th class="text-end">Total Qty</th>
                                         <th class="text-end">Open Qty</th>
                                         <th>Status</th>
@@ -337,11 +336,11 @@
                             <table class="table mb-0">
                                 <thead>
                                     <tr>
+                                        <th style="width:36px;"></th>
                                         <th>AP No</th>
                                         <th>Tanggal</th>
                                         <th>GRPO Ref</th>
                                         <th>PO Ref</th>
-                                        <th>Vendor</th>
                                         <th class="text-end">Total Qty</th>
                                         <th>Status</th>
                                     </tr>
@@ -358,8 +357,7 @@
 
     <!-- Bulk Bar -->
     <div class="bulk-bar" id="bulkBar">
-        <span class="text-muted small me-auto"><span id="bulkCount">0</span> GRPO dipilih — akan dibuat 1 AP per
-            GRPO</span>
+        <span class="text-muted small me-auto">1 GRPO dipilih — akan dibuat 1 AP</span>
         <button class="btn btn-outline-secondary btn-sm" onclick="clearSelection()">Batal</button>
         <button class="btn-generate" onclick="generateAP()"><i class="bi bi-plus-circle me-2"></i>Generate AP</button>
     </div>
@@ -374,27 +372,128 @@
         new SidebarSystem(null, 'ap_list').render();
 
         const DEMO_GRPO = [
+            // ── TOP — dari SIC ────────────────────────────────────────────────────
             {
-                grpoNo: "GRPO-0001", grpoDate: "2026-04-05", poNo: "PO-FC-2604-001",
-                store: "Farm Deli", customer: "PT TOP Distribusi", totalQty: 12581, status: "Closed",
+                grpoNo: "GRPO-TOP-0001", grpoDate: "2026-04-03", poNo: "PO-TOP-2604-001",
+                store: "TOP Branch Bekasi", customer: "TOP", vendor: "SIC",
+                totalQty: 14200, status: "Open",
                 rows: [
-                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qtyOrder: 9514, qtyReceived: 9514 },
-                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 3067, qtyReceived: 3067 }
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 5000, qtyReceived: 5000, unitPrice: 7800 },
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qtyOrder: 9200, qtyReceived: 9200, unitPrice: 8500 }
                 ]
             },
             {
-                grpoNo: "GRPO-0002", grpoDate: "2026-04-10", poNo: "PO-FC-2604-002",
-                store: "Farm Makmur", customer: "CV. Makmur Sejahtera", totalQty: 11000, status: "Open",
+                grpoNo: "GRPO-TOP-0002", grpoDate: "2026-04-10", poNo: "PO-TOP-2604-002",
+                store: "TOP Branch Tangerang", customer: "TOP", vendor: "SIC",
+                totalQty: 8750, status: "Open",
                 rows: [
-                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 4200, qtyReceived: 4200 },
-                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)", qtyOrder: 6800, qtyReceived: 6800 }
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",   qtyOrder: 4500, qtyReceived: 4500, unitPrice: 8200 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4250, qtyReceived: 4250, unitPrice: 9200 }
+                ]
+            },
+            // ── TOP — dari CTU ────────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-TOP-0003", grpoDate: "2026-04-18", poNo: "PO-TOP-2604-003",
+                store: "TOP Branch Bogor", customer: "TOP", vendor: "CTU",
+                totalQty: 6000, status: "Open",
+                rows: [
+                    { itemCode: "DOC-001", itemName: "DOC Broiler FS", qtyOrder: 6000, qtyReceived: 6000, unitPrice: 6500 }
                 ]
             },
             {
-                grpoNo: "GRPO-0003", grpoDate: "2026-04-15", poNo: "PO-FC-2604-003",
-                store: "Farm Sejahtera", customer: "PT Agro Maju", totalQty: 5500, status: "Open",
+                grpoNo: "GRPO-TOP-0004", grpoDate: "2026-04-22", poNo: "PO-TOP-2604-004",
+                store: "TOP Branch Depok", customer: "TOP", vendor: "CTU",
+                totalQty: 7500, status: "Open",
                 rows: [
-                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 5500, qtyReceived: 5500 }
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",  qtyOrder: 4000, qtyReceived: 4000, unitPrice: 8500 },
+                    { itemCode: "DOC-002",  itemName: "DOC Broiler PS",         qtyOrder: 3500, qtyReceived: 3500, unitPrice: 6800 }
+                ]
+            },
+
+            // ── BMAX — dari SIC ───────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-BMAX-0001", grpoDate: "2026-04-05", poNo: "PO-BMAX-2604-001",
+                store: "BMAX Farm Cikarang", customer: "BMAX", vendor: "SIC",
+                totalQty: 10500, status: "Open",
+                rows: [
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qtyOrder: 6000, qtyReceived: 6000, unitPrice: 8500 },
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",  qtyOrder: 4500, qtyReceived: 4500, unitPrice: 8200 }
+                ]
+            },
+            // ── BMAX — dari CTU ───────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-BMAX-0002", grpoDate: "2026-04-14", poNo: "PO-BMAX-2604-002",
+                store: "BMAX Farm Karawang", customer: "BMAX", vendor: "CTU",
+                totalQty: 7800, status: "Open",
+                rows: [
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",         qtyOrder: 3500, qtyReceived: 3500, unitPrice: 6500 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)",  qtyOrder: 4300, qtyReceived: 4300, unitPrice: 9200 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-BMAX-0003", grpoDate: "2026-04-20", poNo: "PO-BMAX-2604-003",
+                store: "BMAX Farm Bekasi", customer: "BMAX", vendor: "CTU",
+                totalQty: 5200, status: "Open",
+                rows: [
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 5200, qtyReceived: 5200, unitPrice: 7800 }
+                ]
+            },
+
+            // ── AYM — dari SIC ────────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-AYM-0001", grpoDate: "2026-04-07", poNo: "PO-AYM-2604-001",
+                store: "AYM Farm Subang", customer: "AYM", vendor: "SIC",
+                totalQty: 12000, status: "Open",
+                rows: [
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 4000, qtyReceived: 4000, unitPrice: 7800 },
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qtyOrder: 8000, qtyReceived: 8000, unitPrice: 8500 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-AYM-0002", grpoDate: "2026-04-16", poNo: "PO-AYM-2604-002",
+                store: "AYM Farm Purwakarta", customer: "AYM", vendor: "SIC",
+                totalQty: 9300, status: "Open",
+                rows: [
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",   qtyOrder: 5300, qtyReceived: 5300, unitPrice: 8200 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4000, qtyReceived: 4000, unitPrice: 9200 }
+                ]
+            },
+            // ── AYM — dari CTU ────────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-AYM-0003", grpoDate: "2026-04-21", poNo: "PO-AYM-2604-003",
+                store: "AYM Farm Indramayu", customer: "AYM", vendor: "CTU",
+                totalQty: 5000, status: "Open",
+                rows: [
+                    { itemCode: "DOC-002", itemName: "DOC Broiler PS", qtyOrder: 5000, qtyReceived: 5000, unitPrice: 6800 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-AYM-0004", grpoDate: "2026-04-23", poNo: "PO-AYM-2604-004",
+                store: "AYM Farm Cirebon", customer: "AYM", vendor: "CTU",
+                totalQty: 6800, status: "Open",
+                rows: [
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",   qtyOrder: 3800, qtyReceived: 3800, unitPrice: 8200 },
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",         qtyOrder: 3000, qtyReceived: 3000, unitPrice: 6500 }
+                ]
+            },
+
+            // ── SIC — dari SIC (internal) & CTU ──────────────────────────────────
+            {
+                grpoNo: "GRPO-SIC-0001", grpoDate: "2026-04-08", poNo: "PO-SIC-2604-001",
+                store: "SIC Farm Majalengka", customer: "SIC", vendor: "SIC",
+                totalQty: 11500, status: "Open",
+                rows: [
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qtyOrder: 6500, qtyReceived: 6500, unitPrice: 8500 },
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",  qtyOrder: 5000, qtyReceived: 5000, unitPrice: 8200 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-SIC-0002", grpoDate: "2026-04-17", poNo: "PO-SIC-2604-002",
+                store: "SIC Farm Cirebon", customer: "SIC", vendor: "CTU",
+                totalQty: 8200, status: "Open",
+                rows: [
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",         qtyOrder: 4000, qtyReceived: 4000, unitPrice: 6500 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)",  qtyOrder: 4200, qtyReceived: 4200, unitPrice: 9200 }
                 ]
             }
         ];
@@ -444,48 +543,90 @@
                 tbody.innerHTML = `<tr><td colspan="9" class="empty-state"><i class="bi bi-inbox"></i>Tidak ada GRPO tersedia.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = rows.map((g, idx) => {
-                const isDone = done.has(g.grpoNo);
-                const expandId = `exp-grpo-${idx}`;
-                const cb = isDone
-                    ? `<input type="checkbox" disabled title="Sudah di-AP">`
-                    : `<input type="checkbox" class="row-check" data-grpo="${g.grpoNo}" onchange="updateBulkBar()">`;
-                const statusHtml = isDone
-                    ? `<span class="status-badge s-generated">AP Generated</span>`
-                    : `<span class="status-badge s-open">${g.status || "Open"}</span>`;
-                const note = isDone ? `<span class="text-muted small">Sudah ada AP</span>` : `<span class="text-muted small">Siap di-generate</span>`;
-                const itemRows = (g.rows || []).map(r => `<tr>
-                    <td>${r.itemCode || "-"}</td>
-                    <td>${r.itemName || "-"}</td>
-                    <td class="text-end">${(r.qtyReceived || r.qty || 0).toLocaleString()}</td>
-                    <td class="text-end">${(r.qtyOrder || 0).toLocaleString()}</td>
-                    <td class="text-end text-primary fw-semibold">${(r.openQty !== undefined ? r.openQty : (r.qtyReceived || r.qty || 0)).toLocaleString()}</td>
-                </tr>`).join("") || `<tr><td colspan="5" class="text-muted text-center">Tidak ada item.</td></tr>`;
-                const totalOpenQty = (g.rows || []).reduce((s, r) => s + (r.openQty !== undefined ? r.openQty : (r.qtyReceived || r.qty || 0)), 0);
-                const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
-                    <td colspan="10">
-                        <div class="expand-inner">
-                            <table class="item-mini-table">
-                                <thead><tr><th>Item Code</th><th>Item Name</th><th class="text-end">Qty Received</th><th class="text-end">Qty Order</th><th class="text-end">Open Qty</th></tr></thead>
-                                <tbody>${itemRows}</tbody>
-                            </table>
-                        </div>
+
+            // Group by company
+            const groups = {};
+            rows.forEach(g => {
+                const company = g.customer || g.store || "Unknown";
+                if (!groups[company]) groups[company] = [];
+                groups[company].push(g);
+            });
+
+            let html = "";
+            let idx = 0;
+            Object.entries(groups).forEach(([company, grpoList]) => {
+                // Company section header
+                html += `<tr style="background:#f0f3fa;">
+                    <td colspan="10" style="padding:8px 16px; font-weight:700; font-size:12px; color:#1a237e; letter-spacing:.3px; border-top:2px solid #c7d2fe;">
+                        <i class="bi bi-building me-2"></i>${company}
+                        <span style="font-weight:400;color:#6b7280;margin-left:8px;">(${grpoList.length} GRPO)</span>
                     </td>
                 </tr>`;
-                const mainRow = `<tr style="${isDone ? 'opacity:.6;' : ''}">
-                    <td>${cb}</td>
-                    <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
-                    <td class="fw-semibold">${g.grpoNo}</td>
-                    <td>${g.grpoDate || "-"}</td>
-                    <td><span class="text-primary">${g.poNo || "-"}</span></td>
-                    <td>${g.customer || g.store || "-"}</td>
-                    <td class="text-end">${(g.totalQty || 0).toLocaleString()}</td>
-                    <td class="text-end text-primary fw-semibold">${totalOpenQty.toLocaleString()}</td>
-                    <td>${statusHtml}</td>
-                    <td>${note}</td>
-                </tr>`;
-                return mainRow + expandRow;
-            }).join("");
+
+                grpoList.forEach(g => {
+                    const isDone = done.has(g.grpoNo);
+                    const expandId = `exp-grpo-${idx}`;
+                    const rb = isDone
+                        ? `<input type="radio" name="grpoSelect" disabled title="Sudah di-AP">`
+                        : `<input type="radio" name="grpoSelect" class="row-check" data-grpo="${g.grpoNo}" onchange="updateBulkBar()">`;
+                    const statusHtml = isDone
+                        ? `<span class="status-badge s-generated">AP Generated</span>`
+                        : `<span class="status-badge s-open">${g.status || "Open"}</span>`;
+                    const note = isDone ? `<span class="text-muted small">Sudah ada AP</span>` : `<span class="text-muted small">Siap di-generate</span>`;
+
+                    const totalOpenQty = (g.rows || []).reduce((s, r) => s + (r.openQty !== undefined ? r.openQty : (r.qtyReceived || r.qty || 0)), 0);
+
+                    const itemRows = (g.rows || []).map(r => {
+                        const qty = r.qtyReceived || r.qty || 0;
+                        const openQty = r.openQty !== undefined ? r.openQty : qty;
+                        const unitPrice = r.unitPrice || 0;
+                        const lineTotal = qty * unitPrice;
+                        return `<tr>
+                            <td>${r.itemCode || "-"}</td>
+                            <td>${r.itemName || "-"}</td>
+                            <td class="text-end">${qty.toLocaleString()}</td>
+                            <td class="text-end text-primary fw-semibold">${openQty.toLocaleString()}</td>
+                            <td class="text-end">${unitPrice ? unitPrice.toLocaleString("id-ID") : "-"}</td>
+                            <td class="text-end fw-semibold">${lineTotal ? "IDR " + lineTotal.toLocaleString("id-ID") : "-"}</td>
+                        </tr>`;
+                    }).join("") || `<tr><td colspan="6" class="text-muted text-center">Tidak ada item.</td></tr>`;
+
+                    const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
+                        <td colspan="10">
+                            <div class="expand-inner">
+                                <table class="item-mini-table">
+                                    <thead><tr>
+                                        <th>Item Code</th><th>Item Name</th>
+                                        <th class="text-end">Qty</th>
+                                        <th class="text-end">Open Qty</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Line Total</th>
+                                    </tr></thead>
+                                    <tbody>${itemRows}</tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                    const mainRow = `<tr style="${isDone ? 'opacity:.6;' : ''}">
+                        <td>${rb}</td>
+                        <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
+                        <td class="fw-semibold">${g.grpoNo}</td>
+                        <td>${g.grpoDate || "-"}</td>
+                        <td><span class="text-primary">${g.poNo || "-"}</span></td>
+                        <td><span class="fw-semibold">${g.vendor || "-"}</span></td>
+                        <td class="text-end">${(g.totalQty || 0).toLocaleString()}</td>
+                        <td class="text-end text-primary fw-semibold">${totalOpenQty.toLocaleString()}</td>
+                        <td>${statusHtml}</td>
+                        <td>${note}</td>
+                    </tr>`;
+
+                    html += mainRow + expandRow;
+                    idx++;
+                });
+            });
+
+            tbody.innerHTML = html;
         }
 
         function toggleExpand(expandId) {
@@ -502,7 +643,7 @@
             const q = (document.getElementById("fApSearch").value || "").toLowerCase();
             const list = getApList().filter(a => {
                 if (!q) return true;
-                return a.apNo.toLowerCase().includes(q) || (a.grpoRef || "").toLowerCase().includes(q) || (a.poRef || "").toLowerCase().includes(q);
+                return a.apNo.toLowerCase().includes(q) || (a.grpoRef || "").toLowerCase().includes(q) || (a.poRef || "").toLowerCase().includes(q) || (a.vendor || "").toLowerCase().includes(q);
             });
 
             const tbody = document.getElementById("apBody");
@@ -510,41 +651,92 @@
                 tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><i class="bi bi-file-earmark-x"></i>Belum ada dokumen AP.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = list.map(a => `<tr style="cursor:pointer;" onclick="window.location.href='customer_ap_view.html?no=${encodeURIComponent(a.apNo)}'">
-            <td class="fw-semibold text-primary">${a.apNo} <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;opacity:.5;"></i></td>
-            <td>${a.apDate || "-"}</td>
-            <td>${a.grpoRef || "-"}</td>
-            <td>${a.poRef || "-"}</td>
-            <td>${a.vendor || "-"}</td>
-            <td class="text-end">${(a.totalQty || 0).toLocaleString()}</td>
-            <td>${statusBadge(a.status)}</td>
-        </tr>`).join("");
+
+            // Group by company (vendor)
+            const groups = {};
+            list.forEach(a => {
+                const company = a.vendor || "Unknown";
+                if (!groups[company]) groups[company] = [];
+                groups[company].push(a);
+            });
+
+            let html = "";
+            let idx = 0;
+            Object.entries(groups).forEach(([company, apList]) => {
+                html += `<tr style="background:#f0f3fa;">
+                    <td colspan="7" style="padding:8px 16px; font-weight:700; font-size:12px; color:#1a237e; letter-spacing:.3px; border-top:2px solid #c7d2fe;">
+                        <i class="bi bi-building me-2"></i>${company}
+                        <span style="font-weight:400;color:#6b7280;margin-left:8px;">(${apList.length} AP)</span>
+                    </td>
+                </tr>`;
+
+                apList.forEach(a => {
+                    const expandId = `exp-ap-${idx}`;
+                    const itemRows = (a.lines || []).map(l => {
+                        const qty = l.qty || 0;
+                        const unitPrice = l.unitPrice || 0;
+                        const lineTotal = qty * unitPrice;
+                        return `<tr>
+                            <td>${l.itemCode || "-"}</td>
+                            <td>${l.itemName || "-"}</td>
+                            <td class="text-end">${qty.toLocaleString()}</td>
+                            <td class="text-end">${unitPrice ? unitPrice.toLocaleString("id-ID") : "-"}</td>
+                            <td class="text-end fw-semibold">${lineTotal ? "IDR " + lineTotal.toLocaleString("id-ID") : "-"}</td>
+                        </tr>`;
+                    }).join("") || `<tr><td colspan="5" class="text-muted text-center">Tidak ada detail item.</td></tr>`;
+
+                    const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
+                        <td colspan="7">
+                            <div class="expand-inner">
+                                <table class="item-mini-table">
+                                    <thead><tr>
+                                        <th>Item Code</th><th>Item Name</th>
+                                        <th class="text-end">Qty</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Line Total</th>
+                                    </tr></thead>
+                                    <tbody>${itemRows}</tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                    const mainRow = `<tr>
+                        <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
+                        <td class="fw-semibold text-primary" style="cursor:pointer;" onclick="window.location.href='customer_ap_view.html?no=${encodeURIComponent(a.apNo)}'">
+                            ${a.apNo} <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;opacity:.5;"></i>
+                        </td>
+                        <td>${a.apDate || "-"}</td>
+                        <td>${a.grpoRef || "-"}</td>
+                        <td>${a.poRef || "-"}</td>
+                        <td class="text-end">${(a.totalQty || 0).toLocaleString()}</td>
+                        <td>${statusBadge(a.status)}</td>
+                    </tr>`;
+
+                    html += mainRow + expandRow;
+                    idx++;
+                });
+            });
+
+            tbody.innerHTML = html;
         }
 
         // ── Selection ─────────────────────────────────────────────────────────────
         function updateBulkBar() {
-            const n = document.querySelectorAll(".row-check:checked").length;
-            document.getElementById("bulkBar").classList.toggle("visible", n > 0);
-            document.getElementById("bulkCount").textContent = n;
-            document.getElementById("checkAll").indeterminate = n > 0 && n < document.querySelectorAll(".row-check").length;
-            document.getElementById("checkAll").checked = n > 0 && n === document.querySelectorAll(".row-check").length;
-        }
-
-        function toggleAll(cb) {
-            document.querySelectorAll(".row-check").forEach(c => c.checked = cb.checked);
-            updateBulkBar();
+            const checked = document.querySelector(".row-check:checked");
+            document.getElementById("bulkBar").classList.toggle("visible", !!checked);
         }
 
         function clearSelection() {
-            document.querySelectorAll(".row-check, #checkAll").forEach(c => { c.checked = false; c.indeterminate = false; });
+            document.querySelectorAll(".row-check").forEach(c => c.checked = false);
             document.getElementById("bulkBar").classList.remove("visible");
         }
 
         // ── Generate AP ───────────────────────────────────────────────────────────
         function generateAP() {
-            const selected = [...document.querySelectorAll(".row-check:checked")].map(c => c.dataset.grpo);
-            if (!selected.length) return;
-            localStorage.setItem("IBOCS_bulk_grpo_refs", JSON.stringify(selected));
+            const checked = document.querySelector(".row-check:checked");
+            if (!checked) return;
+            localStorage.setItem("IBOCS_bulk_grpo_refs", JSON.stringify([checked.dataset.grpo]));
             window.location.href = "customer_bulk_ap_process.html";
         }
 

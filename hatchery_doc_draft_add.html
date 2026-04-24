@@ -297,13 +297,13 @@
         function fmtNum(n) { return n ? Number(n).toLocaleString("id-ID") : "0"; }
 
         function newAfterItem() {
-            return { id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, whseTujuan: "", priceAfter: null };
+            return { id: uniqueId(), itemAfter: "", uomAfter: "Ekor", qtyAfter: 0, whseTujuan: "" };
         }
 
         function newPlan() {
             return {
                 id: uniqueId(), planCode: "",
-                brand: "", brandName: "", itemBefore: "", uomBefore: "Ekor", qtyBefore: 0, priceBefore: null,
+                brand: "", brandName: "", itemBefore: "", uomBefore: "Ekor", qtyBefore: 0, priceBefore: null, priceJual: null,
                 afterItems: [newAfterItem()]
             };
         }
@@ -458,18 +458,27 @@
         function setB(planId, f, v) {
             const p = plans.find(x => x.id === planId);
             if (!p) return;
-            p[f] = (f === "qtyBefore" || f === "priceBefore") ? (parseFloat(v) || 0) : v;
-            if (f === "qtyBefore") updateBadge(planId);
+            p[f] = (f === "qtyBefore" || f === "priceBefore" || f === "priceJual") ? (parseFloat(v) || 0) : v;
+            if (f === "qtyBefore") {
+                // auto-sync single after item qty
+                if (p.afterItems.length === 1) {
+                    p.afterItems[0].qtyAfter = parseFloat(v) || 0;
+                }
+                updateBadge(planId);
+            }
         }
 
         function addAfterItem(planId) {
             const p = plans.find(x => x.id === planId);
-            if (p) { 
+            if (p) {
                 const newItem = newAfterItem();
                 const md = M.getPlan(p.planCode);
                 newItem.whseTujuan = md ? md.warehouseCode : "";
-                p.afterItems.push(newItem); 
-                renderPlan(planId); 
+                // new item gets remaining qty
+                const used = p.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
+                newItem.qtyAfter = Math.max(0, (p.qtyBefore || 0) - used);
+                p.afterItems.push(newItem);
+                renderPlan(planId);
             }
         }
 
@@ -540,10 +549,6 @@
 
             // After cells builder (reused per row)
             const afterCells = a => `
-                    ${showPrice ? `<td class="cp" style="text-align:center;">
-                        <input class="tp" type="number" value="${a.priceAfter || ""}" min="0" placeholder="0"
-                            oninput="setA('${plan.id}','${a.id}','priceAfter',this.value)">
-                    </td>` : ""}
                     <td class="ca">
                         <div class="inp-s">
                             <input class="ti" type="text" value="${a.itemAfter.replace(/"/g,"&quot;")}"
@@ -633,6 +638,10 @@
                                     ${showPB ? `<td class="cp cb" rowspan="${rs}" style="text-align:center;">
                                         <input class="tp" type="number" value="${plan.priceBefore || ""}" min="0" placeholder="0"
                                             oninput="setB('${plan.id}','priceBefore',this.value)">
+                                    </td>` : ""}
+                                    ${showPrice ? `<td class="cp cb" rowspan="${rs}" style="text-align:center;">
+                                        <input class="tp" type="number" value="${plan.priceJual || ""}" min="0" placeholder="0"
+                                            oninput="setB('${plan.id}','priceJual',this.value)">
                                     </td>` : ""}
                                     ${afterCells(plan.afterItems[0])}
                                 </tr>
@@ -731,6 +740,11 @@
             for (const [i, plan] of plans.entries()) {
                 if (!plan.planCode)      { alert(`Dokumen ${i+1}: Plan wajib dipilih.`); return; }
                 if (!plan.brand || !plan.itemBefore) { alert(`Dokumen ${i+1}: Brand dan Item Code wajib diisi.`); return; }
+                const totalAfter = plan.afterItems.reduce((s, a) => s + (a.qtyAfter || 0), 0);
+                if (totalAfter !== (plan.qtyBefore || 0)) {
+                    alert(`Dokumen ${i+1}: Total Qty Tujuan (${totalAfter}) harus sama dengan Qty CTU Pengirim (${plan.qtyBefore || 0}).`);
+                    return;
+                }
                 for (const a of plan.afterItems) {
                     if (!a.itemAfter)    { alert(`Dokumen ${i+1}: Conversion item tidak boleh kosong.`); return; }
                     if (!a.whseTujuan)   { alert(`Dokumen ${i+1}: Warehouse Tujuan wajib dipilih di setiap conversion.`); return; }
@@ -764,7 +778,7 @@
                         id: plan.id,
                         brand: plan.brand, brandName: brandMap[plan.brand] || plan.brand,
                         itemBefore: plan.itemBefore, uomBefore: plan.uomBefore,
-                        qtyBefore: plan.qtyBefore, priceBefore: plan.priceBefore,
+                        qtyBefore: plan.qtyBefore, priceBefore: plan.priceBefore, priceJual: plan.priceJual,
                         afterItems: plan.afterItems.map(a => ({ ...a }))
                     }],
                     status: "Draft",

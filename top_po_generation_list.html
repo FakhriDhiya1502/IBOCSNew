@@ -14,7 +14,7 @@
         .card-header { padding: 13px 16px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #fafbfe; }
         .card-body { padding: 16px; }
 
-        .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 18px; }
+        .summary-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; margin-bottom: 18px; }
         .summary-box { border: 1px solid #e8ebf1; border-radius: 10px; padding: 14px 16px; background: #fafbfe; }
         .summary-box .lbl { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 5px; }
         .summary-box .val { font-size: 24px; font-weight: 700; }
@@ -218,8 +218,9 @@
                                 <select id="fStatus">
                                     <option value="">Semua</option>
                                     <option value="Draft">Draft</option>
-                                    <option value="PO Generated">PO Generated</option>
                                     <option value="DO Generated">DO Generated</option>
+                                    <option value="DO & GRPO Generated">DO &amp; GRPO Generated</option>
+                                    <option value="PO Generated">PO Generated</option>
                                 </select>
                             </div>
                             <div class="f">
@@ -341,8 +342,10 @@
         function fmt(v)      { return v || "—"; }
 
         function statusTag(status) {
-            if (status === "Draft")        return `<span class="tag tag-draft">Draft</span>`;
-            if (status === "PO Generated") return `<span class="tag tag-generated">PO Generated</span>`;
+            if (status === "Draft")               return `<span class="tag tag-draft">Draft</span>`;
+            if (status === "DO Generated")        return `<span class="tag tag-generated">DO Generated</span>`;
+            if (status === "DO & GRPO Generated") return `<span class="tag" style="background:#ccfbf1;color:#0f766e;">DO &amp; GRPO Generated</span>`;
+            if (status === "PO Generated")        return `<span class="tag" style="background:#ede9fe;color:#5b21b6;">PO Generated</span>`;
             return `<span class="tag" style="background:#e0e7ff;color:#3730a3;">${status}</span>`;
         }
 
@@ -361,13 +364,15 @@
         function renderSummary(drafts) {
             const total   = drafts.length;
             const belumPO = drafts.filter(d => d.status === "Draft").length;
-            const sudahPO = drafts.filter(d => d.status === "PO Generated").length;
             const doGen   = drafts.filter(d => d.status === "DO Generated").length;
+            const doGrpo  = drafts.filter(d => d.status === "DO & GRPO Generated").length;
+            const sudahPO = drafts.filter(d => d.status === "PO Generated").length;
             document.getElementById("summaryGrid").innerHTML = `
                 <div class="summary-box"><div class="lbl">Total DO Draft</div><div class="val">${total}</div></div>
                 <div class="summary-box"><div class="lbl">Belum Generate PO</div><div class="val" style="color:#92400e">${belumPO}</div></div>
-                <div class="summary-box"><div class="lbl">PO Generated</div><div class="val" style="color:#166534">${sudahPO}</div></div>
-                <div class="summary-box"><div class="lbl">DO Generated</div><div class="val" style="color:#1d4ed8">${doGen}</div></div>`;
+                <div class="summary-box"><div class="lbl">DO Generated</div><div class="val" style="color:#166534">${doGen}</div></div>
+                <div class="summary-box"><div class="lbl">DO &amp; GRPO Generated</div><div class="val" style="color:#0f766e">${doGrpo}</div></div>
+                <div class="summary-box"><div class="lbl">PO Generated</div><div class="val" style="color:#5b21b6">${sudahPO}</div></div>`;
         }
 
         // ============================

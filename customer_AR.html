@@ -280,12 +280,11 @@
                             <table class="table mb-0">
                                 <thead>
                                     <tr>
-                                        <th style="width:40px;"><input type="checkbox" id="checkAll"
-                                                onchange="toggleAll(this)"></th>
+                                        <th style="width:40px;"></th>
                                         <th style="width:36px;"></th>
                                         <th>DO No</th>
                                         <th>Order / PO Ref</th>
-                                        <th>Vendor</th>
+                                        <th>Customer</th>
                                         <th>ETA</th>
                                         <th class="text-end">Total Qty</th>
                                         <th class="text-end">Open Qty</th>
@@ -312,11 +311,12 @@
                             <table class="table mb-0">
                                 <thead>
                                     <tr>
+                                        <th style="width:36px;"></th>
                                         <th>AR No</th>
                                         <th>Tanggal</th>
                                         <th>DO Ref</th>
                                         <th>Order Ref</th>
-                                        <th>Vendor</th>
+                                        <th class="text-end">Total Qty</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -332,7 +332,7 @@
 
     <!-- Bulk Bar -->
     <div class="bulk-bar" id="bulkBar">
-        <span class="text-muted small me-auto"><span id="bulkCount">0</span> DO dipilih — akan dibuat 1 AR per DO</span>
+        <span class="text-muted small me-auto">1 DO dipilih — akan dibuat 1 AR</span>
         <button class="btn btn-outline-secondary btn-sm" onclick="clearSelection()">Batal</button>
         <button class="btn-generate" onclick="generateAR()"><i class="bi bi-plus-circle me-2"></i>Generate AR</button>
     </div>
@@ -346,24 +346,92 @@
         new SidebarSystem(null, 'ar_list').render();
 
         const DEMO_DO = [
+            // ── SIC → TOP, BMAX, AYM ─────────────────────────────────────────────
             {
-                doNo: "DO-77821", orderNo: "ORD-000128", vendor: "Vendor A", status: "Shipped", eta: "2026-01-09",
+                doNo: "DO-SIC-0001", orderNo: "ORD-SIC-2604-001", company: "SIC", customer: "TOP",
+                status: "Shipped", eta: "2026-04-05",
                 items: [
-                    { sku: "FEED-002", itemCode: "FEED-002", name: "Pakan Starter (BR-1)", itemName: "Pakan Starter (BR-1)", qty: 9514, uom: "Kg" },
-                    { sku: "FEED-004", itemCode: "FEED-004", name: "Pakan Finisher (BR-3)", itemName: "Pakan Finisher (BR-3)", qty: 3067, uom: "Kg" }
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qty: 5000, openQty: 5000, uom: "Kg", unitPrice: 7800 },
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qty: 9200, openQty: 9200, uom: "Kg", unitPrice: 8500 }
                 ]
             },
             {
-                doNo: "DO-77819", orderNo: "ORD-000127", vendor: "Vendor B", status: "DO Issued", eta: "2026-01-08",
+                doNo: "DO-SIC-0002", orderNo: "ORD-SIC-2604-002", company: "SIC", customer: "TOP",
+                status: "Shipped", eta: "2026-04-10",
                 items: [
-                    { sku: "FEED-001", itemCode: "FEED-001", name: "Pakan Pre-Starter (BR-0)", itemName: "Pakan Pre-Starter (BR-0)", qty: 4200, uom: "Kg" }
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",   qty: 4500, openQty: 4500, uom: "Kg", unitPrice: 8200 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qty: 4250, openQty: 4250, uom: "Kg", unitPrice: 9200 }
                 ]
             },
             {
-                doNo: "DO-77821-B", orderNo: "ORD-000128", vendor: "Vendor A", status: "In Transit", eta: "2026-01-11",
+                doNo: "DO-SIC-0003", orderNo: "ORD-SIC-2604-003", company: "SIC", customer: "BMAX",
+                status: "Shipped", eta: "2026-04-06",
                 items: [
-                    { sku: "FEED-003", itemCode: "FEED-003", name: "Pakan Grower (BR-2)", itemName: "Pakan Grower (BR-2)", qty: 6800, uom: "Kg" },
-                    { sku: "FEED-004", itemCode: "FEED-004", name: "Pakan Finisher (BR-3)", itemName: "Pakan Finisher (BR-3)", qty: 2500, uom: "Kg" }
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qty: 6000, openQty: 6000, uom: "Kg", unitPrice: 8500 },
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",  qty: 4500, openQty: 4500, uom: "Kg", unitPrice: 8200 }
+                ]
+            },
+            {
+                doNo: "DO-SIC-0004", orderNo: "ORD-SIC-2604-004", company: "SIC", customer: "AYM",
+                status: "Shipped", eta: "2026-04-08",
+                items: [
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qty: 4000, openQty: 4000, uom: "Kg", unitPrice: 7800 },
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qty: 8000, openQty: 8000, uom: "Kg", unitPrice: 8500 }
+                ]
+            },
+            {
+                doNo: "DO-SIC-0005", orderNo: "ORD-SIC-2604-005", company: "SIC", customer: "AYM",
+                status: "Shipped", eta: "2026-04-17",
+                items: [
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",   qty: 5300, openQty: 5300, uom: "Kg", unitPrice: 8200 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qty: 4000, openQty: 4000, uom: "Kg", unitPrice: 9200 }
+                ]
+            },
+
+            // ── CTU → TOP, BMAX, AYM ─────────────────────────────────────────────
+            {
+                doNo: "DO-CTU-0001", orderNo: "ORD-CTU-2604-001", company: "CTU", customer: "TOP",
+                status: "Shipped", eta: "2026-04-19",
+                items: [
+                    { itemCode: "DOC-001", itemName: "DOC Broiler FS", qty: 6000, openQty: 6000, uom: "Ekor", unitPrice: 6500 }
+                ]
+            },
+            {
+                doNo: "DO-CTU-0002", orderNo: "ORD-CTU-2604-002", company: "CTU", customer: "TOP",
+                status: "Shipped", eta: "2026-04-23",
+                items: [
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qty: 4000, openQty: 4000, uom: "Kg",    unitPrice: 8500 },
+                    { itemCode: "DOC-002",  itemName: "DOC Broiler PS",        qty: 3500, openQty: 3500, uom: "Ekor", unitPrice: 6800 }
+                ]
+            },
+            {
+                doNo: "DO-CTU-0003", orderNo: "ORD-CTU-2604-003", company: "CTU", customer: "BMAX",
+                status: "Shipped", eta: "2026-04-15",
+                items: [
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",         qty: 3500, openQty: 3500, uom: "Ekor", unitPrice: 6500 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)",  qty: 4300, openQty: 4300, uom: "Kg",   unitPrice: 9200 }
+                ]
+            },
+            {
+                doNo: "DO-CTU-0004", orderNo: "ORD-CTU-2604-004", company: "CTU", customer: "BMAX",
+                status: "Shipped", eta: "2026-04-21",
+                items: [
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qty: 5200, openQty: 5200, uom: "Kg", unitPrice: 7800 }
+                ]
+            },
+            {
+                doNo: "DO-CTU-0005", orderNo: "ORD-CTU-2604-005", company: "CTU", customer: "AYM",
+                status: "Shipped", eta: "2026-04-22",
+                items: [
+                    { itemCode: "DOC-002", itemName: "DOC Broiler PS", qty: 5000, openQty: 5000, uom: "Ekor", unitPrice: 6800 }
+                ]
+            },
+            {
+                doNo: "DO-CTU-0006", orderNo: "ORD-CTU-2604-006", company: "CTU", customer: "AYM",
+                status: "Shipped", eta: "2026-04-24",
+                items: [
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)", qty: 3800, openQty: 3800, uom: "Kg",    unitPrice: 8200 },
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",       qty: 3000, openQty: 3000, uom: "Ekor", unitPrice: 6500 }
                 ]
             }
         ];
@@ -413,66 +481,101 @@
             const done = generatedDoNos();
             const rows = getDoList().filter(d => {
                 if (!q) return true;
-                return d.doNo.toLowerCase().includes(q) || (d.orderNo || "").toLowerCase().includes(q) || (d.vendor || "").toLowerCase().includes(q);
+                return d.doNo.toLowerCase().includes(q) || (d.orderNo || "").toLowerCase().includes(q) || (d.customer || "").toLowerCase().includes(q) || (d.company || "").toLowerCase().includes(q);
             });
 
             const tbody = document.getElementById("doBody");
             if (!rows.length) {
-                tbody.innerHTML = `<tr><td colspan="9" class="empty-state"><i class="bi bi-truck"></i>Tidak ada DO tersedia.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10" class="empty-state"><i class="bi bi-truck"></i>Tidak ada DO tersedia.</td></tr>`;
                 return;
             }
 
-            // Enrich DO with order lines for expand
-            const orderLines = JSON.parse(localStorage.getItem("IBOCS_customer_order_lines") || "{}");
+            // Group by company (SIC / CTU)
+            const groups = {};
+            rows.forEach(d => {
+                const company = d.company || "Unknown";
+                if (!groups[company]) groups[company] = [];
+                groups[company].push(d);
+            });
 
-            tbody.innerHTML = rows.map((d, idx) => {
-                const isDone = done.has(d.doNo);
-                const expandId = `exp-do-${idx}`;
-                const cb = isDone
-                    ? `<input type="checkbox" disabled title="Sudah di-AR">`
-                    : `<input type="checkbox" class="row-check" data-do="${d.doNo}" onchange="updateBulkBar()">`;
-                const arStatus = isDone
-                    ? `<span class="status-badge s-generated">Closed</span>`
-                    : `<span class="status-badge s-open">Open</span>`;
-                const note = isDone ? `<span class="text-muted small">Sudah ada AR</span>` : `<span class="text-muted small">Siap di-generate</span>`;
+            let html = "";
+            let idx = 0;
+            Object.entries(groups).forEach(([company, doList]) => {
+                html += `<tr style="background:#f0f3fa;">
+                    <td colspan="10" style="padding:8px 16px; font-weight:700; font-size:12px; color:#1a237e; letter-spacing:.3px; border-top:2px solid #c7d2fe;">
+                        <i class="bi bi-building me-2"></i>${company}
+                        <span style="font-weight:400;color:#6b7280;margin-left:8px;">(${doList.length} DO)</span>
+                    </td>
+                </tr>`;
 
-                const lines = d.items || orderLines[d.orderNo] || [];
-                const itemRows = lines.length
-                    ? lines.map(l => `<tr>
-                    <td>${l.sku || l.itemCode || "-"}</td>
-                    <td>${l.name || l.itemName || "-"}</td>
-                    <td class="text-end">${(l.qty || 0).toLocaleString()}</td>
-                    <td class="text-end text-primary fw-semibold">${(l.openQty !== undefined ? l.openQty : (l.qty || 0)).toLocaleString()}</td>
-                    <td>${l.uom || "Kg"}</td>
-                  </tr>`).join("")
-                    : `<tr><td colspan="5" class="text-muted text-center py-2">Tidak ada item detail.</td></tr>`;
+                doList.forEach(d => {
+                    const isDone = done.has(d.doNo);
+                    const expandId = `exp-do-${idx}`;
+                    const rb = isDone
+                        ? `<input type="radio" name="doSelect" disabled title="Sudah di-AR">`
+                        : `<input type="radio" name="doSelect" class="row-check" data-do="${d.doNo}" onchange="updateBulkBar()">`;
+                    const arStatus = isDone
+                        ? `<span class="status-badge s-generated">Closed</span>`
+                        : `<span class="status-badge s-open">Open</span>`;
+                    const note = isDone ? `<span class="text-muted small">Sudah ada AR</span>` : `<span class="text-muted small">Siap di-generate</span>`;
 
-                const totalQty = lines.reduce((s, l) => s + (l.qty || 0), 0);
-                const totalOpenQty = lines.reduce((s, l) => s + (l.openQty !== undefined ? l.openQty : (l.qty || 0)), 0);
-                const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
-                <td colspan="10">
-                    <div class="expand-inner">
-                        <table class="item-mini-table">
-                            <thead><tr><th>Item Code</th><th>Item Name</th><th class="text-end">Qty</th><th class="text-end">Open Qty</th><th>UOM</th></tr></thead>
-                            <tbody>${itemRows}</tbody>
-                        </table>
-                    </div>
-                </td>
-            </tr>`;
-                const mainRow = `<tr style="${isDone ? 'opacity:.6;' : ''}">
-                <td>${cb}</td>
-                <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
-                <td class="fw-semibold">${d.doNo}</td>
-                <td><span class="text-primary">${d.orderNo || "-"}</span></td>
-                <td>${d.vendor || "-"}</td>
-                <td>${d.eta || "-"}</td>
-                <td class="text-end">${totalQty.toLocaleString()}</td>
-                <td class="text-end text-primary fw-semibold">${totalOpenQty.toLocaleString()}</td>
-                <td>${arStatus}</td>
-                <td>${note}</td>
-            </tr>`;
-                return mainRow + expandRow;
-            }).join("");
+                    const lines = d.items || [];
+                    const totalQty     = lines.reduce((s, l) => s + (l.qty || 0), 0);
+                    const totalOpenQty = lines.reduce((s, l) => s + (l.openQty !== undefined ? l.openQty : (l.qty || 0)), 0);
+
+                    const itemRows = lines.length
+                        ? lines.map(l => {
+                            const qty      = l.qty || 0;
+                            const openQty  = l.openQty !== undefined ? l.openQty : qty;
+                            const unitPrice = l.unitPrice || 0;
+                            const lineTotal = qty * unitPrice;
+                            return `<tr>
+                                <td>${l.itemCode || "-"}</td>
+                                <td>${l.itemName || "-"}</td>
+                                <td class="text-end">${qty.toLocaleString()}</td>
+                                <td class="text-end text-primary fw-semibold">${openQty.toLocaleString()}</td>
+                                <td class="text-end">${unitPrice ? unitPrice.toLocaleString("id-ID") : "-"}</td>
+                                <td class="text-end fw-semibold">${lineTotal ? "IDR " + lineTotal.toLocaleString("id-ID") : "-"}</td>
+                            </tr>`;
+                        }).join("")
+                        : `<tr><td colspan="6" class="text-muted text-center py-2">Tidak ada item detail.</td></tr>`;
+
+                    const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
+                        <td colspan="10">
+                            <div class="expand-inner">
+                                <table class="item-mini-table">
+                                    <thead><tr>
+                                        <th>Item Code</th><th>Item Name</th>
+                                        <th class="text-end">Qty</th>
+                                        <th class="text-end">Open Qty</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Line Total</th>
+                                    </tr></thead>
+                                    <tbody>${itemRows}</tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                    const mainRow = `<tr style="${isDone ? 'opacity:.6;' : ''}">
+                        <td>${rb}</td>
+                        <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
+                        <td class="fw-semibold">${d.doNo}</td>
+                        <td><span class="text-primary">${d.orderNo || "-"}</span></td>
+                        <td><span class="fw-semibold">${d.customer || "-"}</span></td>
+                        <td>${d.eta || "-"}</td>
+                        <td class="text-end">${totalQty.toLocaleString()}</td>
+                        <td class="text-end text-primary fw-semibold">${totalOpenQty.toLocaleString()}</td>
+                        <td>${arStatus}</td>
+                        <td>${note}</td>
+                    </tr>`;
+
+                    html += mainRow + expandRow;
+                    idx++;
+                });
+            });
+
+            tbody.innerHTML = html;
         }
 
         function toggleExpand(expandId) {
@@ -489,48 +592,100 @@
             const q = (document.getElementById("fArSearch").value || "").toLowerCase();
             const list = getArList().filter(a => {
                 if (!q) return true;
-                return a.arNo.toLowerCase().includes(q) || (a.doRef || "").toLowerCase().includes(q) || (a.orderRef || "").toLowerCase().includes(q);
+                return a.arNo.toLowerCase().includes(q) || (a.doRef || "").toLowerCase().includes(q) || (a.orderRef || "").toLowerCase().includes(q) || (a.company || "").toLowerCase().includes(q) || (a.customer || "").toLowerCase().includes(q);
             });
 
             const tbody = document.getElementById("arBody");
             if (!list.length) {
-                tbody.innerHTML = `<tr><td colspan="6" class="empty-state"><i class="bi bi-file-earmark-x"></i>Belum ada dokumen AR.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><i class="bi bi-file-earmark-x"></i>Belum ada dokumen AR.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = list.map(a => `<tr style="cursor:pointer;" onclick="window.location.href='customer_ar_view.html?no=${encodeURIComponent(a.arNo)}'">
-            <td class="fw-semibold text-primary">${a.arNo} <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;opacity:.5;"></i></td>
-            <td>${a.arDate || "-"}</td>
-            <td>${a.doRef || "-"}</td>
-            <td>${a.orderRef || "-"}</td>
-            <td>${a.vendor || "-"}</td>
-            <td>${statusBadge(a.status)}</td>
-        </tr>`).join("");
+
+            // Group by company (SIC / CTU)
+            const groups = {};
+            list.forEach(a => {
+                const company = a.company || "Unknown";
+                if (!groups[company]) groups[company] = [];
+                groups[company].push(a);
+            });
+
+            let html = "";
+            let idx = 0;
+            Object.entries(groups).forEach(([company, arList]) => {
+                html += `<tr style="background:#f0f3fa;">
+                    <td colspan="7" style="padding:8px 16px; font-weight:700; font-size:12px; color:#1a237e; letter-spacing:.3px; border-top:2px solid #c7d2fe;">
+                        <i class="bi bi-building me-2"></i>${company}
+                        <span style="font-weight:400;color:#6b7280;margin-left:8px;">(${arList.length} AR)</span>
+                    </td>
+                </tr>`;
+
+                arList.forEach(a => {
+                    const expandId = `exp-ar-${idx}`;
+                    const itemRows = (a.lines || []).map(l => {
+                        const qty = l.qty || 0;
+                        const unitPrice = l.unitPrice || 0;
+                        const lineTotal = qty * unitPrice;
+                        return `<tr>
+                            <td>${l.itemCode || "-"}</td>
+                            <td>${l.itemName || "-"}</td>
+                            <td class="text-end">${qty.toLocaleString()}</td>
+                            <td class="text-end">${unitPrice ? unitPrice.toLocaleString("id-ID") : "-"}</td>
+                            <td class="text-end fw-semibold">${lineTotal ? "IDR " + lineTotal.toLocaleString("id-ID") : "-"}</td>
+                        </tr>`;
+                    }).join("") || `<tr><td colspan="5" class="text-muted text-center">Tidak ada detail item.</td></tr>`;
+
+                    const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
+                        <td colspan="7">
+                            <div class="expand-inner">
+                                <table class="item-mini-table">
+                                    <thead><tr>
+                                        <th>Item Code</th><th>Item Name</th>
+                                        <th class="text-end">Qty</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Line Total</th>
+                                    </tr></thead>
+                                    <tbody>${itemRows}</tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                    const mainRow = `<tr>
+                        <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
+                        <td class="fw-semibold text-primary" style="cursor:pointer;" onclick="window.location.href='customer_ar_view.html?no=${encodeURIComponent(a.arNo)}'">
+                            ${a.arNo} <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;opacity:.5;"></i>
+                        </td>
+                        <td>${a.arDate || "-"}</td>
+                        <td>${a.doRef || "-"}</td>
+                        <td>${a.orderRef || "-"}</td>
+                        <td class="text-end">${(a.totalQty || 0).toLocaleString()}</td>
+                        <td>${statusBadge(a.status)}</td>
+                    </tr>`;
+
+                    html += mainRow + expandRow;
+                    idx++;
+                });
+            });
+
+            tbody.innerHTML = html;
         }
 
         // ── Selection ─────────────────────────────────────────────────────────────
         function updateBulkBar() {
-            const n = document.querySelectorAll(".row-check:checked").length;
-            document.getElementById("bulkBar").classList.toggle("visible", n > 0);
-            document.getElementById("bulkCount").textContent = n;
-            document.getElementById("checkAll").indeterminate = n > 0 && n < document.querySelectorAll(".row-check").length;
-            document.getElementById("checkAll").checked = n > 0 && n === document.querySelectorAll(".row-check").length;
-        }
-
-        function toggleAll(cb) {
-            document.querySelectorAll(".row-check").forEach(c => c.checked = cb.checked);
-            updateBulkBar();
+            const checked = document.querySelector(".row-check:checked");
+            document.getElementById("bulkBar").classList.toggle("visible", !!checked);
         }
 
         function clearSelection() {
-            document.querySelectorAll(".row-check, #checkAll").forEach(c => { c.checked = false; c.indeterminate = false; });
+            document.querySelectorAll(".row-check").forEach(c => c.checked = false);
             document.getElementById("bulkBar").classList.remove("visible");
         }
 
         // ── Generate AR ───────────────────────────────────────────────────────────
         function generateAR() {
-            const selected = [...document.querySelectorAll(".row-check:checked")].map(c => c.dataset.do);
-            if (!selected.length) return;
-            localStorage.setItem("IBOCS_bulk_do_refs", JSON.stringify(selected));
+            const checked = document.querySelector(".row-check:checked");
+            if (!checked) return;
+            localStorage.setItem("IBOCS_bulk_do_refs", JSON.stringify([checked.dataset.do]));
             window.location.href = "customer_bulk_ar_process.html";
         }
 

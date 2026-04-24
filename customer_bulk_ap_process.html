@@ -303,27 +303,128 @@
 
         // ── Demo Data ─────────────────────────────────────────────────────────────
         const DEMO_GRPO = [
+            // ── TOP — dari SIC ────────────────────────────────────────────────────
             {
-                grpoNo: "GRPO-0001", grpoDate: "2026-04-05", poNo: "PO-FC-2604-001",
-                store: "Farm Deli", customer: "PT TOP Distribusi", totalQty: 12581, status: "Closed",
+                grpoNo: "GRPO-TOP-0001", grpoDate: "2026-04-03", poNo: "PO-TOP-2604-001",
+                store: "TOP Branch Bekasi", customer: "TOP", vendor: "SIC",
+                totalQty: 14200, status: "Open",
                 rows: [
-                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",   qtyOrder: 9514, qtyReceived: 9514, unitPrice: 8500 },
-                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)",  qtyOrder: 3067, qtyReceived: 3067, unitPrice: 9200 }
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 5000, qtyReceived: 5000, unitPrice: 7800 },
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qtyOrder: 9200, qtyReceived: 9200, unitPrice: 8500 }
                 ]
             },
             {
-                grpoNo: "GRPO-0002", grpoDate: "2026-04-10", poNo: "PO-FC-2604-002",
-                store: "Farm Makmur", customer: "CV. Makmur Sejahtera", totalQty: 11000, status: "Open",
+                grpoNo: "GRPO-TOP-0002", grpoDate: "2026-04-10", poNo: "PO-TOP-2604-002",
+                store: "TOP Branch Tangerang", customer: "TOP", vendor: "SIC",
+                totalQty: 8750, status: "Open",
                 rows: [
-                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 4200, qtyReceived: 4200, unitPrice: 7800 },
-                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",       qtyOrder: 6800, qtyReceived: 6800, unitPrice: 8200 }
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",   qtyOrder: 4500, qtyReceived: 4500, unitPrice: 8200 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4250, qtyReceived: 4250, unitPrice: 9200 }
+                ]
+            },
+            // ── TOP — dari CTU ────────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-TOP-0003", grpoDate: "2026-04-18", poNo: "PO-TOP-2604-003",
+                store: "TOP Branch Bogor", customer: "TOP", vendor: "CTU",
+                totalQty: 6000, status: "Open",
+                rows: [
+                    { itemCode: "DOC-001", itemName: "DOC Broiler FS", qtyOrder: 6000, qtyReceived: 6000, unitPrice: 6500 }
                 ]
             },
             {
-                grpoNo: "GRPO-0003", grpoDate: "2026-04-15", poNo: "PO-FC-2604-003",
-                store: "Farm Sejahtera", customer: "PT Agro Maju", totalQty: 5500, status: "Open",
+                grpoNo: "GRPO-TOP-0004", grpoDate: "2026-04-22", poNo: "PO-TOP-2604-004",
+                store: "TOP Branch Depok", customer: "TOP", vendor: "CTU",
+                totalQty: 7500, status: "Open",
                 rows: [
-                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 5500, qtyReceived: 5500, unitPrice: 9200 }
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qtyOrder: 4000, qtyReceived: 4000, unitPrice: 8500 },
+                    { itemCode: "DOC-002",  itemName: "DOC Broiler PS",        qtyOrder: 3500, qtyReceived: 3500, unitPrice: 6800 }
+                ]
+            },
+
+            // ── BMAX — dari SIC ───────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-BMAX-0001", grpoDate: "2026-04-05", poNo: "PO-BMAX-2604-001",
+                store: "BMAX Farm Cikarang", customer: "BMAX", vendor: "SIC",
+                totalQty: 10500, status: "Open",
+                rows: [
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qtyOrder: 6000, qtyReceived: 6000, unitPrice: 8500 },
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",  qtyOrder: 4500, qtyReceived: 4500, unitPrice: 8200 }
+                ]
+            },
+            // ── BMAX — dari CTU ───────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-BMAX-0002", grpoDate: "2026-04-14", poNo: "PO-BMAX-2604-002",
+                store: "BMAX Farm Karawang", customer: "BMAX", vendor: "CTU",
+                totalQty: 7800, status: "Open",
+                rows: [
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",        qtyOrder: 3500, qtyReceived: 3500, unitPrice: 6500 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4300, qtyReceived: 4300, unitPrice: 9200 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-BMAX-0003", grpoDate: "2026-04-20", poNo: "PO-BMAX-2604-003",
+                store: "BMAX Farm Bekasi", customer: "BMAX", vendor: "CTU",
+                totalQty: 5200, status: "Open",
+                rows: [
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 5200, qtyReceived: 5200, unitPrice: 7800 }
+                ]
+            },
+
+            // ── AYM — dari SIC ────────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-AYM-0001", grpoDate: "2026-04-07", poNo: "PO-AYM-2604-001",
+                store: "AYM Farm Subang", customer: "AYM", vendor: "SIC",
+                totalQty: 12000, status: "Open",
+                rows: [
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 4000, qtyReceived: 4000, unitPrice: 7800 },
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qtyOrder: 8000, qtyReceived: 8000, unitPrice: 8500 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-AYM-0002", grpoDate: "2026-04-16", poNo: "PO-AYM-2604-002",
+                store: "AYM Farm Purwakarta", customer: "AYM", vendor: "SIC",
+                totalQty: 9300, status: "Open",
+                rows: [
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",   qtyOrder: 5300, qtyReceived: 5300, unitPrice: 8200 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4000, qtyReceived: 4000, unitPrice: 9200 }
+                ]
+            },
+            // ── AYM — dari CTU ────────────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-AYM-0003", grpoDate: "2026-04-21", poNo: "PO-AYM-2604-003",
+                store: "AYM Farm Indramayu", customer: "AYM", vendor: "CTU",
+                totalQty: 5000, status: "Open",
+                rows: [
+                    { itemCode: "DOC-002", itemName: "DOC Broiler PS", qtyOrder: 5000, qtyReceived: 5000, unitPrice: 6800 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-AYM-0004", grpoDate: "2026-04-23", poNo: "PO-AYM-2604-004",
+                store: "AYM Farm Cirebon", customer: "AYM", vendor: "CTU",
+                totalQty: 6800, status: "Open",
+                rows: [
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)", qtyOrder: 3800, qtyReceived: 3800, unitPrice: 8200 },
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",       qtyOrder: 3000, qtyReceived: 3000, unitPrice: 6500 }
+                ]
+            },
+
+            // ── SIC — dari SIC & CTU ──────────────────────────────────────────────
+            {
+                grpoNo: "GRPO-SIC-0001", grpoDate: "2026-04-08", poNo: "PO-SIC-2604-001",
+                store: "SIC Farm Majalengka", customer: "SIC", vendor: "SIC",
+                totalQty: 11500, status: "Open",
+                rows: [
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)", qtyOrder: 6500, qtyReceived: 6500, unitPrice: 8500 },
+                    { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",  qtyOrder: 5000, qtyReceived: 5000, unitPrice: 8200 }
+                ]
+            },
+            {
+                grpoNo: "GRPO-SIC-0002", grpoDate: "2026-04-17", poNo: "PO-SIC-2604-002",
+                store: "SIC Farm Cirebon", customer: "SIC", vendor: "CTU",
+                totalQty: 8200, status: "Open",
+                rows: [
+                    { itemCode: "DOC-001",  itemName: "DOC Broiler FS",        qtyOrder: 4000, qtyReceived: 4000, unitPrice: 6500 },
+                    { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4200, qtyReceived: 4200, unitPrice: 9200 }
                 ]
             }
         ];
@@ -475,7 +576,8 @@
         // ── Generate AP ───────────────────────────────────────────────────────────
         function generateBatchAP() {
             if (!workingData.length) return;
-            if (!confirm(`Generate ${workingData.length} dokumen AP dari GRPO yang dipilih?`)) return;
+            const grpoNo = workingData[0]?.grpoNo || "";
+            if (!confirm(`Generate AP dari ${grpoNo}?`)) return;
 
             const apDate  = document.getElementById("fPostingDate").value;
             const dueDate = document.getElementById("fDueDate").value;
@@ -521,7 +623,7 @@
             localStorage.setItem("IBOCS_ap_list", JSON.stringify(apList));
             localStorage.removeItem("IBOCS_bulk_grpo_refs");
 
-            showToast(`${count} AP berhasil dibuat!`);
+            showToast(`AP berhasil dibuat!`);
             setTimeout(() => window.location.href = "customer_AP.html", 1500);
         }
 

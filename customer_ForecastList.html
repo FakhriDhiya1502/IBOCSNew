@@ -923,19 +923,16 @@
                     const rekLabel = rekCount > 0 ? `★ (${rekCount})` : `★ Rekom`;
                     const safeCompanyKey = company.replace(/\s+/g, '-');
                     const isChecked = _selectedPlansForBulk.includes(plan.planNo) ? "checked" : "";
-                    const guard = canSubmitForecast(plan.planNo);
-                    const canTick = rekCount > 0 && plan.fcStatus === "Draft" && guard.ok;
+                    const canTick = rekCount > 0 && plan.fcStatus === "Draft";
                     const isDisabled = canTick ? "" : "disabled";
                     const disabledMsg = rekCount === 0
                         ? `title="Isi rekomendasi (★ Rekom) terlebih dahulu"`
                         : plan.fcStatus !== "Draft"
                         ? `title="Status plan sudah '${plan.fcStatus}' — tidak bisa disubmit ulang"`
-                        : !guard.ok
-                        ? `title="${guard.reason}"`
                         : "";
-                    
+
                     const blockReason = !canTick
-                        ? (rekCount === 0 ? "Belum ada rekom" : plan.fcStatus !== "Draft" ? plan.fcStatus : "FC aktif")
+                        ? (rekCount === 0 ? "Belum ada rekom" : plan.fcStatus)
                         : "";
 
                     const fcStatusBadge = plan.fcStatus === "Draft"
