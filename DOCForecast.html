@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,97 +8,400 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f0f2f7; color: #1e293b; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f0f2f7;
+            color: #1e293b;
+        }
 
         /* ── Page Layout ───────────────────────────── */
-        .card { background: #fff; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border: 1px solid #e2e8f0; }
-        .card-header { padding: 13px 18px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #eef0f4; background: #f8fafc; border-radius: 12px 12px 0 0; color: #334155; display: flex; align-items: center; gap: 8px; }
-        .card-body { padding: 18px; }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+            padding: 13px 18px;
+            font-weight: 700;
+            font-size: 13px;
+            border-bottom: 1px solid #eef0f4;
+            background: #f8fafc;
+            border-radius: 12px 12px 0 0;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 18px;
+        }
 
         /* ── Page Title ────────────────────────────── */
-        .page-title { font-size: 20px; font-weight: 800; color: #1e293b; margin: 0 0 2px; }
-        .page-sub   { font-size: 12px; color: #64748b; }
+        .page-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0 0 2px;
+        }
+
+        .page-sub {
+            font-size: 12px;
+            color: #64748b;
+        }
 
         /* ── Filter Grid ───────────────────────────── */
-        .filter-grid { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
-        .filter-grid .field { flex: 1 1 160px; }
-        .field label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
-        .field input, .field select { width: 100%; height: 36px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 10px; font-size: 13px; background: #fff; color: #1e293b; transition: border-color .15s; }
-        .field input:focus, .field select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+        .filter-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-grid .field {
+            flex: 1 1 160px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            height: 36px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0 10px;
+            font-size: 13px;
+            background: #fff;
+            color: #1e293b;
+            transition: border-color .15s;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .12);
+        }
 
         /* ── Main Table ────────────────────────────── */
-        .table-wrap { overflow-x: auto; }
-        table.rt { width: 100%; border-collapse: collapse; min-width: 1000px; }
-        table.rt th { background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 10px 14px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; text-transform: uppercase; letter-spacing: .3px; }
-        table.rt td { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; font-size: 12px; vertical-align: middle; }
-        table.rt tbody tr:last-child td { border-bottom: none; }
-        table.rt tbody tr:hover { background: #f8faff; cursor: pointer; }
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table.rt {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        table.rt th {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 10px 14px;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+
+        table.rt td {
+            padding: 11px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        table.rt tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.rt tbody tr:hover {
+            background: #f8faff;
+            cursor: pointer;
+        }
 
         /* ── Badges ────────────────────────────────── */
-        .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-        .tag-green  { background: #dcfce7; color: #166534; }
-        .tag-yellow { background: #fef9c3; color: #92400e; }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .tag-green {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tag-yellow {
+            background: #fef9c3;
+            color: #92400e;
+        }
 
         /* ── Buttons ───────────────────────────────── */
-        .btn-view { padding: 5px 12px; border-radius: 7px; border: 1px solid #c7d2fe; font-size: 11px; font-weight: 700; background: #eef2ff; color: #4338ca; cursor: pointer; transition: background .15s; }
-        .btn-view:hover { background: #c7d2fe; }
+        .btn-view {
+            padding: 5px 12px;
+            border-radius: 7px;
+            border: 1px solid #c7d2fe;
+            font-size: 11px;
+            font-weight: 700;
+            background: #eef2ff;
+            color: #4338ca;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .btn-view:hover {
+            background: #c7d2fe;
+        }
 
         /* ── Modal ─────────────────────────────────── */
-        .modal-xl-custom { max-width: 96%; }
-        .modal-content { border-radius: 10px; overflow: hidden; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-        .modal-header { background: #1a237e; color: #fff; padding: 12px 18px; border-bottom: none; }
-        .modal-title { font-size: 14px; font-weight: 700; letter-spacing: .3px; }
-        .modal-header .btn-close { filter: invert(1) brightness(2); opacity: .8; }
-        .modal-body { padding: 0; background: #f4f6fa; }
+        .modal-xl-custom {
+            max-width: 96%;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: #1a237e;
+            color: #fff;
+            padding: 12px 18px;
+            border-bottom: none;
+        }
+
+        .modal-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1) brightness(2);
+            opacity: .8;
+        }
+
+        .modal-body {
+            padding: 0;
+            background: #f4f6fa;
+        }
 
         /* ── SAP Header Panel ──────────────────────── */
-        .sap-header-panel { padding: 18px 20px; background: #fff; border-bottom: 2px solid #e8ecf3; }
-        .sap-section-title { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1px solid #e8ecf3; }
-        .sap-grid { display: grid; grid-template-columns: 148px 1fr; gap: 5px 12px; align-items: center; }
-        .sap-grid label { font-size: 11px; font-weight: 600; color: #475569; margin: 0; }
-        .sap-grid input, .sap-grid select { width: 100%; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0 8px; font-size: 11px; height: 26px; background: #f8fafc; color: #1e293b; }
-        .sap-grid input:disabled { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
-        .arrow-link { color: #6366f1; font-weight: 900; margin-right: 4px; font-size: 10px; }
+        .sap-header-panel {
+            padding: 18px 20px;
+            background: #fff;
+            border-bottom: 2px solid #e8ecf3;
+        }
+
+        .sap-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            margin: 0 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e8ecf3;
+        }
+
+        .sap-grid {
+            display: grid;
+            grid-template-columns: 148px 1fr;
+            gap: 5px 12px;
+            align-items: center;
+        }
+
+        .sap-grid label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #475569;
+            margin: 0;
+        }
+
+        .sap-grid input,
+        .sap-grid select {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-size: 11px;
+            height: 26px;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .sap-grid input:disabled {
+            background: #f1f5f9;
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+
+        .arrow-link {
+            color: #6366f1;
+            font-weight: 900;
+            margin-right: 4px;
+            font-size: 10px;
+        }
 
         /* ── SAP Tabs ──────────────────────────────── */
-        .nav-tabs-sap { border-bottom: 2px solid #dde3ee; background: #eef1f8; padding: 8px 12px 0; display: flex; gap: 2px; flex-wrap: wrap; }
-        .nav-tabs-sap .nav-link { font-size: 11px; color: #475569; padding: 6px 14px; border: 1px solid transparent; border-bottom: none; border-radius: 5px 5px 0 0; font-weight: 600; background: transparent; }
-        .nav-tabs-sap .nav-link:hover { background: #fff; border-color: #dde3ee #dde3ee transparent; color: #1e293b; }
-        .nav-tabs-sap .nav-link.active { color: #1a237e; background: #f4f6fa; border-color: #dde3ee #dde3ee #f4f6fa; font-weight: 700; }
+        .nav-tabs-sap {
+            border-bottom: 2px solid #dde3ee;
+            background: #eef1f8;
+            padding: 8px 12px 0;
+            display: flex;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
 
-        .tab-content-sap { padding: 14px; min-height: 280px; background: #f4f6fa; }
+        .nav-tabs-sap .nav-link {
+            font-size: 11px;
+            color: #475569;
+            padding: 6px 14px;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            font-weight: 600;
+            background: transparent;
+        }
+
+        .nav-tabs-sap .nav-link:hover {
+            background: #fff;
+            border-color: #dde3ee #dde3ee transparent;
+            color: #1e293b;
+        }
+
+        .nav-tabs-sap .nav-link.active {
+            color: #1a237e;
+            background: #f4f6fa;
+            border-color: #dde3ee #dde3ee #f4f6fa;
+            font-weight: 700;
+        }
+
+        .tab-content-sap {
+            padding: 14px;
+            min-height: 280px;
+            background: #f4f6fa;
+        }
 
         /* ── Grid Table (inside tabs) ──────────────── */
-        table.gt { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #dde3ee; border-radius: 6px; overflow: hidden; }
-        table.gt th { background: #eef1f8; font-size: 11px; color: #475569; padding: 6px 10px; border-bottom: 2px solid #dde3ee; border-right: 1px solid #dde3ee; font-weight: 700; }
-        table.gt td { padding: 5px 10px; border-bottom: 1px solid #f0f3f8; border-right: 1px solid #f0f3f8; font-size: 11px; color: #334155; }
-        table.gt tbody tr:last-child td { border-bottom: none; }
-        table.gt tbody tr:hover { background: #f8faff; }
+        table.gt {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border: 1px solid #dde3ee;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        table.gt th {
+            background: #eef1f8;
+            font-size: 11px;
+            color: #475569;
+            padding: 6px 10px;
+            border-bottom: 2px solid #dde3ee;
+            border-right: 1px solid #dde3ee;
+            font-weight: 700;
+        }
+
+        table.gt td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f3f8;
+            border-right: 1px solid #f0f3f8;
+            font-size: 11px;
+            color: #334155;
+        }
+
+        table.gt tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.gt tbody tr:hover {
+            background: #f8faff;
+        }
 
         /* ── Others Form Grid ──────────────────────── */
-        .others-grid { display: grid; grid-template-columns: 380px 1fr; gap: 32px; }
+        .others-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 32px;
+        }
+
         .others-grid .sap-grid input:disabled,
-        .others-grid textarea[disabled] { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
-        .others-grid textarea[disabled] { border-radius: 4px; padding: 6px 8px; resize: none; }
+        .others-grid textarea[disabled] {
+            background: #f1f5f9;
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+
+        .others-grid textarea[disabled] {
+            border-radius: 4px;
+            padding: 6px 8px;
+            resize: none;
+        }
 
         /* ── Modal Footer ──────────────────────────── */
-        .modal-footer { background: #eef1f8; border-top: 1px solid #dde3ee; padding: 10px 18px; justify-content: flex-end; gap: 8px; }
+        .modal-footer {
+            background: #eef1f8;
+            border-top: 1px solid #dde3ee;
+            padding: 10px 18px;
+            justify-content: flex-end;
+            gap: 8px;
+        }
 
         /* ── Customer Section (grouped table) ─────── */
         .customer-header {
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 10px 14px;
             background: linear-gradient(90deg, #eef2ff 0%, #f8fafc 100%);
             border: 1px solid #c7d2fe;
             border-bottom: none;
             border-radius: 10px 10px 0 0;
         }
-        .customer-name { font-size: 14px; font-weight: 700; color: #1a237e; }
-        .customer-section .table-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 0 0 10px 10px; }
-        .customer-section table.rt { min-width: 960px; }
+
+        .customer-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a237e;
+        }
+
+        .customer-section .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .customer-section table.rt {
+            min-width: 960px;
+        }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -106,10 +410,13 @@
             <span class="navbar-text text-white-50 small d-none d-md-inline">Customer Portal</span>
             <div class="ms-auto d-flex align-items-center gap-2">
                 <div class="dropdown">
-                    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" id="userBtn">User</button>
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+                        id="userBtn">User</button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><span class="dropdown-item-text small text-muted" id="userInfo">-</span></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><button class="dropdown-item text-danger" id="btnLogout">Logout</button></li>
                     </ul>
                 </div>
@@ -131,12 +438,15 @@
 
                 <!-- Filter -->
                 <div class="card">
-                    <div class="card-header"><i class="bi bi-funnel-fill" style="color:#6366f1;"></i> Filter Pencarian</div>
+                    <div class="card-header"><i class="bi bi-funnel-fill" style="color:#6366f1;"></i> Filter Pencarian
+                    </div>
                     <div class="card-body">
                         <div class="filter-grid">
                             <div class="field">
                                 <label>Customer</label>
-                                <select id="fCust"><option value="">-- Semua Customer --</option></select>
+                                <select id="fCust">
+                                    <option value="">-- Semua Customer --</option>
+                                </select>
                             </div>
                             <div class="field">
                                 <label>Status</label>
@@ -149,8 +459,10 @@
                             <div class="field" style="flex:0 0 auto;">
                                 <label>&nbsp;</label>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-primary btn-sm px-4" onclick="renderReport()"><i class="bi bi-search me-1"></i>Cari</button>
-                                    <button class="btn btn-outline-secondary btn-sm px-3" onclick="resetFilter()">Reset</button>
+                                    <button class="btn btn-primary btn-sm px-4" onclick="renderReport()"><i
+                                            class="bi bi-search me-1"></i>Cari</button>
+                                    <button class="btn btn-outline-secondary btn-sm px-3"
+                                        onclick="resetFilter()">Reset</button>
                                 </div>
                             </div>
                         </div>
@@ -202,28 +514,30 @@
                                 <div class="sap-grid">
                                     <label>Plan Description</label>
                                     <input type="text" id="mDesc" disabled>
-                                    
+
                                     <label>Start Date</label>
                                     <input type="text" id="mStart" disabled>
-                                    
+
                                     <label>End Date</label>
                                     <input type="text" id="mEnd" disabled>
-                                    
+
                                     <label>BP Peternak</label>
-                                    <div class="d-flex"><span class="arrow-link">➜</span><input type="text" id="mCustCode" disabled></div>
-                                    
+                                    <div class="d-flex"><span class="arrow-link">➜</span><input type="text"
+                                            id="mCustCode" disabled></div>
+
                                     <label>BP Peternak Name</label>
                                     <input type="text" id="mCustName" disabled>
-                                    
+
                                     <label>Type of Chicken</label>
-                                    <div class="d-flex"><span class="arrow-link">➜</span><input type="text" id="mChickType" disabled></div>
-                                    
+                                    <div class="d-flex"><span class="arrow-link">➜</span><input type="text"
+                                            id="mChickType" disabled></div>
+
                                     <label>Desc of Chicken</label>
                                     <input type="text" id="mChickDesc" disabled>
-                                    
+
                                     <label>Batch Number</label>
                                     <input type="text" id="mBatch" disabled>
-                                    
+
                                     <label>Hatchery</label>
                                     <input type="text" id="mHatchery" disabled>
                                 </div>
@@ -233,132 +547,281 @@
                                 <div class="sap-grid">
                                     <label>No. PLN</label>
                                     <input type="text" id="mNo" disabled>
-                                    
+
                                     <label>Document Date</label>
                                     <input type="text" id="mDocDate" disabled>
-                                    
+
                                     <label>Project</label>
                                     <input type="text" id="mProject" disabled>
-                                    
+
                                     <label>Dist. Rules</label>
                                     <input type="text" id="mDistRules" disabled>
-                                    
+
                                     <label>Initial Stock</label>
                                     <input type="text" id="mInitStock" disabled style="text-align:right;">
-                                    
+
                                     <label>DOC Weight</label>
                                     <input type="text" id="mDocWeight" disabled style="text-align:right;">
-                                    
+
                                     <label>Budget DOC per Ekor</label>
                                     <input type="text" value="0.00" disabled style="text-align:right;">
-                                    
+
                                     <label>Warehouse Code</label>
-                                    <div class="d-flex"><span class="arrow-link">➜</span><input type="text" id="mWhseCode" disabled></div>
-                                    
+                                    <div class="d-flex"><span class="arrow-link">➜</span><input type="text"
+                                            id="mWhseCode" disabled></div>
+
                                     <label>Warehouse Name</label>
                                     <input type="text" id="mWhseName" disabled>
-                                    
+
                                     <label>Status</label>
                                     <input type="text" id="mStatus" disabled>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- SAP Tabs -->
                     <ul class="nav nav-tabs nav-tabs-sap" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-sapronak" type="button">Program Sapronak</button>
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-sapronak"
+                                type="button">Program Sapronak</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-perf" type="button">Standard Performance</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-perf"
+                                type="button">Standard Performance</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-sales" type="button">Sales</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-sales"
+                                type="button">Sales</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-cogs" type="button">COGS</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-cogs"
+                                type="button">COGS</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-biaya" type="button">Biaya</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-biaya"
+                                type="button">Biaya</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-adj" type="button">Adjustment</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-adj"
+                                type="button">Adjustment</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-personil" type="button">Personil</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-personil"
+                                type="button">Personil</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-others" type="button">Others</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-others"
+                                type="button">Others</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-bonus" type="button">Bonus</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-bonus"
+                                type="button">Bonus</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-budget" type="button">Budget</button>
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-budget"
+                                type="button">Budget</button>
                         </li>
                     </ul>
                     <div class="tab-content tab-content-sap" id="myTabContent">
                         <div class="tab-pane fade show active" id="tab-sapronak">
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Standard Code</th><th>Standard Name</th><th>Note</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Standard Code</th>
+                                        <th>Standard Name</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td>1</td><td><span class="arrow-link">➜</span> STD00100</td><td>JG06-20.000</td><td></td></tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><span class="arrow-link">➜</span> STD00100</td>
+                                        <td>JG06-20.000</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab-perf">
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Standard Performance Code</th><th>Standard Performance Name</th><th>Note</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Standard Performance Code</th>
+                                        <th>Standard Performance Name</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td>1</td><td><span class="arrow-link">➜</span> 100000000</td><td>STD AHP</td><td></td></tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><span class="arrow-link">➜</span> 100000000</td>
+                                        <td>STD AHP</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab-sales">
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Kontrak Pembelian Code</th><th>Kontrak Pembelian Name</th><th>Version</th><th>Note</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Kontrak Pembelian Code</th>
+                                        <th>Kontrak Pembelian Name</th>
+                                        <th>Version</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td>1</td><td><span class="arrow-link">➜</span> 100000068</td><td>JG06-SALES</td><td>Harga</td><td></td></tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><span class="arrow-link">➜</span> 100000068</td>
+                                        <td>JG06-SALES</td>
+                                        <td>Harga</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab-cogs">
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Kontrak Penjualan Code</th><th>Kontrak Penjualan Name</th><th>Version</th><th>Note</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Kontrak Penjualan Code</th>
+                                        <th>Kontrak Penjualan Name</th>
+                                        <th>Version</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td>1</td><td><span class="arrow-link">➜</span> 100000155</td><td>JG06-COGS HARGA</td><td>Harga</td><td></td></tr>
-                                    <tr><td>2</td><td><span class="arrow-link">➜</span> 100000124</td><td>JG06-COGS SIMULASI</td><td>Simulasi</td><td></td></tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><span class="arrow-link">➜</span> 100000155</td>
+                                        <td>JG06-COGS HARGA</td>
+                                        <td>Harga</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><span class="arrow-link">➜</span> 100000124</td>
+                                        <td>JG06-COGS SIMULASI</td>
+                                        <td>Simulasi</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab-biaya">
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Biaya Code</th><th>Biaya Name</th><th>Version</th><th>Note</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Biaya Code</th>
+                                        <th>Biaya Name</th>
+                                        <th>Version</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td colspan="5" style="color:#999; text-align:center; padding:16px;">No Data</td></tr>
+                                    <tr>
+                                        <td colspan="5" style="color:#999; text-align:center; padding:16px;">No Data
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab-adj">
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Adjustment</th><th>Adjustment Name</th><th>Version</th><th>Note</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Adjustment</th>
+                                        <th>Adjustment Name</th>
+                                        <th>Version</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td colspan="5" style="color:#999; text-align:center; padding:16px;">No Data</td></tr>
+                                    <tr>
+                                        <td colspan="5" style="color:#999; text-align:center; padding:16px;">No Data
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab-personil">
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Employee Id</th><th>Employee Name</th><th>Position</th><th>Mobile Phone</th><th>Note</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Employee Id</th>
+                                        <th>Employee Name</th>
+                                        <th>Position</th>
+                                        <th>Mobile Phone</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td>1</td><td><span class="arrow-link">➜</span> 320</td><td>Boge Pradana</td><td>Sales Unit</td><td></td><td></td></tr>
-                                    <tr><td>2</td><td><span class="arrow-link">➜</span> 318</td><td>Gilang Arya Praditya</td><td>Penimbang</td><td></td><td></td></tr>
-                                    <tr><td>3</td><td><span class="arrow-link">➜</span> 319</td><td>Kasmiyati -</td><td>Admin Unit</td><td></td><td></td></tr>
-                                    <tr><td>4</td><td><span class="arrow-link">➜</span> 314</td><td>Ma'ruf Noor</td><td>Kepala Produksi</td><td></td><td></td></tr>
-                                    <tr><td>5</td><td><span class="arrow-link">➜</span> 313</td><td>Muhammad Kholil</td><td>Kepala Unit</td><td></td><td></td></tr>
-                                    <tr><td>6</td><td><span class="arrow-link">➜</span> 424</td><td>Sherina Lailatul Atina Wijayanti</td><td>Admin Sales Unit</td><td></td><td></td></tr>
-                                    <tr><td>7</td><td><span class="arrow-link">➜</span> 315</td><td>Tri Sutrisno</td><td>PPL</td><td></td><td></td></tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><span class="arrow-link">➜</span> 320</td>
+                                        <td>Boge Pradana</td>
+                                        <td>Sales Unit</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><span class="arrow-link">➜</span> 318</td>
+                                        <td>Gilang Arya Praditya</td>
+                                        <td>Penimbang</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><span class="arrow-link">➜</span> 319</td>
+                                        <td>Kasmiyati -</td>
+                                        <td>Admin Unit</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td><span class="arrow-link">➜</span> 314</td>
+                                        <td>Ma'ruf Noor</td>
+                                        <td>Kepala Produksi</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td><span class="arrow-link">➜</span> 313</td>
+                                        <td>Muhammad Kholil</td>
+                                        <td>Kepala Unit</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td><span class="arrow-link">➜</span> 424</td>
+                                        <td>Sherina Lailatul Atina Wijayanti</td>
+                                        <td>Admin Sales Unit</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td><span class="arrow-link">➜</span> 315</td>
+                                        <td>Tri Sutrisno</td>
+                                        <td>PPL</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -366,7 +829,8 @@
                             <div class="others-grid">
                                 <div>
                                     <div class="sap-grid" style="grid-template-columns:120px 1fr;">
-                                        <label>Luas Kandang</label><input type="text" value="75 x 12 = 1.800 m2" disabled>
+                                        <label>Luas Kandang</label><input type="text" value="75 x 12 = 1.800 m2"
+                                            disabled>
                                         <label>GPS Location</label><input type="text" disabled>
                                         <label>Jumlah Lantai</label><input type="text" value="2" disabled>
                                         <label>Status Kandang</label><input type="text" value="Milik Sendiri" disabled>
@@ -374,13 +838,16 @@
                                         <label>Sub Unit</label><input type="text" disabled>
                                     </div>
                                     <div style="margin-top:20px;">
-                                        <label style="font-size:11px; font-weight:600; display:block; margin-bottom:4px;">Remarks</label>
-                                        <textarea disabled style="width:100%; height:60px; border:1px solid #ccc; background:#e9ecef; font-size:11px;"></textarea>
+                                        <label
+                                            style="font-size:11px; font-weight:600; display:block; margin-bottom:4px;">Remarks</label>
+                                        <textarea disabled
+                                            style="width:100%; height:60px; border:1px solid #ccc; background:#e9ecef; font-size:11px;"></textarea>
                                     </div>
                                     <div class="sap-grid" style="grid-template-columns:120px 1fr; margin-top:8px;">
                                         <label>Approved</label>
                                         <div class="d-flex gap-2">
-                                            <input type="checkbox" disabled> <span style="font-size:11px;">Approved By</span> <input type="text" disabled style="width:80px;">
+                                            <input type="checkbox" disabled> <span style="font-size:11px;">Approved
+                                                By</span> <input type="text" disabled style="width:80px;">
                                         </div>
                                     </div>
                                     <div class="sap-grid" style="grid-template-columns:120px 1fr; margin-top:8px;">
@@ -392,35 +859,90 @@
                                     <div class="sap-grid" style="grid-template-columns:120px 1fr;">
                                         <label>Telephone</label><input type="text" value="0822 2361 0559" disabled>
                                         <label>Alamat</label>
-                                        <textarea disabled style="width:100%; height:40px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:4px;">Desa Troso Pecangan Jepara JAWA TENGAH</textarea>
+                                        <textarea disabled
+                                            style="width:100%; height:40px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:4px;">Desa Troso Pecangan Jepara JAWA TENGAH</textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab-bonus">
                             <div class="d-flex gap-2 align-items-center mb-2">
-                                <span style="font-size:11px; font-weight:600;">Range Bonus</span> <span class="arrow-link" style="margin:0;">➜</span>
-                                <input type="text" value="3" disabled style="width:40px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
-                                <input type="text" value="100000001" disabled style="width:100px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
+                                <span style="font-size:11px; font-weight:600;">Range Bonus</span> <span
+                                    class="arrow-link" style="margin:0;">➜</span>
+                                <input type="text" value="3" disabled
+                                    style="width:40px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
+                                <input type="text" value="100000001" disabled
+                                    style="width:100px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
                             </div>
                             <table class="gt mb-4">
-                                <thead><tr><th style="width:30px;">#</th><th>Bonus Code</th><th>Bonus Description</th><th>From</th><th>To</th><th>Amount Bonus</th><th>Description</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Bonus Code</th>
+                                        <th>Bonus Description</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Amount Bonus</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td>1</td><td>B0001</td><td>Bonus FCR</td><td>-9.9900</td><td>0.1000</td><td>100.00</td><td>Bonus R003 01.07.2024</td></tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>B0001</td>
+                                        <td>Bonus FCR</td>
+                                        <td>-9.9900</td>
+                                        <td>0.1000</td>
+                                        <td>100.00</td>
+                                        <td>Bonus R003 01.07.2024</td>
+                                    </tr>
                                 </tbody>
                             </table>
-                            
+
                             <div class="d-flex gap-2 align-items-center mb-2">
-                                <span style="font-size:11px; font-weight:600;">Static Bonus</span> <span class="arrow-link" style="margin:0;">➜</span>
-                                <input type="text" value="4" disabled style="width:40px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
-                                <input type="text" value="100000001" disabled style="width:100px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
+                                <span style="font-size:11px; font-weight:600;">Static Bonus</span> <span
+                                    class="arrow-link" style="margin:0;">➜</span>
+                                <input type="text" value="4" disabled
+                                    style="width:40px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
+                                <input type="text" value="100000001" disabled
+                                    style="width:100px; border:1px solid #ccc; background:#e9ecef; font-size:11px; padding:2px 6px;">
                             </div>
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Bonus Code</th><th>Bonus Description</th><th>Percentage</th><th>Amount Bonus</th><th>Description</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Bonus Code</th>
+                                        <th>Bonus Description</th>
+                                        <th>Percentage</th>
+                                        <th>Amount Bonus</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td>1</td><td>B0007</td><td>Bonus Mortality R003</td><td>0.0000</td><td>100.00</td><td>Bonus R003 01.07.2024</td></tr>
-                                    <tr><td>2</td><td>B0004</td><td>Bonus Kandang Close House</td><td>0.0000</td><td>100.00</td><td></td></tr>
-                                    <tr><td>3</td><td>B0008</td><td>Bonus Pasar R003</td><td>20.0000</td><td>0.00</td><td></td></tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>B0007</td>
+                                        <td>Bonus Mortality R003</td>
+                                        <td>0.0000</td>
+                                        <td>100.00</td>
+                                        <td>Bonus R003 01.07.2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>B0004</td>
+                                        <td>Bonus Kandang Close House</td>
+                                        <td>0.0000</td>
+                                        <td>100.00</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>B0008</td>
+                                        <td>Bonus Pasar R003</td>
+                                        <td>20.0000</td>
+                                        <td>0.00</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -428,17 +950,36 @@
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div class="d-flex gap-2 align-items-center">
                                     <span style="font-size:11px; font-weight:600;">Budget</span>
-                                    <input type="text" disabled style="width:150px; border:1px solid #ccc; background:#e9ecef; height:24px;">
+                                    <input type="text" disabled
+                                        style="width:150px; border:1px solid #ccc; background:#e9ecef; height:24px;">
                                 </div>
                                 <div class="d-flex gap-2 align-items-center">
                                     <span style="font-size:11px; font-weight:600;">Description</span>
-                                    <input type="text" disabled style="width:150px; border:1px solid #ccc; background:#e9ecef; height:24px;">
+                                    <input type="text" disabled
+                                        style="width:150px; border:1px solid #ccc; background:#e9ecef; height:24px;">
                                 </div>
                             </div>
                             <table class="gt">
-                                <thead><tr><th style="width:30px;">#</th><th>Number</th><th>IsTitle</th><th>Budget Item</th><th>UOM</th><th>Account</th><th>Budget Quantity</th><th>Unit Price</th><th>Budget</th><th>Actual Quantity</th><th>Actual</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;">#</th>
+                                        <th>Number</th>
+                                        <th>IsTitle</th>
+                                        <th>Budget Item</th>
+                                        <th>UOM</th>
+                                        <th>Account</th>
+                                        <th>Budget Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Budget</th>
+                                        <th>Actual Quantity</th>
+                                        <th>Actual</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td colspan="11" style="color:#999; text-align:center; padding:16px;">No Data</td></tr>
+                                    <tr>
+                                        <td colspan="11" style="color:#999; text-align:center; padding:16px;">No Data
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -610,15 +1151,15 @@
 
         function openDetail(planCode) {
             const p = allPlans.find(x => x.code === planCode);
-            if(!p) return;
+            if (!p) return;
 
-            const custName = p.ownerType === "customer" 
-                    ? (M.getCustomer(p.owner) ? M.getCustomer(p.owner).name : p.owner)
-                    : (M.getExternalVendor(p.owner) ? M.getExternalVendor(p.owner).name : p.owner);
+            const custName = p.ownerType === "customer"
+                ? (M.getCustomer(p.owner) ? M.getCustomer(p.owner).name : p.owner)
+                : (M.getExternalVendor(p.owner) ? M.getExternalVendor(p.owner).name : p.owner);
 
             const fmtSAPDate = (dStr) => {
-                if(!dStr) return "";
-                const [y,m,d] = dStr.split("-");
+                if (!dStr) return "";
+                const [y, m, d] = dStr.split("-");
                 return `${d}.${m}.${y}`;
             }
 
@@ -637,8 +1178,8 @@
             document.getElementById("mDocDate").value = fmtSAPDate(p.documentDate);
             document.getElementById("mProject").value = p.project || "";
             document.getElementById("mDistRules").value = p.distRules || "";
-            document.getElementById("mInitStock").value = p.initialStock ? Number(p.initialStock).toLocaleString('en-US', {minimumFractionDigits: 2}) : "0.00";
-            document.getElementById("mDocWeight").value = p.docWeight ? Number(p.docWeight).toLocaleString('en-US', {minimumFractionDigits: 2}) : "0.00";
+            document.getElementById("mInitStock").value = p.initialStock ? Number(p.initialStock).toLocaleString('en-US', { minimumFractionDigits: 2 }) : "0.00";
+            document.getElementById("mDocWeight").value = p.docWeight ? Number(p.docWeight).toLocaleString('en-US', { minimumFractionDigits: 2 }) : "0.00";
             document.getElementById("mWhseCode").value = p.warehouseCode || "";
             document.getElementById("mWhseName").value = p.warehouseName || "";
             document.getElementById("mStatus").value = (p.status || "").toUpperCase();
@@ -648,4 +1189,5 @@
         }
     </script>
 </body>
+
 </html>

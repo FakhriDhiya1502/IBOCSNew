@@ -3,7 +3,7 @@
  * Shared storage & demo data untuk DO Draft DOC.
  */
 
-const DOC_DRAFT_KEY = "IBOCS_doc_drafts_v3";
+const DOC_DRAFT_KEY = "IBOCS_doc_drafts_v4";
 
 /* ─── Demo Data ─────────────────────────────────────────────── */
 const DOC_DRAFT_DEMO = [
@@ -27,7 +27,7 @@ const DOC_DRAFT_DEMO = [
                 { id: "A1", itemAfter: "DOC Broiler Cobb 500 (M)", uomAfter: "Ekor", qtyAfter: 10000, whseTujuan: "WH-KDG01" }
             ]
         }],
-        status: "Draft", doNumber: null,
+        status: "Draft", statusPO: null, doNumber: null,
         createdBy: "admin_hatchery", createdAt: "2026-04-18"
     },
     {
@@ -50,7 +50,7 @@ const DOC_DRAFT_DEMO = [
                 { id: "A1", itemAfter: "DOC Broiler Ross 308 (M)", uomAfter: "Ekor", qtyAfter: 5000, whseTujuan: "WH-KDG02" }
             ]
         }],
-        status: "DO & GRPO Generated", doNumber: "DO-001", grpoNumber: "GRPO-001",
+        status: "DO & GRPO Generated", statusPO: null, doNumber: "DO-001", grpoNumber: "GRPO-001",
         createdBy: "admin_hatchery", createdAt: "2026-04-19"
     },
     {
@@ -73,7 +73,7 @@ const DOC_DRAFT_DEMO = [
                 { id: "A1", itemAfter: "DOC Hubbard (M)", uomAfter: "Ekor", qtyAfter: 10000, whseTujuan: "WH-KDG01" }
             ]
         }],
-        status: "DO Generated", doNumber: "DO-002", grpoNumber: null,
+        status: "DO Generated", statusPO: null, doNumber: "DO-002", grpoNumber: null,
         createdBy: "admin_hatchery", createdAt: "2026-04-20"
     },
     {
@@ -97,7 +97,7 @@ const DOC_DRAFT_DEMO = [
                 { id: "A2", itemAfter: "DOC Layer Lohmann (M)", uomAfter: "Ekor", qtyAfter: 4000, whseTujuan: "WH-KDG02" }
             ]
         }],
-        status: "DO Generated", doNumber: "DO-003", grpoNumber: null,
+        status: "DO Generated", statusPO: null, doNumber: "DO-003", grpoNumber: null,
         createdBy: "admin_hatchery", createdAt: "2026-04-21"
     },
     {
@@ -120,11 +120,11 @@ const DOC_DRAFT_DEMO = [
                 { id: "A1", itemAfter: "DOC Broiler Cobb 500 (M)", uomAfter: "Ekor", qtyAfter: 4000, whseTujuan: "WH-KDG03" }
             ]
         }],
-        status: "Draft", doNumber: null,
+        status: "Draft", statusPO: null, doNumber: null,
         createdBy: "admin_hatchery", createdAt: "2026-04-20"
     },
     {
-        // Internal · PO Generated
+        // Internal · DO Generated + PO Generated
         id: "DOD-006",
         date: "2026-04-22", postingDate: "2026-04-22", deliveryDate: "2026-04-24",
         docType: "internal",
@@ -143,7 +143,7 @@ const DOC_DRAFT_DEMO = [
                 { id: "A1", itemAfter: "DOC Layer Lohmann (F)", uomAfter: "Ekor", qtyAfter: 8000, whseTujuan: "WH-KDG03" }
             ]
         }],
-        status: "PO Generated", doNumber: "DO-004", grpoNumber: null, poGenId: "PO-GEN-001",
+        status: "DO Generated", statusPO: "PO Generated", doNumber: "DO-004", grpoNumber: null, poGenId: "PO-GEN-001",
         createdBy: "admin_hatchery", createdAt: "2026-04-22"
     },
     {
@@ -167,7 +167,7 @@ const DOC_DRAFT_DEMO = [
                 { id: "A2", itemAfter: "DOC Broiler Ross 308 (F)", uomAfter: "Ekor", qtyAfter: 2000, whseTujuan: "WH-KDG03" }
             ]
         }],
-        status: "Draft", doNumber: null,
+        status: "Draft", statusPO: null, doNumber: null,
         createdBy: "admin_hatchery", createdAt: "2026-04-23"
     }
 ];
@@ -219,10 +219,24 @@ const DOC_FORECAST_REFS = [
 ];
 
 /* ─── Storage Functions ─────────────────────────────────────── */
+function docDraftMigrate(drafts) {
+    return drafts.map(d => {
+        // Rename "Confirmed" → "Open"
+        if (d.status === "Confirmed") d.status = "Open";
+        // Split old "PO Generated" into statusDO + statusPO
+        if (d.status === "PO Generated") {
+            d.status   = "DO Generated";
+            d.statusPO = "PO Generated";
+        }
+        if (d.statusPO === undefined) d.statusPO = null;
+        return d;
+    });
+}
+
 function docDraftLoadAll() {
     try {
         const raw = localStorage.getItem(DOC_DRAFT_KEY);
-        if (raw) return JSON.parse(raw);
+        if (raw) return docDraftMigrate(JSON.parse(raw));
     } catch(e) {}
     localStorage.setItem(DOC_DRAFT_KEY, JSON.stringify(DOC_DRAFT_DEMO));
     return DOC_DRAFT_DEMO.map(d => ({ ...d }));

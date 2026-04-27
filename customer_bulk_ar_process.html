@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Customer | Bulk AR Processor</title>
+    <title>Customer | AR Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -12,22 +12,22 @@
 
         :root { --primary: #1a237e; --line: #d0d7e3; --soft: #f5f7fb; --muted: #6b7280; }
 
-        /* ── Navbar ── */
         .topnav { background: var(--primary); padding: 10px 24px; display:flex; align-items:center; gap:16px; }
         .topnav .brand { color:#fff; font-weight:800; font-size:17px; text-decoration:none; }
         .topnav .portal-label { color:rgba(255,255,255,.5); font-size:12px; }
         .topnav .nav-user { color:rgba(255,255,255,.7); font-size:12px; margin-left:auto; }
 
-        /* ── Page shell ── */
         .page-wrap { padding: 20px 24px; }
         .page-title { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
         .page-title h4 { margin:0; font-size:17px; font-weight:700; color:var(--primary); }
 
-        /* ── Invoice card ── */
+        .mode-badge { padding:3px 12px; border-radius:20px; font-size:11.5px; font-weight:700; }
+        .mode-do { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+        .mode-ar { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+
         .inv-card { background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.06); overflow:hidden; }
         .inv-titlebar { background:#e8ecf8; border-bottom:2px solid var(--primary); padding:9px 18px; font-weight:700; font-size:14px; color:var(--primary); display:flex; align-items:center; gap:8px; }
 
-        /* ── Header grid ── */
         .inv-header { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--line); }
         .inv-header-left { padding:16px 20px; border-right:1px solid var(--line); }
         .inv-header-right { padding:16px 20px; }
@@ -37,56 +37,38 @@
         .field-row label { font-size:11.5px; font-weight:600; color:var(--muted); }
         .field-row input, .field-row select {
             border:1px solid #c5cfe0; border-radius:5px; padding:5px 9px;
-            font-size:13px; background:#fff; outline:none; font-family:inherit; color:#1f2937;
-            width:100%;
+            font-size:13px; background:#f5f7fb; color:#374151; width:100%;
+            outline:none; font-family:inherit;
         }
-        .field-row input:focus, .field-row select:focus { border-color:var(--primary); box-shadow:0 0 0 2px rgba(26,35,126,.1); }
-        .field-row input[readonly] { background:#f5f7fb; color:#374151; }
-        .field-row .val-static { font-size:13px; font-weight:600; color:#1f2937; }
 
-        /* ── Tabs (Contents / Logistics / Accounting) ── */
         .inv-tabs { border-bottom:1px solid var(--line); background:#f8fafc; display:flex; }
         .inv-tab { padding:9px 20px; border:none; background:transparent; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; }
         .inv-tab.active { color:var(--primary); border-bottom-color:var(--primary); background:#fff; }
 
-        /* ── Table ── */
         .inv-table-wrap { overflow-x:auto; }
-        table.inv-table { width:100%; border-collapse:collapse; min-width:900px; }
+        table.inv-table { width:100%; border-collapse:collapse; min-width:700px; }
         table.inv-table th { background:#f0f3fa; font-size:11px; font-weight:700; color:var(--muted); padding:8px 10px; border-bottom:1.5px solid var(--line); text-align:left; white-space:nowrap; }
         table.inv-table td { padding:7px 10px; border-bottom:1px solid #edf0f7; vertical-align:middle; white-space:nowrap; }
         table.inv-table tr:hover td { background:#f8faff; }
         table.inv-table .group-row td { background:#eef2ff; font-weight:700; color:var(--primary); border-top:2px solid #c7d2fe; padding:7px 14px; font-size:12px; }
-        table.inv-table td input {
-            border:1px solid #dde3ef; border-radius:4px; padding:4px 7px;
-            font-size:13px; background:#fff; outline:none; width:100%;
-        }
-        table.inv-table td input:focus { border-color:var(--primary); }
-        table.inv-table td input[readonly] { background:#f5f7fb; }
 
-        /* ── Footer totals ── */
         .inv-footer { display:grid; grid-template-columns:1fr 340px; border-top:1px solid var(--line); }
         .inv-footer-left { padding:14px 20px; display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; }
         .inv-footer-right { border-left:1px solid var(--line); padding:12px 20px; }
 
         .total-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #edf0f7; font-size:13px; }
-        .total-row:last-child { border-bottom:none; padding-top:8px; font-size:14px; font-weight:700; color:var(--primary); }
+        .total-row:last-child { border-bottom:none; padding-top:8px; font-size:14px; font-weight:700; }
         .total-row label { color:var(--muted); font-size:12px; }
         .total-row .val { font-weight:600; color:#1f2937; min-width:140px; text-align:right; }
         .total-row.grand .val { color:var(--primary); font-size:14px; }
 
-        /* ── Action bar ── */
         .action-bar { background:#fff; border-top:2px solid var(--line); padding:12px 20px; display:flex; justify-content:flex-end; align-items:center; gap:10px; }
-        .btn-cancel { padding:8px 18px; background:#e5e7eb; color:#374151; border:none; border-radius:7px; font-weight:700; font-size:13px; cursor:pointer; }
-        .btn-cancel:hover { background:#d1d5db; }
-        .btn-generate { padding:9px 24px; background:var(--primary); color:#fff; border:none; border-radius:7px; font-weight:700; font-size:13px; cursor:pointer; }
-        .btn-generate:hover { background:#283593; }
 
         .status-badge { padding:2px 10px; border-radius:20px; font-size:11px; font-weight:700; }
         .s-open { background:#eff6ff; color:#1d4ed8; }
+        .s-generated { background:#ecfdf5; color:#065f46; }
 
-        /* ── Toast ── */
-        .toast-msg { position:fixed; bottom:24px; right:24px; z-index:99999; padding:12px 22px; border-radius:10px; font-size:13px; font-weight:700; box-shadow:0 4px 20px rgba(0,0,0,.18); animation:slideUp .2s ease; color:#fff; }
-        @keyframes slideUp { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
+        .info-banner { background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 16px; margin-bottom:16px; font-size:12.5px; color:#92400e; display:flex; align-items:center; gap:8px; }
     </style>
 </head>
 <body>
@@ -101,26 +83,30 @@
             <div class="col-lg-2 pt-3 px-2" id="sidebar-container"></div>
             <div class="col-lg-10 page-wrap">
 
-                <!-- Page title -->
                 <div class="page-title">
                     <a href="customer_AR.html" class="btn btn-outline-secondary btn-sm rounded-circle" style="width:30px;height:30px;padding:0;line-height:28px;text-align:center;">
                         <i class="bi bi-arrow-left"></i>
                     </a>
-                    <h4><i class="bi bi-file-earmark-plus me-2"></i>A/R Invoice — Bulk AR Processor</h4>
+                    <h4 id="pageTitle"><i class="bi bi-file-earmark-plus me-2"></i>Detail</h4>
+                    <span class="mode-badge" id="modeBadge"></span>
                 </div>
 
-                <!-- Invoice card -->
+                <div class="info-banner" id="infoBanner" style="display:none;">
+                    <i class="bi bi-eye"></i>
+                    <span id="infoBannerText"></span>
+                </div>
+
                 <div class="inv-card mb-4">
                     <div class="inv-titlebar">
-                        <i class="bi bi-file-earmark-text"></i> A/R Invoice
+                        <i class="bi bi-file-earmark-text"></i>
+                        <span id="cardTitle">A/R Invoice</span>
                     </div>
 
                     <!-- Header -->
                     <div class="inv-header">
-                        <!-- Left -->
                         <div class="inv-header-left">
                             <div class="field-row">
-                                <label>Customer</label>
+                                <label id="lblParty">Customer</label>
                                 <input type="text" id="fCustomerCode" readonly>
                             </div>
                             <div class="field-row">
@@ -128,22 +114,10 @@
                                 <input type="text" id="fCustomerName" readonly>
                             </div>
                             <div class="field-row">
-                                <label>Contact Person</label>
-                                <input type="text" id="fContact" placeholder="-">
-                            </div>
-                            <div class="field-row">
-                                <label>Customer Ref. No.</label>
-                                <input type="text" id="fCustRefNo" placeholder="Isi jika ada">
-                            </div>
-                            <div class="field-row">
                                 <label>Currency</label>
-                                <select id="fCurrency">
-                                    <option value="IDR">IDR — Rupiah</option>
-                                    <option value="USD">USD — US Dollar</option>
-                                </select>
+                                <input type="text" value="IDR — Rupiah" readonly>
                             </div>
                         </div>
-                        <!-- Right -->
                         <div class="inv-header-right">
                             <div class="field-row">
                                 <label>No.</label>
@@ -151,27 +125,23 @@
                             </div>
                             <div class="field-row">
                                 <label>Status</label>
-                                <div><span class="status-badge s-open">Open</span></div>
+                                <div><span class="status-badge s-open" id="fStatus">Open</span></div>
                             </div>
                             <div class="field-row">
                                 <label>Posting Date</label>
-                                <input type="date" id="fPostingDate">
+                                <input type="text" id="fPostingDate" readonly>
                             </div>
                             <div class="field-row">
                                 <label>Due Date</label>
-                                <input type="date" id="fDueDate">
+                                <input type="text" id="fDueDate" readonly>
                             </div>
                             <div class="field-row">
-                                <label>Document Date</label>
-                                <input type="date" id="fDocDate">
+                                <label id="lblRef1">DO Ref</label>
+                                <input type="text" id="fDoRef" readonly>
                             </div>
                             <div class="field-row">
-                                <label>DO Ref(s)</label>
-                                <input type="text" id="fDoRefs" readonly>
-                            </div>
-                            <div class="field-row">
-                                <label>Order Ref(s)</label>
-                                <input type="text" id="fOrderRefs" readonly>
+                                <label id="lblRef2">Order Ref</label>
+                                <input type="text" id="fOrderRef" readonly>
                             </div>
                         </div>
                     </div>
@@ -193,11 +163,10 @@
                                         <th style="width:110px;">G/L Account</th>
                                         <th>G/L Account Name</th>
                                         <th style="width:90px;">Distr. Rule</th>
-                                        <th style="width:80px;text-align:right;">Service Qty</th>
+                                        <th style="width:80px;text-align:right;">Qty</th>
                                         <th style="width:140px;text-align:right;">Unit Price (IDR)</th>
                                         <th style="width:90px;text-align:right;">Discount %</th>
                                         <th style="width:90px;">Tax Code</th>
-                                        <th style="width:80px;">WTax Liable</th>
                                     </tr>
                                 </thead>
                                 <tbody id="contentsBody"></tbody>
@@ -205,43 +174,16 @@
                         </div>
                     </div>
 
-                    <!-- Accounting tab (hidden) -->
+                    <!-- Accounting tab -->
                     <div id="tabAccounting" style="display:none; padding:16px 20px;">
                         <div class="row g-3" style="max-width:500px;">
                             <div class="col-6">
                                 <label class="form-label fw-semibold" style="font-size:11.5px;color:var(--muted);">Account Code</label>
-                                <select id="gAccount" class="form-select form-select-sm">
-                                    <option value="1100">1100 — Piutang Usaha</option>
-                                    <option value="1110">1110 — Piutang Dagang Feed</option>
-                                    <option value="1120">1120 — Piutang Dagang DOC</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold" style="font-size:11.5px;color:var(--muted);">Distr. Rule</label>
-                                <select id="gDistrRule" class="form-select form-select-sm">
-                                    <option value="PROD;HO">PROD;HO</option>
-                                    <option value="PROD;FARM">PROD;FARM</option>
-                                    <option value="PROD;DIST">PROD;DIST</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold" style="font-size:11.5px;color:var(--muted);">Tax Code</label>
-                                <select id="gTaxCode" class="form-select form-select-sm">
-                                    <option value="PPNO-NO">PPNO-NO</option>
-                                    <option value="PPN11">PPN11 — PPN 11%</option>
-                                    <option value="EXEMPT">EXEMPT</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-semibold" style="font-size:11.5px;color:var(--muted);">WTax Liable</label>
-                                <select id="gWtax" class="form-select form-select-sm">
-                                    <option value="No">No</option>
-                                    <option value="Yes">Yes</option>
-                                </select>
+                                <input type="text" class="form-control form-control-sm" id="gAccount" readonly>
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-semibold" style="font-size:11.5px;color:var(--muted);">Catatan Internal</label>
-                                <textarea id="gNotes" class="form-control form-control-sm" rows="2" placeholder="Catatan penerimaan, instruksi, dll..."></textarea>
+                                <textarea class="form-control form-control-sm" id="gNotes" rows="2" readonly></textarea>
                             </div>
                         </div>
                     </div>
@@ -251,11 +193,7 @@
                         <div class="inv-footer-left">
                             <div>
                                 <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;">Sales Employee</div>
-                                <input type="text" id="fSalesEmp" value="-No Sales Employee-" style="border:1px solid #d0d7e3;border-radius:5px;padding:5px 9px;font-size:13px;width:200px;">
-                            </div>
-                            <div>
-                                <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;">Owner</div>
-                                <input type="text" id="fOwner" style="border:1px solid #d0d7e3;border-radius:5px;padding:5px 9px;font-size:13px;width:180px;">
+                                <input type="text" value="-No Sales Employee-" readonly style="border:1px solid #d0d7e3;border-radius:5px;padding:5px 9px;font-size:13px;width:200px;background:#f5f7fb;">
                             </div>
                         </div>
                         <div class="inv-footer-right">
@@ -265,19 +203,15 @@
                             </div>
                             <div class="total-row">
                                 <label>Discount</label>
-                                <span class="val"><input type="number" id="fDiscount" value="0" min="0" max="100" style="width:60px;border:1px solid #d0d7e3;border-radius:4px;padding:3px 6px;font-size:13px;text-align:right;" oninput="recalcTotals()"> %</span>
+                                <span class="val" id="totDiscount">0%</span>
                             </div>
                             <div class="total-row">
                                 <label>Freight</label>
-                                <span class="val"><input type="number" id="fFreight" value="0" min="0" style="width:120px;border:1px solid #d0d7e3;border-radius:4px;padding:3px 6px;font-size:13px;text-align:right;" oninput="recalcTotals()"></span>
+                                <span class="val" id="totFreight">IDR 0</span>
                             </div>
                             <div class="total-row">
                                 <label>Tax</label>
                                 <span class="val" id="totTax">IDR 0</span>
-                            </div>
-                            <div class="total-row">
-                                <label>WTax Amount</label>
-                                <span class="val" id="totWtax">IDR 0</span>
                             </div>
                             <div class="total-row grand">
                                 <label style="font-size:13px;color:var(--primary);font-weight:700;">Total</label>
@@ -288,11 +222,8 @@
 
                     <!-- Action bar -->
                     <div class="action-bar">
-                        <button class="btn-cancel" onclick="window.location.href='customer_AR.html'">
-                            <i class="bi bi-x-lg me-1"></i>Batal
-                        </button>
-                        <button class="btn-generate" onclick="generateBatchAR()">
-                            <i class="bi bi-rocket-takeoff me-2"></i>Add — Generate AR
+                        <button class="btn btn-outline-secondary" onclick="window.location.href='customer_AR.html'">
+                            <i class="bi bi-arrow-left me-1"></i>Kembali
                         </button>
                     </div>
                 </div>
@@ -304,31 +235,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="sidebar.js"></script>
     <script>
-        // ── Session ──────────────────────────────────────────────────────────────
         const sess = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
         if (!sess || !sess.role) window.location.href = "login.html";
         document.getElementById("navUser").textContent = sess.name || sess.username || "";
 
-        const today = new Date().toISOString().split("T")[0];
-        document.getElementById("fPostingDate").value = today;
-        document.getElementById("fDocDate").value = today;
-        const due = new Date(); due.setDate(due.getDate() + 7);
-        document.getElementById("fDueDate").value = due.toISOString().split("T")[0];
-
         document.addEventListener("DOMContentLoaded", () => {
             new SidebarSystem(null, "ar_list").render();
-            loadWorksheet();
+            loadView();
         });
 
-        // ── Demo Data ─────────────────────────────────────────────────────────────
         const DEMO_DO = [
-            // ── SIC → TOP, BMAX, AYM ─────────────────────────────────────────────
             {
                 doNo: "DO-SIC-0001", orderNo: "ORD-SIC-2604-001", company: "SIC", customer: "TOP",
                 status: "Shipped", eta: "2026-04-05",
                 items: [
-                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qty: 5000, uom: "Kg",    unitPrice: 7800 },
-                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qty: 9200, uom: "Kg",    unitPrice: 8500 }
+                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qty: 5000, uom: "Kg", unitPrice: 7800 },
+                    { itemCode: "FEED-002", itemName: "Pakan Starter (BR-1)",     qty: 9200, uom: "Kg", unitPrice: 8500 }
                 ]
             },
             {
@@ -363,14 +285,10 @@
                     { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qty: 4000, uom: "Kg", unitPrice: 9200 }
                 ]
             },
-
-            // ── CTU → TOP, BMAX, AYM ─────────────────────────────────────────────
             {
                 doNo: "DO-CTU-0001", orderNo: "ORD-CTU-2604-001", company: "CTU", customer: "TOP",
                 status: "Shipped", eta: "2026-04-19",
-                items: [
-                    { itemCode: "DOC-001", itemName: "DOC Broiler FS", qty: 6000, uom: "Ekor", unitPrice: 6500 }
-                ]
+                items: [{ itemCode: "DOC-001", itemName: "DOC Broiler FS", qty: 6000, uom: "Ekor", unitPrice: 6500 }]
             },
             {
                 doNo: "DO-CTU-0002", orderNo: "ORD-CTU-2604-002", company: "CTU", customer: "TOP",
@@ -391,16 +309,12 @@
             {
                 doNo: "DO-CTU-0004", orderNo: "ORD-CTU-2604-004", company: "CTU", customer: "BMAX",
                 status: "Shipped", eta: "2026-04-21",
-                items: [
-                    { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qty: 5200, uom: "Kg", unitPrice: 7800 }
-                ]
+                items: [{ itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qty: 5200, uom: "Kg", unitPrice: 7800 }]
             },
             {
                 doNo: "DO-CTU-0005", orderNo: "ORD-CTU-2604-005", company: "CTU", customer: "AYM",
                 status: "Shipped", eta: "2026-04-22",
-                items: [
-                    { itemCode: "DOC-002", itemName: "DOC Broiler PS", qty: 5000, uom: "Ekor", unitPrice: 6800 }
-                ]
+                items: [{ itemCode: "DOC-002", itemName: "DOC Broiler PS", qty: 5000, uom: "Ekor", unitPrice: 6800 }]
             },
             {
                 doNo: "DO-CTU-0006", orderNo: "ORD-CTU-2604-006", company: "CTU", customer: "AYM",
@@ -418,215 +332,148 @@
             return [...stored, ...DEMO_DO.filter(d => !storedNos.has(d.doNo))];
         }
 
-        // ── Working data ──────────────────────────────────────────────────────────
-        let workingData = [];   // [{doNo, orderNo, vendor, items:[{itemCode,itemName,qty,unitPrice,discount,glAccount,...}]}]
-        let lineCounter = 0;
-
-        function loadWorksheet() {
-            const rawRefs = localStorage.getItem("IBOCS_bulk_do_refs");
-            if (!rawRefs) {
-                alert("Tidak ada DO yang dipilih! Kembali ke halaman AR...");
-                window.location.href = "customer_AR.html";
-                return;
-            }
-            const targetRefs = JSON.parse(rawRefs);
-            const allDo = getDoList();
-            const orderLines = JSON.parse(localStorage.getItem("IBOCS_customer_order_lines") || "{}");
-
-            workingData = targetRefs.map(ref => {
-                const doc = allDo.find(d => d.doNo === ref);
-                if (!doc) return null;
-                const lines = (doc.items && doc.items.length) ? doc.items : (orderLines[doc.orderNo] || []);
-                return {
-                    ...doc,
-                    items: lines.map(l => ({
-                        itemCode:  l.itemCode || l.sku || "-",
-                        itemName:  l.itemName || l.name || "-",
-                        qty:       l.qty || 1,
-                        unitPrice: l.unitPrice || l.price || 0,
-                        discount:  0,
-                        glAccount: "7110204",
-                        glName:    "SALES REVENUE — FEED",
-                        distrRule: "PROD;HO",
-                        taxCode:   "PPNO-NO",
-                        wtax:      "No"
-                    }))
-                };
-            }).filter(Boolean);
-
-            // Fill header
-            const arList = JSON.parse(localStorage.getItem("IBOCS_ar_list") || "[]");
-            const nextNo = "AR-" + today.replace(/-/g,"").slice(2) + "-" + String(arList.length + 1).padStart(4,"0");
-            document.getElementById("fDocNo").value = nextNo;
-
-            // Customer from first DO
-            if (workingData.length) {
-                const first = workingData[0];
-                document.getElementById("fCustomerCode").value = (first.customer || "").replace(/\s+/g,"").slice(0,8).toUpperCase() || "-";
-                document.getElementById("fCustomerName").value = first.customer || "-";
-            }
-            document.getElementById("fDoRefs").value    = workingData.map(d => d.doNo).join(", ");
-            document.getElementById("fOrderRefs").value = [...new Set(workingData.map(d => d.orderNo))].join(", ");
-
-            renderContents();
-        }
-
-        // ── Render Contents table ─────────────────────────────────────────────────
-        function renderContents() {
-            const tbody = document.getElementById("contentsBody");
-            let html = "";
-            lineCounter = 0;
-
-            workingData.forEach(doc => {
-                // Group header row
-                html += `<tr class="group-row">
-                    <td colspan="10">
-                        <i class="bi bi-truck me-2"></i>${doc.doNo}
-                        <span style="font-weight:400;color:#4b5563;margin-left:12px;">Order: ${doc.orderNo || "-"}</span>
-                        <span style="font-weight:400;color:#4b5563;margin-left:12px;font-size:11px;">${doc.vendor || ""}</span>
-                    </td>
-                </tr>`;
-
-                doc.items.forEach((item, i) => {
-                    lineCounter++;
-                    const lineId = `${doc.doNo}__${i}`;
-                    html += `<tr>
-                        <td class="text-muted">${lineCounter}</td>
-                        <td><input type="text" value="${item.itemName}" readonly style="min-width:180px;"></td>
-                        <td><input type="text" id="gl_${lineId}" value="${item.glAccount}" style="width:90px;" oninput="updateField('${doc.doNo}',${i},'glAccount',this.value);updateGlName('${lineId}',this.value);"></td>
-                        <td><input type="text" id="gln_${lineId}" value="${item.glName}" style="min-width:180px;" readonly></td>
-                        <td><input type="text" id="dr_${lineId}" value="${item.distrRule}" style="width:80px;" oninput="updateField('${doc.doNo}',${i},'distrRule',this.value)"></td>
-                        <td style="text-align:right;"><input type="number" id="qty_${lineId}" value="${item.qty}" min="0" style="width:70px;text-align:right;" oninput="updateField('${doc.doNo}',${i},'qty',+this.value);recalcTotals()"></td>
-                        <td style="text-align:right;"><input type="number" id="price_${lineId}" value="${item.unitPrice}" min="0" style="width:110px;text-align:right;" oninput="updateField('${doc.doNo}',${i},'unitPrice',+this.value);recalcTotals()"></td>
-                        <td style="text-align:right;"><input type="number" id="disc_${lineId}" value="${item.discount}" min="0" max="100" style="width:70px;text-align:right;" oninput="updateField('${doc.doNo}',${i},'discount',+this.value);recalcTotals()"></td>
-                        <td><input type="text" id="tax_${lineId}" value="${item.taxCode}" style="width:80px;" oninput="updateField('${doc.doNo}',${i},'taxCode',this.value)"></td>
-                        <td>${item.wtax}</td>
-                    </tr>`;
-                });
-            });
-
-            if (!workingData.length) {
-                html = `<tr><td colspan="10" class="text-center py-4 text-muted">Tidak ada data DO.</td></tr>`;
-            }
-            tbody.innerHTML = html;
-            recalcTotals();
-        }
-
-        function updateField(doNo, itemIdx, field, val) {
-            const doc = workingData.find(d => d.doNo === doNo);
-            if (doc && doc.items[itemIdx]) doc.items[itemIdx][field] = val;
-        }
-
-        const GL_NAMES = {
-            "7110204": "SALES REVENUE — FEED",
-            "7110205": "SALES REVENUE — DOC",
-            "5120501": "COGS DIRECT — FREIGHT EXPENSE",
-            "1100":    "PIUTANG USAHA",
-            "OTHER":   "OTHER INCOME"
-        };
-        function updateGlName(lineId, code) {
-            const el = document.getElementById("gln_" + lineId);
-            if (el) el.value = GL_NAMES[code] || "";
-        }
-
-        // ── Recalculate totals ────────────────────────────────────────────────────
         function fmt(n) { return "IDR " + Math.round(n).toLocaleString("id-ID"); }
 
-        function recalcTotals() {
-            let beforeDisc = 0;
-            workingData.forEach(doc => {
-                doc.items.forEach(item => {
-                    beforeDisc += (item.qty || 0) * (item.unitPrice || 0);
-                });
-            });
+        function loadView() {
+            const params = new URLSearchParams(window.location.search);
+            const doNo = params.get("do");
 
-            const discPct  = parseFloat(document.getElementById("fDiscount").value) || 0;
-            const freight  = parseFloat(document.getElementById("fFreight").value) || 0;
-            const taxCode  = document.getElementById("gTaxCode") ? document.getElementById("gTaxCode").value : "PPNO-NO";
+            if (!doNo) {
+                document.getElementById("pageTitle").innerHTML = `<i class="bi bi-exclamation-triangle me-2"></i>Parameter tidak valid`;
+                return;
+            }
 
-            const discAmt  = beforeDisc * discPct / 100;
-            const afterDisc = beforeDisc - discAmt;
-            const taxRate  = taxCode === "PPN11" ? 0.11 : 0;
-            const taxAmt   = afterDisc * taxRate;
-            const grand    = afterDisc + freight + taxAmt;
+            const arList = JSON.parse(localStorage.getItem("IBOCS_ar_list") || "[]");
+            const existingAR = arList.find(a => a.doRef === doNo);
 
-            document.getElementById("totBeforeDisc").textContent = fmt(beforeDisc);
-            document.getElementById("totTax").textContent        = fmt(taxAmt);
-            document.getElementById("totWtax").textContent       = fmt(0);
-            document.getElementById("totGrand").textContent      = fmt(grand);
+            if (existingAR) {
+                loadArView(existingAR);
+            } else {
+                loadDoPreview(doNo);
+            }
         }
 
-        // ── Tab switch ────────────────────────────────────────────────────────────
+        function loadArView(ar) {
+            document.getElementById("pageTitle").innerHTML = `<i class="bi bi-file-earmark-plus me-2"></i>Detail AR — ${ar.arNo}`;
+            document.getElementById("modeBadge").className = "mode-badge mode-ar";
+            document.getElementById("modeBadge").textContent = "AR Generated";
+            document.getElementById("cardTitle").textContent = "A/R Invoice";
+            document.getElementById("infoBanner").style.display = "flex";
+            document.getElementById("infoBannerText").textContent = `Dokumen AR ini sudah digenerate dari ${ar.doRef}. Tampilan read-only.`;
+
+            document.getElementById("lblParty").textContent = "Customer";
+            document.getElementById("fCustomerCode").value = (ar.customer || "").replace(/\s+/g,"").slice(0,8).toUpperCase();
+            document.getElementById("fCustomerName").value = ar.customer || "-";
+            document.getElementById("fDocNo").value = ar.arNo;
+            document.getElementById("fPostingDate").value = ar.arDate || "-";
+            document.getElementById("fDueDate").value = ar.dueDate || "-";
+            document.getElementById("lblRef1").textContent = "DO Ref";
+            document.getElementById("fDoRef").value = ar.doRef || "-";
+            document.getElementById("lblRef2").textContent = "Order Ref";
+            document.getElementById("fOrderRef").value = ar.orderRef || "-";
+
+            const statusEl = document.getElementById("fStatus");
+            statusEl.textContent = ar.status || "Open";
+            statusEl.className = "status-badge " + (ar.status === "Open" ? "s-open" : "s-generated");
+
+            document.getElementById("gAccount").value = ar.accountCode || "-";
+            document.getElementById("gNotes").value = ar.notes || "";
+
+            let html = "";
+            let lineNo = 0;
+            (ar.lines || []).forEach(l => {
+                lineNo++;
+                html += `<tr>
+                    <td class="text-muted">${lineNo}</td>
+                    <td>${l.itemName || "-"}</td>
+                    <td>${l.glAccount || "-"}</td>
+                    <td>${l.glName || "-"}</td>
+                    <td>${l.distrRule || "-"}</td>
+                    <td style="text-align:right;">${(l.qty || 0).toLocaleString()}</td>
+                    <td style="text-align:right;">${l.unitPrice ? l.unitPrice.toLocaleString("id-ID") : "-"}</td>
+                    <td style="text-align:right;">${(l.discount || 0)}%</td>
+                    <td>${l.taxCode || "-"}</td>
+                </tr>`;
+            });
+            document.getElementById("contentsBody").innerHTML = html || `<tr><td colspan="9" class="text-center py-4 text-muted">Tidak ada item.</td></tr>`;
+
+            const total = ar.totalBeforeDisc || 0;
+            document.getElementById("totBeforeDisc").textContent = fmt(total);
+            document.getElementById("totDiscount").textContent = (ar.discountPct || 0) + "%";
+            document.getElementById("totFreight").textContent = fmt(ar.freight || 0);
+            document.getElementById("totTax").textContent = fmt(0);
+            document.getElementById("totGrand").textContent = fmt(ar.total || total);
+        }
+
+        function loadDoPreview(doNo) {
+            const allDo = getDoList();
+            const d = allDo.find(x => x.doNo === doNo);
+
+            document.getElementById("pageTitle").innerHTML = `<i class="bi bi-truck me-2"></i>Preview DO — ${doNo}`;
+            document.getElementById("modeBadge").className = "mode-badge mode-do";
+            document.getElementById("modeBadge").textContent = "DO Preview";
+            document.getElementById("cardTitle").textContent = "Delivery Order Detail";
+            document.getElementById("infoBanner").style.display = "flex";
+            document.getElementById("infoBannerText").textContent = `DO ini belum di-generate menjadi AR. Tampilan preview data DO.`;
+
+            if (!d) {
+                document.getElementById("contentsBody").innerHTML = `<tr><td colspan="9" class="text-center py-4 text-muted">Data DO tidak ditemukan.</td></tr>`;
+                return;
+            }
+
+            document.getElementById("lblParty").textContent = "Customer";
+            document.getElementById("fCustomerCode").value = (d.customer || "").slice(0,8).toUpperCase();
+            document.getElementById("fCustomerName").value = d.customer || "-";
+            document.getElementById("fDocNo").value = d.doNo;
+            document.getElementById("fPostingDate").value = d.eta || "-";
+            document.getElementById("fDueDate").value = "-";
+            document.getElementById("lblRef1").textContent = "Order Ref";
+            document.getElementById("fDoRef").value = d.orderNo || "-";
+            document.getElementById("lblRef2").textContent = "Status";
+            document.getElementById("fOrderRef").value = d.status || "Shipped";
+
+            const statusEl = document.getElementById("fStatus");
+            statusEl.textContent = "Belum di-AR";
+            statusEl.className = "status-badge s-open";
+
+            document.getElementById("gAccount").value = "-";
+            document.getElementById("gNotes").value = "";
+
+            let html = "";
+            let lineNo = 0;
+            let grandTotal = 0;
+            (d.items || []).forEach(l => {
+                lineNo++;
+                const qty = l.qty || 0;
+                const price = l.unitPrice || 0;
+                const total = qty * price;
+                grandTotal += total;
+                html += `<tr>
+                    <td class="text-muted">${lineNo}</td>
+                    <td>${l.itemName || "-"}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td style="text-align:right;">${qty.toLocaleString()}</td>
+                    <td style="text-align:right;">${price ? price.toLocaleString("id-ID") : "-"}</td>
+                    <td style="text-align:right;">0%</td>
+                    <td>-</td>
+                </tr>`;
+            });
+            document.getElementById("contentsBody").innerHTML = html || `<tr><td colspan="9" class="text-center py-4 text-muted">Tidak ada item.</td></tr>`;
+
+            document.getElementById("totBeforeDisc").textContent = fmt(grandTotal);
+            document.getElementById("totDiscount").textContent = "0%";
+            document.getElementById("totFreight").textContent = fmt(0);
+            document.getElementById("totTax").textContent = fmt(0);
+            document.getElementById("totGrand").textContent = fmt(grandTotal);
+        }
+
         function switchInvTab(tab, btn) {
             document.querySelectorAll(".inv-tab").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             document.getElementById("tabContents").style.display   = tab === "contents"   ? "" : "none";
             document.getElementById("tabAccounting").style.display = tab === "accounting" ? "" : "none";
-        }
-
-        // ── Generate AR ───────────────────────────────────────────────────────────
-        function generateBatchAR() {
-            if (!workingData.length) return;
-            const doNo = workingData[0]?.doNo || "";
-            if (!confirm(`Generate AR dari ${doNo}?`)) return;
-
-            const arDate   = document.getElementById("fPostingDate").value;
-            const dueDate  = document.getElementById("fDueDate").value;
-            const account  = document.getElementById("gAccount") ? document.getElementById("gAccount").value : "1100";
-            const notes    = document.getElementById("gNotes") ? document.getElementById("gNotes").value : "";
-            const discPct  = parseFloat(document.getElementById("fDiscount").value) || 0;
-            const freight  = parseFloat(document.getElementById("fFreight").value) || 0;
-
-            const arList = JSON.parse(localStorage.getItem("IBOCS_ar_list") || "[]");
-            let count = 0;
-
-            workingData.forEach(doc => {
-                const arNo = "AR-" + arDate.replace(/-/g,"").slice(2) + "-" + String(arList.length + count + 1).padStart(4, "0");
-                const lines = doc.items.map(l => ({
-                    itemCode:  l.itemCode,
-                    itemName:  l.itemName,
-                    qty:       l.qty,
-                    unitPrice: l.unitPrice,
-                    discount:  l.discount,
-                    subtotal:  l.qty * l.unitPrice * (1 - l.discount/100),
-                    glAccount: l.glAccount,
-                    glName:    l.glName,
-                    distrRule: l.distrRule,
-                    taxCode:   l.taxCode,
-                    uom:       l.uom || "Kg"
-                }));
-                const totalBeforeDisc = lines.reduce((s,l) => s + l.qty * l.unitPrice, 0);
-                arList.unshift({
-                    arNo, arDate, dueDate, accountCode: account, notes,
-                    doRef:    doc.doNo,
-                    orderRef: doc.orderNo || "",
-                    company:  doc.company || "",
-                    customer: doc.customer || "",
-                    totalQty: lines.reduce((s,l) => s + l.qty, 0),
-                    discountPct: discPct,
-                    freight,
-                    totalBeforeDisc,
-                    total: totalBeforeDisc * (1 - discPct/100) + freight,
-                    status: "Open",
-                    lines
-                });
-                count++;
-            });
-
-            localStorage.setItem("IBOCS_ar_list", JSON.stringify(arList));
-            localStorage.removeItem("IBOCS_bulk_do_refs");
-
-            showToast(`AR berhasil dibuat!`);
-            setTimeout(() => window.location.href = "customer_AR.html", 1500);
-        }
-
-        function showToast(msg, type = "success") {
-            const t = document.createElement("div");
-            t.className = "toast-msg";
-            t.style.background = type === "success" ? "#166534" : "#991b1b";
-            t.textContent = (type === "success" ? "✓ " : "✗ ") + msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3500);
         }
     </script>
 </body>

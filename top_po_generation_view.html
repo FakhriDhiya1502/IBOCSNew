@@ -212,8 +212,10 @@
         function fmtPrice(n) { return n != null ? "Rp " + Number(n).toLocaleString("id-ID") : "—"; }
 
         function statusTag(s) {
-            if (s === "Draft")        return `<span class="tag t-int" style="background:#fef9c3;color:#92400e;">Draft</span>`;
-            if (s === "PO Generated") return `<span class="tag" style="background:#dcfce7;color:#166534;">PO Generated</span>`;
+            if (s === "Draft")                  return `<span class="tag t-int" style="background:#fef9c3;color:#92400e;">Draft</span>`;
+            if (s === "Open")                   return `<span class="tag" style="background:#e0e7ff;color:#3730a3;">Open</span>`;
+            if (s === "DO Generated")           return `<span class="tag" style="background:#dcfce7;color:#166534;">DO Generated</span>`;
+            if (s === "DO & GRPO Generated")    return `<span class="tag" style="background:#ccfbf1;color:#0f766e;">DO &amp; GRPO Generated</span>`;
             return `<span class="tag" style="background:#e0e7ff;color:#3730a3;">${s}</span>`;
         }
 
@@ -227,7 +229,7 @@
             document.getElementById("pageSubtitle").textContent = `${draft.id} · ${draft.customerName}`;
 
             // Banner
-            const isGenerated = draft.status === "PO Generated";
+            const isGenerated = draft.statusPO === "PO Generated";
             const bannerHtml = isGenerated
                 ? `<div class="s-banner s-done"><i class="bi bi-check-circle-fill" style="font-size:20px;"></i> PO sudah dibuat untuk DO Draft ini</div>`
                 : `<div class="s-banner s-draft"><i class="bi bi-clock" style="font-size:20px;"></i> DO Draft ini belum di-generate menjadi PO</div>`;
@@ -358,8 +360,8 @@
 
             poGenSave(po);
 
-            // Update DO Draft status
-            draft.status   = "PO Generated";
+            // Update DO Draft — pisah statusPO dari status DO
+            draft.statusPO = "PO Generated";
             draft.poGenId  = poId;
             docDraftSave(draft);
 

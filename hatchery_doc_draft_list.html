@@ -27,6 +27,7 @@
         tbody tr:hover { background: #fafcff; cursor: pointer; }
         .tag { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
         .tag-draft    { background: #fef9c3; color: #92400e; }
+        .tag-open     { background: #e0e7ff; color: #3730a3; }
         .tag-generated{ background: #dcfce7; color: #166534; }
         .tag-dogrpo   { background: #ccfbf1; color: #0f766e; }
         .tag-pogen    { background: #ede9fe; color: #5b21b6; }
@@ -98,14 +99,21 @@
                                 </select>
                             </div>
                             <div class="f">
-                                <label>Status</label>
+                                <label>Status DO</label>
                                 <select id="fStatus">
                                     <option value="">Semua</option>
                                     <option value="Draft">Draft</option>
-                                    <option value="Confirmed">Confirmed</option>
+                                    <option value="Open">Open</option>
                                     <option value="DO Generated">DO Generated</option>
                                     <option value="DO & GRPO Generated">DO &amp; GRPO Generated</option>
+                                </select>
+                            </div>
+                            <div class="f">
+                                <label>Status PO</label>
+                                <select id="fStatusPO">
+                                    <option value="">Semua</option>
                                     <option value="PO Generated">PO Generated</option>
+                                    <option value="none">Belum PO</option>
                                 </select>
                             </div>
                             <div class="f">
@@ -135,7 +143,8 @@
                                         <th>Plan Tujuan</th>
                                         <th>Customer</th>
                                         <th style="text-align:center">Lines</th>
-                                        <th>Status</th>
+                                        <th>Status DO</th>
+                                        <th>Status PO</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -185,12 +194,12 @@
         }
 
         function renderSummary(drafts) {
-            const total    = drafts.length;
-            const cDraft   = drafts.filter(d => d.status === "Draft").length;
-            const confirmed= drafts.filter(d => d.status === "Confirmed").length;
-            const doGen    = drafts.filter(d => d.status === "DO Generated").length;
-            const doGrpo   = drafts.filter(d => d.status === "DO & GRPO Generated").length;
-            const poGen    = drafts.filter(d => d.status === "PO Generated").length;
+            const total  = drafts.length;
+            const cDraft = drafts.filter(d => d.status === "Draft").length;
+            const cOpen  = drafts.filter(d => d.status === "Open").length;
+            const doGen  = drafts.filter(d => d.status === "DO Generated").length;
+            const doGrpo = drafts.filter(d => d.status === "DO & GRPO Generated").length;
+            const poGen  = drafts.filter(d => d.statusPO === "PO Generated").length;
 
             document.getElementById("summaryGrid").innerHTML = `
                 <div class="summary-box">
@@ -202,8 +211,8 @@
                     <div class="val" style="color:#92400e">${cDraft}</div>
                 </div>
                 <div class="summary-box">
-                    <div class="lbl">Confirmed</div>
-                    <div class="val" style="color:#3730a3">${confirmed}</div>
+                    <div class="lbl">Open</div>
+                    <div class="val" style="color:#3730a3">${cOpen}</div>
                 </div>
                 <div class="summary-box">
                     <div class="lbl">DO Generated</div>
@@ -236,13 +245,15 @@
                     : `<span class="tag tag-external">External</span>`;
                 const statusTag = d.status === "Draft"
                     ? `<span class="tag tag-draft">Draft</span>`
-                    : d.status === "Confirmed"
-                        ? `<span class="tag" style="background:#e0e7ff;color:#3730a3;">Confirmed</span>`
+                    : d.status === "Open"
+                        ? `<span class="tag tag-open">Open</span>`
                         : d.status === "DO & GRPO Generated"
                             ? `<span class="tag tag-dogrpo">DO &amp; GRPO Generated</span>`
-                            : d.status === "PO Generated"
-                                ? `<span class="tag tag-pogen">PO Generated</span>`
-                                : `<span class="tag tag-generated">DO Generated</span>`;
+                            : `<span class="tag tag-generated">DO Generated</span>`;
+
+                const statusPOTag = d.statusPO === "PO Generated"
+                    ? `<span class="tag tag-pogen">PO Generated</span>`
+                    : `<span style="color:#9ca3af;font-size:11px;">—</span>`;
 
                 const planLabel = d.planCode
                     ? `${d.planCode}<span style="font-size:11px;color:#6b7280"> — ${d.planName || ""}</span>`
@@ -263,6 +274,7 @@
                     <td>${d.customerName}</td>
                     <td style="text-align:center">${d.lines.length}</td>
                     <td>${statusTag}</td>
+                    <td>${statusPOTag}</td>
                     <td onclick="event.stopPropagation()">
                         <div style="display:flex;gap:6px;flex-wrap:wrap;">${actions}</div>
                     </td>
@@ -274,22 +286,25 @@
             const type     = document.getElementById("fType").value;
             const cust     = document.getElementById("fCustomer").value;
             const status   = document.getElementById("fStatus").value;
+            const statusPO = document.getElementById("fStatusPO").value;
             const dateFrom = document.getElementById("fDateFrom").value;
             const dateTo   = document.getElementById("fDateTo").value;
 
             let filtered = allDrafts.filter(d => {
-                if (type   && d.docType !== type)        return false;
-                if (cust   && d.customer !== cust)       return false;
-                if (status && d.status !== status)       return false;
-                if (dateFrom && d.date < dateFrom)       return false;
-                if (dateTo   && d.date > dateTo)         return false;
+                if (type     && d.docType !== type)                            return false;
+                if (cust     && d.customer !== cust)                           return false;
+                if (status   && d.status !== status)                           return false;
+                if (statusPO === "PO Generated" && d.statusPO !== "PO Generated") return false;
+                if (statusPO === "none"         && d.statusPO === "PO Generated") return false;
+                if (dateFrom && d.date < dateFrom)                             return false;
+                if (dateTo   && d.date > dateTo)                               return false;
                 return true;
             });
             renderTable(filtered);
         }
 
         function resetFilter() {
-            ["fType","fCustomer","fStatus","fDateFrom","fDateTo"].forEach(id => {
+            ["fType","fCustomer","fStatus","fStatusPO","fDateFrom","fDateTo"].forEach(id => {
                 const el = document.getElementById(id);
                 el.value = "";
             });

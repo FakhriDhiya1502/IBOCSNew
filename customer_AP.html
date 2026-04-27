@@ -257,6 +257,78 @@
         .item-mini-table tr:last-child td {
             border-bottom: none;
         }
+
+        .btn-detail {
+            background: none;
+            border: 1px solid #c7d2fe;
+            border-radius: 6px;
+            padding: 2px 8px;
+            color: #4338ca;
+            font-size: 11.5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-detail:hover {
+            background: #eef2ff;
+        }
+
+        /* Progress modal */
+        .progress-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-modal {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 32px;
+            min-width: 380px;
+            max-width: 480px;
+            box-shadow: 0 8px 40px rgba(0,0,0,.18);
+        }
+
+        .progress-modal h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a237e;
+            margin: 0 0 6px;
+        }
+
+        .progress-modal .subtitle {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 20px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-icon {
+            width: 22px;
+            text-align: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .pi-waiting { color: #9ca3af; }
+        .pi-processing { color: #1a237e; }
+        .pi-done { color: #059669; }
     </style>
 </head>
 
@@ -315,6 +387,7 @@
                                         <th class="text-end">Open Qty</th>
                                         <th>Status</th>
                                         <th>Keterangan</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody id="grpoBody"></tbody>
@@ -357,13 +430,22 @@
 
     <!-- Bulk Bar -->
     <div class="bulk-bar" id="bulkBar">
-        <span class="text-muted small me-auto">1 GRPO dipilih — akan dibuat 1 AP</span>
+        <span class="text-muted small me-auto" id="bulkBarLabel">0 GRPO dipilih</span>
         <button class="btn btn-outline-secondary btn-sm" onclick="clearSelection()">Batal</button>
         <button class="btn-generate" onclick="generateAP()"><i class="bi bi-plus-circle me-2"></i>Generate AP</button>
     </div>
 
     <!-- Toast -->
     <div class="toast-wrap" id="toastWrap"></div>
+
+    <!-- Progress Modal -->
+    <div class="progress-modal-backdrop" id="progressBackdrop" style="display:none;">
+        <div class="progress-modal">
+            <h5><i class="bi bi-arrow-repeat me-2"></i>Sedang Memproses AP</h5>
+            <p class="subtitle">Jangan tutup atau refresh halaman ini.</p>
+            <div id="progressList"></div>
+        </div>
+    </div>
 
     <script>
         const sess = JSON.parse(localStorage.getItem("IBOCS_user") || "{}");
@@ -372,7 +454,6 @@
         new SidebarSystem(null, 'ap_list').render();
 
         const DEMO_GRPO = [
-            // ── TOP — dari SIC ────────────────────────────────────────────────────
             {
                 grpoNo: "GRPO-TOP-0001", grpoDate: "2026-04-03", poNo: "PO-TOP-2604-001",
                 store: "TOP Branch Bekasi", customer: "TOP", vendor: "SIC",
@@ -391,7 +472,6 @@
                     { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4250, qtyReceived: 4250, unitPrice: 9200 }
                 ]
             },
-            // ── TOP — dari CTU ────────────────────────────────────────────────────
             {
                 grpoNo: "GRPO-TOP-0003", grpoDate: "2026-04-18", poNo: "PO-TOP-2604-003",
                 store: "TOP Branch Bogor", customer: "TOP", vendor: "CTU",
@@ -409,8 +489,6 @@
                     { itemCode: "DOC-002",  itemName: "DOC Broiler PS",         qtyOrder: 3500, qtyReceived: 3500, unitPrice: 6800 }
                 ]
             },
-
-            // ── BMAX — dari SIC ───────────────────────────────────────────────────
             {
                 grpoNo: "GRPO-BMAX-0001", grpoDate: "2026-04-05", poNo: "PO-BMAX-2604-001",
                 store: "BMAX Farm Cikarang", customer: "BMAX", vendor: "SIC",
@@ -420,7 +498,6 @@
                     { itemCode: "FEED-003", itemName: "Pakan Grower (BR-2)",  qtyOrder: 4500, qtyReceived: 4500, unitPrice: 8200 }
                 ]
             },
-            // ── BMAX — dari CTU ───────────────────────────────────────────────────
             {
                 grpoNo: "GRPO-BMAX-0002", grpoDate: "2026-04-14", poNo: "PO-BMAX-2604-002",
                 store: "BMAX Farm Karawang", customer: "BMAX", vendor: "CTU",
@@ -438,8 +515,6 @@
                     { itemCode: "FEED-001", itemName: "Pakan Pre-Starter (BR-0)", qtyOrder: 5200, qtyReceived: 5200, unitPrice: 7800 }
                 ]
             },
-
-            // ── AYM — dari SIC ────────────────────────────────────────────────────
             {
                 grpoNo: "GRPO-AYM-0001", grpoDate: "2026-04-07", poNo: "PO-AYM-2604-001",
                 store: "AYM Farm Subang", customer: "AYM", vendor: "SIC",
@@ -458,7 +533,6 @@
                     { itemCode: "FEED-004", itemName: "Pakan Finisher (BR-3)", qtyOrder: 4000, qtyReceived: 4000, unitPrice: 9200 }
                 ]
             },
-            // ── AYM — dari CTU ────────────────────────────────────────────────────
             {
                 grpoNo: "GRPO-AYM-0003", grpoDate: "2026-04-21", poNo: "PO-AYM-2604-003",
                 store: "AYM Farm Indramayu", customer: "AYM", vendor: "CTU",
@@ -476,8 +550,6 @@
                     { itemCode: "DOC-001",  itemName: "DOC Broiler FS",         qtyOrder: 3000, qtyReceived: 3000, unitPrice: 6500 }
                 ]
             },
-
-            // ── SIC — dari SIC (internal) & CTU ──────────────────────────────────
             {
                 grpoNo: "GRPO-SIC-0001", grpoDate: "2026-04-08", poNo: "PO-SIC-2604-001",
                 store: "SIC Farm Majalengka", customer: "SIC", vendor: "SIC",
@@ -512,7 +584,6 @@
             return new Set(getApList().map(a => a.grpoRef));
         }
 
-        // ── AP Status Badge ───────────────────────────────────────────────────────
         function statusBadge(status) {
             const text = (!status || status === "Draft") ? "Open" : status;
             const cls = text === "Open" ? "s-open" : text === "Closed" ? "s-posted" : text === "Paid" ? "s-paid" : "s-open";
@@ -540,11 +611,10 @@
 
             const tbody = document.getElementById("grpoBody");
             if (!rows.length) {
-                tbody.innerHTML = `<tr><td colspan="9" class="empty-state"><i class="bi bi-inbox"></i>Tidak ada GRPO tersedia.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="11" class="empty-state"><i class="bi bi-inbox"></i>Tidak ada GRPO tersedia.</td></tr>`;
                 return;
             }
 
-            // Group by company
             const groups = {};
             rows.forEach(g => {
                 const company = g.customer || g.store || "Unknown";
@@ -555,9 +625,8 @@
             let html = "";
             let idx = 0;
             Object.entries(groups).forEach(([company, grpoList]) => {
-                // Company section header
                 html += `<tr style="background:#f0f3fa;">
-                    <td colspan="10" style="padding:8px 16px; font-weight:700; font-size:12px; color:#1a237e; letter-spacing:.3px; border-top:2px solid #c7d2fe;">
+                    <td colspan="11" style="padding:8px 16px; font-weight:700; font-size:12px; color:#1a237e; letter-spacing:.3px; border-top:2px solid #c7d2fe;">
                         <i class="bi bi-building me-2"></i>${company}
                         <span style="font-weight:400;color:#6b7280;margin-left:8px;">(${grpoList.length} GRPO)</span>
                     </td>
@@ -566,9 +635,9 @@
                 grpoList.forEach(g => {
                     const isDone = done.has(g.grpoNo);
                     const expandId = `exp-grpo-${idx}`;
-                    const rb = isDone
-                        ? `<input type="radio" name="grpoSelect" disabled title="Sudah di-AP">`
-                        : `<input type="radio" name="grpoSelect" class="row-check" data-grpo="${g.grpoNo}" onchange="updateBulkBar()">`;
+                    const cb = isDone
+                        ? `<input type="checkbox" disabled title="Sudah di-AP">`
+                        : `<input type="checkbox" class="row-check" data-grpo="${g.grpoNo}" onchange="updateBulkBar()">`;
                     const statusHtml = isDone
                         ? `<span class="status-badge s-generated">AP Generated</span>`
                         : `<span class="status-badge s-open">${g.status || "Open"}</span>`;
@@ -592,7 +661,7 @@
                     }).join("") || `<tr><td colspan="6" class="text-muted text-center">Tidak ada item.</td></tr>`;
 
                     const expandRow = `<tr class="expand-row" id="${expandId}" style="display:none;">
-                        <td colspan="10">
+                        <td colspan="11">
                             <div class="expand-inner">
                                 <table class="item-mini-table">
                                     <thead><tr>
@@ -609,7 +678,7 @@
                     </tr>`;
 
                     const mainRow = `<tr style="${isDone ? 'opacity:.6;' : ''}">
-                        <td>${rb}</td>
+                        <td>${cb}</td>
                         <td><button class="expand-btn" id="btn-${expandId}" onclick="toggleExpand('${expandId}')"><i class="bi bi-chevron-right"></i></button></td>
                         <td class="fw-semibold">${g.grpoNo}</td>
                         <td>${g.grpoDate || "-"}</td>
@@ -619,6 +688,7 @@
                         <td class="text-end text-primary fw-semibold">${totalOpenQty.toLocaleString()}</td>
                         <td>${statusHtml}</td>
                         <td>${note}</td>
+                        <td><button class="btn-detail" onclick="viewDetail('${g.grpoNo}')"><i class="bi bi-eye me-1"></i>Detail</button></td>
                     </tr>`;
 
                     html += mainRow + expandRow;
@@ -638,6 +708,10 @@
             btn.innerHTML = isOpen ? `<i class="bi bi-chevron-right"></i>` : `<i class="bi bi-chevron-down"></i>`;
         }
 
+        function viewDetail(grpoNo) {
+            window.location.href = `customer_bulk_ap_process.html?grpo=${encodeURIComponent(grpoNo)}`;
+        }
+
         // ── AP Table ──────────────────────────────────────────────────────────────
         function renderApTable() {
             const q = (document.getElementById("fApSearch").value || "").toLowerCase();
@@ -652,7 +726,6 @@
                 return;
             }
 
-            // Group by company (vendor)
             const groups = {};
             list.forEach(a => {
                 const company = a.vendor || "Unknown";
@@ -723,8 +796,10 @@
 
         // ── Selection ─────────────────────────────────────────────────────────────
         function updateBulkBar() {
-            const checked = document.querySelector(".row-check:checked");
-            document.getElementById("bulkBar").classList.toggle("visible", !!checked);
+            const checked = document.querySelectorAll(".row-check:checked");
+            const n = checked.length;
+            document.getElementById("bulkBar").classList.toggle("visible", n > 0);
+            document.getElementById("bulkBarLabel").textContent = `${n} GRPO dipilih — akan dibuat ${n} AP`;
         }
 
         function clearSelection() {
@@ -732,12 +807,97 @@
             document.getElementById("bulkBar").classList.remove("visible");
         }
 
-        // ── Generate AP ───────────────────────────────────────────────────────────
-        function generateAP() {
-            const checked = document.querySelector(".row-check:checked");
-            if (!checked) return;
-            localStorage.setItem("IBOCS_bulk_grpo_refs", JSON.stringify([checked.dataset.grpo]));
-            window.location.href = "customer_bulk_ap_process.html";
+        // ── Generate AP (inline, with progress modal) ─────────────────────────────
+        async function generateAP() {
+            const checked = [...document.querySelectorAll(".row-check:checked")];
+            if (!checked.length) return;
+
+            const selectedGrpos = checked.map(c => c.dataset.grpo);
+            const allGrpo = getGrpoList();
+            const today = new Date().toISOString().split("T")[0];
+
+            // Build progress list UI
+            const progressList = document.getElementById("progressList");
+            progressList.innerHTML = selectedGrpos.map(grpoNo =>
+                `<div class="progress-item" id="pi-${grpoNo.replace(/[^a-z0-9]/gi,'_')}">
+                    <span class="progress-icon pi-waiting"><i class="bi bi-circle"></i></span>
+                    <span>${grpoNo}</span>
+                </div>`
+            ).join("");
+            document.getElementById("progressBackdrop").style.display = "flex";
+
+            await sleep(300);
+
+            const apList = JSON.parse(localStorage.getItem("IBOCS_ap_list") || "[]");
+            let count = 0;
+
+            for (const grpoNo of selectedGrpos) {
+                const safeId = grpoNo.replace(/[^a-z0-9]/gi, '_');
+                const piEl = document.getElementById(`pi-${safeId}`);
+
+                // Mark as processing
+                piEl.querySelector(".progress-icon").className = "progress-icon pi-processing";
+                piEl.querySelector(".progress-icon").innerHTML = `<i class="bi bi-arrow-repeat spin"></i>`;
+                piEl.querySelector("span:last-child").textContent = `${grpoNo} — sedang diproses...`;
+
+                await sleep(600);
+
+                const g = allGrpo.find(x => x.grpoNo === grpoNo);
+                if (g) {
+                    const apNo = "AP-" + today.replace(/-/g,"").slice(2) + "-" + String(apList.length + count + 1).padStart(4, "0");
+                    const lines = (g.rows || []).map(r => ({
+                        itemCode:  r.itemCode || "-",
+                        itemName:  r.itemName || "-",
+                        qtyOrder:  r.qtyOrder || r.qtyReceived || 0,
+                        qty:       r.qtyReceived || r.qty || 0,
+                        unitPrice: r.unitPrice || 0,
+                        discount:  0,
+                        subtotal:  (r.qtyReceived || 0) * (r.unitPrice || 0),
+                        glAccount: "5120501",
+                        glName:    "COGS DIRECT — FREIGHT EXPENSE",
+                        distrRule: "PROD;HO",
+                        taxCode:   "PPNO-NO"
+                    }));
+                    const totalBeforeDisc = lines.reduce((s, l) => s + l.qty * l.unitPrice, 0);
+                    apList.unshift({
+                        apNo, apDate: today, dueDate: addDays(today, 30),
+                        accountCode: "2100", notes: "",
+                        grpoRef: g.grpoNo,
+                        poRef:   g.poNo || "",
+                        vendor:  g.customer || g.store || "",
+                        totalQty: lines.reduce((s, l) => s + l.qty, 0),
+                        discountPct: 0, freight: 0,
+                        totalBeforeDisc,
+                        total: totalBeforeDisc,
+                        status: "Open",
+                        lines
+                    });
+                    count++;
+                }
+
+                // Mark done
+                piEl.querySelector(".progress-icon").className = "progress-icon pi-done";
+                piEl.querySelector(".progress-icon").innerHTML = `<i class="bi bi-check-circle-fill"></i>`;
+                piEl.querySelector("span:last-child").textContent = `${grpoNo} — selesai`;
+
+                await sleep(400);
+            }
+
+            localStorage.setItem("IBOCS_ap_list", JSON.stringify(apList));
+
+            await sleep(600);
+            document.getElementById("progressBackdrop").style.display = "none";
+            clearSelection();
+            showToast(`${count} AP berhasil dibuat!`, "success");
+            renderGrpoTable();
+        }
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function addDays(dateStr, days) {
+            const d = new Date(dateStr);
+            d.setDate(d.getDate() + days);
+            return d.toISOString().split("T")[0];
         }
 
         // ── Toast ─────────────────────────────────────────────────────────────────
@@ -753,6 +913,11 @@
         // ── Init ──────────────────────────────────────────────────────────────────
         renderGrpoTable();
     </script>
+
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin { display: inline-block; animation: spin .7s linear infinite; }
+    </style>
 </body>
 
 </html>

@@ -219,21 +219,24 @@
 
             const isDO     = d.status === "DO Generated";
             const isDOGRPO = d.status === "DO & GRPO Generated";
-            const isPOGen  = d.status === "PO Generated";
-            const isConfirmed = d.status === "Confirmed";
+            const isPOGen  = d.statusPO === "PO Generated";
+            const isOpen   = d.status === "Open";
             const isDone   = isDO || isDOGRPO;
 
             let bannerHtml = "";
             if (isDOGRPO) {
-                bannerHtml = `<div class="s-banner s-done"><i class="bi bi-check-circle-fill"></i> DO &amp; GRPO Generated — DO: <strong>${d.doNumber || "—"}</strong> · GRPO: <strong>${d.grpoNumber || "—"}</strong></div>`;
+                bannerHtml = `<div class="s-banner s-done"><i class="bi bi-check-circle-fill"></i> Status DO: <strong>DO &amp; GRPO Generated</strong> — DO: <strong>${d.doNumber || "—"}</strong> · GRPO: <strong>${d.grpoNumber || "—"}</strong></div>`;
             } else if (isDO) {
-                bannerHtml = `<div class="s-banner s-done"><i class="bi bi-check-circle-fill"></i> DO Generated — Nomor DO: <strong>${d.doNumber || "—"}</strong></div>`;
-            } else if (isPOGen) {
-                bannerHtml = `<div class="s-banner s-pogen"><i class="bi bi-bag-check-fill"></i> PO Generated — Nomor PO: <strong>${d.poGenId || "—"}</strong></div>`;
-            } else if (isConfirmed) {
-                bannerHtml = `<div class="s-banner" style="background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe;"><i class="bi bi-check-circle-fill"></i> Confirmed — Menunggu Generate DO oleh Admin Sales.</div>`;
+                bannerHtml = `<div class="s-banner s-done"><i class="bi bi-check-circle-fill"></i> Status DO: <strong>DO Generated</strong> — Nomor DO: <strong>${d.doNumber || "—"}</strong></div>`;
+            } else if (isOpen) {
+                bannerHtml = `<div class="s-banner" style="background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe;"><i class="bi bi-check-circle-fill"></i> Status DO: <strong>Open</strong> — Menunggu Generate DO oleh Admin Sales.</div>`;
             } else {
-                bannerHtml = `<div class="s-banner s-draft"><i class="bi bi-clock-history"></i> Draft — Menunggu confirm atau pengisian harga oleh Admin Sales.</div>`;
+                bannerHtml = `<div class="s-banner s-draft"><i class="bi bi-clock-history"></i> Status DO: <strong>Draft</strong> — Menunggu konfirmasi.</div>`;
+            }
+            if (isPOGen) {
+                bannerHtml += `<div class="s-banner s-pogen" style="margin-top:-10px;"><i class="bi bi-bag-check-fill"></i> Status PO: <strong>PO Generated</strong> — Nomor PO: <strong>${d.poGenId || "—"}</strong></div>`;
+            } else if (isDone) {
+                bannerHtml += `<div class="s-banner" style="background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb;margin-top:-10px;"><i class="bi bi-bag me-1"></i> Status PO: <strong>Belum di-generate</strong></div>`;
             }
             document.getElementById("statusBanner").innerHTML = bannerHtml;
 
@@ -265,9 +268,9 @@
 
         /* ── Render lines table ─────────────────────────────────── */
         function renderLines(d) {
-            const isDraft     = d.status === "Draft";
-            const isConfirmed = d.status === "Confirmed";
-            const canEdit     = showPrice && (isDraft || isConfirmed);
+            const isDraft = d.status === "Draft";
+            const isOpen  = d.status === "Open";
+            const canEdit = showPrice && (isDraft || isOpen);
             const ext         = d.docType === "external";
             const showPB      = showPrice && ext;
 
@@ -375,15 +378,15 @@
 
         /* ── Actions ────────────────────────────────────────────── */
         function renderActions(d) {
-            const isDraft     = d.status === "Draft";
-            const isConfirmed = d.status === "Confirmed";
-            const btns        = [];
+            const isDraft = d.status === "Draft";
+            const isOpen  = d.status === "Open";
+            const btns    = [];
 
             if (isDraft && isHatch) {
                 btns.push(`<a href="hatchery_doc_draft_add.html?id=${d.id}" class="btn-wrn"><i class="bi bi-pencil me-1"></i> Edit Draft</a>`);
                 btns.push(`<button class="btn-pri" onclick="confirmDraft()"><i class="bi bi-check2-circle me-1"></i> Confirm Draft</button>`);
             }
-            if ((isConfirmed || isDraft) && showPrice) {
+            if ((isOpen || isDraft) && showPrice) {
                 btns.push(`<button class="btn-suc" onclick="openGen()"><i class="bi bi-lightning-charge-fill me-1"></i> Generate DO</button>`);
             }
             document.getElementById("actionFooter").innerHTML = btns.join("");
@@ -391,7 +394,7 @@
 
         function confirmDraft() {
             if (confirm("Apakah Anda yakin ingin melakukan Confirm Draft ini?")) {
-                draft.status = "Confirmed";
+                draft.status = "Open";
                 docDraftSave(draft);
                 location.reload();
             }
