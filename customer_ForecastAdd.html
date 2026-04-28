@@ -311,7 +311,7 @@
             border-radius: 12px;
             padding: 12px 20px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             display: flex;
             align-items: center;
             gap: 20px;
@@ -613,7 +613,8 @@
             <div class="col-lg-2" id="sidebar-container"></div>
             <div class="col-lg-10">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0 fw-bold" style="color:#1a237e;"><i class="bi bi-plus-square me-2"></i>Add Forecast</h4>
+                    <h4 class="mb-0 fw-bold" style="color:#1a237e;"><i class="bi bi-plus-square me-2"></i>Add Forecast
+                    </h4>
                     <a href="customer_ForecastList.html" class="btn btn-outline-secondary btn-sm fw-bold">
                         <i class="bi bi-arrow-left me-1"></i>Back to List
                     </a>
@@ -623,11 +624,13 @@
                     <div class="topbar">
                         <div>
                             <h1>Add Forecast</h1>
-                            <div class="subtext">Pilih plan, tentukan week, cek kalkulator kebutuhan pakan, lalu simpan dokumen forecast.</div>
+                            <div class="subtext">Pilih plan, tentukan week, cek kalkulator kebutuhan pakan, lalu simpan
+                                dokumen forecast.</div>
                         </div>
                         <div style="min-width:220px;">
                             <label class="form-label mb-1 small fw-bold text-muted">Forecast Period</label>
-                            <select class="form-select form-select-sm fw-bold" id="forecastPeriod" onchange="renderPlanCards()">
+                            <select class="form-select form-select-sm fw-bold" id="forecastPeriod"
+                                onchange="renderPlanCards()">
                                 <option value="Week 18">Week 18</option>
                                 <option value="Week 19">Week 19</option>
                                 <option value="Week 20">Week 20</option>
@@ -652,10 +655,13 @@
     </div>
 
     <!-- Bulk Action Bar -->
-    <div id="bulkActionBar" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; padding:16px 24px; box-shadow:0 -4px 20px rgba(0,0,0,0.08); z-index:1000; justify-content:flex-end; gap:12px; align-items:center;">
-        <div class="text-muted small me-auto d-none d-md-block">Sistem akan membuat dokumen forecast terpisah sesuai Forecast Period yang dipilih.</div>
+    <div id="bulkActionBar"
+        style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; padding:16px 24px; box-shadow:0 -4px 20px rgba(0,0,0,0.08); z-index:1000; justify-content:flex-end; gap:12px; align-items:center;">
+        <div class="text-muted small me-auto d-none d-md-block">Sistem akan membuat dokumen forecast terpisah sesuai
+            Forecast Period yang dipilih.</div>
         <div style="font-weight:700; color:#1a237e;" class="me-3"><span id="bulkActionCount">0</span> Plan Dipilih</div>
-        <button class="btn btn-primary px-4 fw-bold" style="border-radius:8px;" id="btnBulkSubmit" onclick="startReviewFlow()">
+        <button class="btn btn-primary px-4 fw-bold" style="border-radius:8px;" id="btnBulkSubmit"
+            onclick="startReviewFlow()">
             <i class="bi bi-clipboard2-check me-2"></i>Buat Forecast
         </button>
     </div>
@@ -681,21 +687,27 @@
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-cloud-arrow-down me-2"></i>Tarik Plan dari SAP — <span id="getDataCompany">-</span></h5>
+                    <h5 class="modal-title fw-bold"><i class="bi bi-cloud-arrow-down me-2"></i>Tarik Plan dari SAP —
+                        <span id="getDataCompany">-</span>
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div class="p-3 border-bottom bg-light">
                         <div class="row g-2">
                             <div class="col">
-                                <label class="form-label mb-1" style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Farm</label>
-                                <select class="form-select form-select-sm" id="getDataFarmFilter" onchange="onGetDataFarmChange()">
+                                <label class="form-label mb-1"
+                                    style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Farm</label>
+                                <select class="form-select form-select-sm" id="getDataFarmFilter"
+                                    onchange="onGetDataFarmChange()">
                                     <option value="">Semua Farm</option>
                                 </select>
                             </div>
                             <div class="col">
-                                <label class="form-label mb-1" style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Kandang</label>
-                                <select class="form-select form-select-sm" id="getDataKdgFilter" onchange="renderGetDataList()">
+                                <label class="form-label mb-1"
+                                    style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Kandang</label>
+                                <select class="form-select form-select-sm" id="getDataKdgFilter"
+                                    onchange="renderGetDataList()">
                                     <option value="">Semua Kandang</option>
                                 </select>
                             </div>
@@ -704,9 +716,12 @@
                     <div class="p-3" id="getDataPreview"></div>
                 </div>
                 <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary btn-sm fw-bold px-4" id="btnTarikSubmit" onclick="submitGetData()">
-                        <i class="bi bi-cloud-download me-1"></i>Tarik <span id="getDataCountBadge" class="badge bg-white text-primary ms-1">0</span> Plan
+                    <button type="button" class="btn btn-outline-secondary btn-sm fw-bold"
+                        data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary btn-sm fw-bold px-4" id="btnTarikSubmit"
+                        onclick="submitGetData()">
+                        <i class="bi bi-cloud-download me-1"></i>Tarik <span id="getDataCountBadge"
+                            class="badge bg-white text-primary ms-1">0</span> Plan
                     </button>
                 </div>
             </div>
@@ -750,7 +765,9 @@
 
 
     <!-- Toast Container -->
-    <div id="toastContainer" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:flex-end;"></div>
+    <div id="toastContainer"
+        style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="master_data.js"></script>
@@ -820,30 +837,29 @@
         ];
 
         // ─── DEMO PLANS (mapped from kandang aktif) ───────────────────────────────
-        let DEMO_PLANS = [
-            { planNo: "PLAN-2026-001", fcStatus: "Draft",            status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",    id: "KDG-01", wh: "WH-KDG01", docQty: 20000, docType: "DOC Broiler Cobb 500", age: 7  },
-            { planNo: "PLAN-2026-002", fcStatus: "Forecast Created", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",    id: "KDG-02", wh: "WH-KDG02", docQty: 24000, docType: "DOC Broiler Ross 308", age: 9  },
-            { planNo: "PLAN-2026-003", fcStatus: "Draft",            status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan",   id: "KDG-03", wh: "WH-KDG03", docQty: 18000, docType: "DOC Broiler Cobb 500", age: 14 },
-            { planNo: "PLAN-2026-004", fcStatus: "Draft",            status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan",   id: "KDG-04", wh: "WH-KDG04", docQty: 16000, docType: "DOC Broiler Ross 308", age: 5  },
-            { planNo: "PLAN-2026-005", fcStatus: "Draft",            status: "Active", company: "PT AYM",            farm: "Farm Binjai",  id: "KDG-05", wh: "WH-KDG05", docQty: 12000, docType: "DOC Broiler Cobb 500", age: 19 },
-            { planNo: "PLAN-2026-006", fcStatus: "Forecast Created", status: "Active", company: "PT AYM",            farm: "Farm Binjai",  id: "KDG-06", wh: "WH-KDG06", docQty: 10000, docType: "DOC Broiler Ross 308", age: 14 },
-            { planNo: "PLAN-2026-007", fcStatus: "Draft",            status: "Active", company: "PT AYM",            farm: "Farm Stabat",  id: "KDG-07", wh: "WH-KDG07", docQty: 15000, docType: "DOC Broiler Cobb 500", age: 3  },
-            { planNo: "PLAN-2026-008", fcStatus: "PO Created",       status: "Active", company: "PT BMAX",           farm: "Farm BMAX A",  id: "KDG-08", wh: "WH-KDG08", docQty: 22000, docType: "DOC Broiler Ross 308", age: 23 },
-            { planNo: "PLAN-2026-009", fcStatus: "Draft",            status: "Active", company: "PT BMAX",           farm: "Farm BMAX A",  id: "KDG-09", wh: "WH-KDG09", docQty: 18000, docType: "DOC Broiler Cobb 500", age: 7  },
-            { planNo: "PLAN-2026-010", fcStatus: "Draft",            status: "Active", company: "PT BMAX",           farm: "Farm BMAX B",  id: "KDG-10", wh: "WH-KDG10", docQty: 20000, docType: "DOC Broiler Ross 308", age: 11 },
-        ];
+        let DEMO_PLANS = [];
 
         let _sapPlansPool = [
-            { planNo: "PLAN-2026-011", fcStatus: "Draft", status: "Draft", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-11", wh: "WH-KDG11", docQty: 21000, docType: "DOC Broiler Cobb 500", age: 2  },
-            { planNo: "PLAN-2026-012", fcStatus: "Draft", status: "Draft", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-12", wh: "WH-KDG12", docQty: 19000, docType: "DOC Broiler Ross 308", age: 1  },
-            { planNo: "PLAN-2026-013", fcStatus: "Draft", status: "Draft", company: "PT TOP Distribusi", farm: "Farm Medan",  id: "KDG-13", wh: "WH-KDG13", docQty: 17000, docType: "DOC Broiler Cobb 500", age: 4  },
-            { planNo: "PLAN-2026-014", fcStatus: "Draft", status: "Draft", company: "PT TOP Distribusi", farm: "Farm Medan",  id: "KDG-14", wh: "WH-KDG14", docQty: 23000, docType: "DOC Broiler Ross 308", age: 6  },
-            { planNo: "PLAN-2026-015", fcStatus: "Draft", status: "Draft", company: "PT AYM",            farm: "Farm Binjai", id: "KDG-15", wh: "WH-KDG15", docQty: 13000, docType: "DOC Broiler Cobb 500", age: 8  },
-            { planNo: "PLAN-2026-016", fcStatus: "Draft", status: "Draft", company: "PT AYM",            farm: "Farm Stabat", id: "KDG-16", wh: "WH-KDG16", docQty: 11000, docType: "DOC Broiler Ross 308", age: 3  },
-            { planNo: "PLAN-2026-017", fcStatus: "Draft", status: "Draft", company: "PT AYM",            farm: "Farm Stabat", id: "KDG-17", wh: "WH-KDG17", docQty: 14000, docType: "DOC Broiler Cobb 500", age: 5  },
-            { planNo: "PLAN-2026-018", fcStatus: "Draft", status: "Draft", company: "PT BMAX",           farm: "Farm BMAX A", id: "KDG-18", wh: "WH-KDG18", docQty: 25000, docType: "DOC Broiler Ross 308", age: 1  },
-            { planNo: "PLAN-2026-019", fcStatus: "Draft", status: "Draft", company: "PT BMAX",           farm: "Farm BMAX B", id: "KDG-19", wh: "WH-KDG19", docQty: 16000, docType: "DOC Broiler Cobb 500", age: 9  },
-            { planNo: "PLAN-2026-020", fcStatus: "Draft", status: "Draft", company: "PT BMAX",           farm: "Farm BMAX B", id: "KDG-20", wh: "WH-KDG20", docQty: 20000, docType: "DOC Broiler Ross 308", age: 7  },
+            { planNo: "PLAN-2026-001", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-01", wh: "WH-KDG01", docQty: 20000, docType: "DOC Broiler Cobb 500", age: 7 },
+            { planNo: "PLAN-2026-002", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-02", wh: "WH-KDG02", docQty: 24000, docType: "DOC Broiler Ross 308", age: 9 },
+            { planNo: "PLAN-2026-003", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-03", wh: "WH-KDG03", docQty: 18000, docType: "DOC Broiler Cobb 500", age: 14 },
+            { planNo: "PLAN-2026-004", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-04", wh: "WH-KDG04", docQty: 16000, docType: "DOC Broiler Ross 308", age: 5 },
+            { planNo: "PLAN-2026-005", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Binjai", id: "KDG-05", wh: "WH-KDG05", docQty: 12000, docType: "DOC Broiler Cobb 500", age: 19 },
+            { planNo: "PLAN-2026-006", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Binjai", id: "KDG-06", wh: "WH-KDG06", docQty: 10000, docType: "DOC Broiler Ross 308", age: 14 },
+            { planNo: "PLAN-2026-007", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Stabat", id: "KDG-07", wh: "WH-KDG07", docQty: 15000, docType: "DOC Broiler Cobb 500", age: 3 },
+            { planNo: "PLAN-2026-008", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-08", wh: "WH-KDG08", docQty: 22000, docType: "DOC Broiler Ross 308", age: 23 },
+            { planNo: "PLAN-2026-009", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-09", wh: "WH-KDG09", docQty: 18000, docType: "DOC Broiler Cobb 500", age: 7 },
+            { planNo: "PLAN-2026-010", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX B", id: "KDG-10", wh: "WH-KDG10", docQty: 20000, docType: "DOC Broiler Ross 308", age: 11 },
+            { planNo: "PLAN-2026-011", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-11", wh: "WH-KDG11", docQty: 21000, docType: "DOC Broiler Cobb 500", age: 2 },
+            { planNo: "PLAN-2026-012", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-12", wh: "WH-KDG12", docQty: 19000, docType: "DOC Broiler Ross 308", age: 1 },
+            { planNo: "PLAN-2026-013", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-13", wh: "WH-KDG13", docQty: 17000, docType: "DOC Broiler Cobb 500", age: 4 },
+            { planNo: "PLAN-2026-014", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-14", wh: "WH-KDG14", docQty: 23000, docType: "DOC Broiler Ross 308", age: 6 },
+            { planNo: "PLAN-2026-015", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Binjai", id: "KDG-15", wh: "WH-KDG15", docQty: 13000, docType: "DOC Broiler Cobb 500", age: 8 },
+            { planNo: "PLAN-2026-016", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Stabat", id: "KDG-16", wh: "WH-KDG16", docQty: 11000, docType: "DOC Broiler Ross 308", age: 3 },
+            { planNo: "PLAN-2026-017", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Stabat", id: "KDG-17", wh: "WH-KDG17", docQty: 14000, docType: "DOC Broiler Cobb 500", age: 5 },
+            { planNo: "PLAN-2026-018", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-18", wh: "WH-KDG18", docQty: 25000, docType: "DOC Broiler Ross 308", age: 1 },
+            { planNo: "PLAN-2026-019", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX B", id: "KDG-19", wh: "WH-KDG19", docQty: 16000, docType: "DOC Broiler Cobb 500", age: 9 },
+            { planNo: "PLAN-2026-020", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX B", id: "KDG-20", wh: "WH-KDG20", docQty: 20000, docType: "DOC Broiler Ross 308", age: 7 },
         ];
 
         const HARVEST_DAY = 35;
@@ -874,27 +890,33 @@
 
         // ─── FILTER STATE ─────────────────────────────────────────────────────────
         let _activeCompany = "ALL"; // set dari URL param
-        let _activeCompanyFilter = "ALL";
-        let _activeFcStatusFilter = "ALL";
 
         // ─── RENDER BY COMPANY ────────────────────────────────────────────────────
         function renderPlanCards() {
-            renderFilterBar();
             renderSummary();
 
-            const plansFilteredByStatus = DEMO_PLANS.filter(p => _activeFcStatusFilter === "ALL" || p.fcStatus === _activeFcStatusFilter);
-            const companies = [...new Set(plansFilteredByStatus.map(p => p.company))];
-            const filtered = _activeCompanyFilter === "ALL"
-                ? companies
-                : companies.filter(c => c === _activeCompanyFilter);
+            if (DEMO_PLANS.length === 0) {
+                document.getElementById("filterContainer").innerHTML = "";
+                document.getElementById("plansContainer").innerHTML = `
+                    <div style="text-align:center;padding:60px 24px;border:2px dashed #e0e7ef;border-radius:12px;background:#fafbfe;">
+                        <i class="bi bi-cloud-arrow-down" style="font-size:40px;color:#c7d2fe;display:block;margin-bottom:16px;"></i>
+                        <div style="font-size:16px;font-weight:700;color:#1a237e;margin-bottom:8px;">Belum Ada Plan</div>
+                        <div style="font-size:13px;color:#6b7280;margin-bottom:20px;">Tarik data plan dari SAP untuk mulai membuat forecast.</div>
+                        <button class="btn btn-primary fw-bold px-4" style="border-radius:8px;" onclick="openGetData('${_activeCompany}')">
+                            <i class="bi bi-cloud-arrow-down me-2"></i>Tarik Plan dari SAP
+                        </button>
+                    </div>`;
+                return;
+            }
 
-            document.getElementById("plansContainer").innerHTML = filtered.map(company => {
+            const companies = [...new Set(DEMO_PLANS.map(p => p.company))];
+
+            document.getElementById("plansContainer").innerHTML = companies.map(company => {
                 const tableHeader = `
                     <thead>
                         <tr>
                             <th rowspan="2" style="width:40px;text-align:center;"><input type="checkbox" onchange="toggleAllBulk(this, '${company}')"></th>
                             <th rowspan="2" style="min-width:130px;">Plan No</th>
-                            <th rowspan="2" style="min-width:100px;">Status FC</th>
                             <th rowspan="2" style="min-width:90px;">Farm</th>
                             <th rowspan="2" style="min-width:70px;">Kandang</th>
                             <th rowspan="2">Populasi</th>
@@ -916,7 +938,7 @@
                         </tr>
                     </thead>`;
 
-                const plans = plansFilteredByStatus.filter(p => p.company === company);
+                const plans = DEMO_PLANS.filter(p => p.company === company);
                 const totalPop = plans.reduce((s, p) => s + p.docQty, 0);
                 const totalKebutuhan = plans.reduce((s, p) => s + Math.round(calcFeedNeed(p).totalQty), 0);
 
@@ -926,15 +948,9 @@
                     const safeCompanyKey = company.replace(/\s+/g, '-');
                     const isChecked = _selectedPlansForBulk.includes(plan.planNo) ? "checked" : "";
                     const periodGuard = canSubmitForecast(plan.planNo, getSelectedPeriod());
-                    const canTick = periodGuard.ok;
-                    const isDisabled = canTick ? "" : "disabled";
+                    const isDisabled = periodGuard.ok ? "" : "disabled";
                     const disabledMsg = !periodGuard.ok ? `title="${periodGuard.reason}"` : "";
-                    const blockReason = !canTick ? "Sudah ada forecast" : "";
-
-                    const fcStatusBadge = plan.fcStatus === "Draft"
-                        ? `<span class="badge bg-secondary">Draft</span>`
-                        : plan.fcStatus === "Forecast Created" ? `<span class="badge bg-primary">Forecast Created</span>`
-                        : `<span class="badge bg-success">PO Created</span>`;
+                    const blockReason = !periodGuard.ok ? "Sudah ada forecast" : "";
 
                     return `<tr>
                         <td style="text-align:center;">
@@ -942,7 +958,6 @@
                             ${blockReason ? `<div style="font-size:9px;color:#f87171;margin-top:2px;white-space:nowrap;">${blockReason}</div>` : ""}
                         </td>
                         <td style="font-weight:700;color:#1a237e;white-space:nowrap;">${plan.planNo}</td>
-                        <td>${fcStatusBadge}</td>
                         <td style="white-space:nowrap;">${plan.farm}</td>
                         <td>${plan.id}</td>
                         <td style="font-weight:700;">${fmt(plan.docQty)}</td>
@@ -996,46 +1011,6 @@
             }).join("");
         }
 
-        function renderFilterBar() {
-            const companies = [...new Set(DEMO_PLANS.map(p => p.company))];
-            const allC = [{ key: "ALL", label: "Semua Company" }, ...companies.map(c => ({ key: c, label: c }))];
-            const companyBtns = allC.map(({ key, label }) =>
-                `<button class="filter-btn${_activeCompanyFilter === key ? " active" : ""}" onclick="setFilter('${key}')">${label}</button>`
-            ).join("");
-
-            const statuses = [
-                { key: "Draft", label: "Draft" }, 
-                { key: "Forecast Created", label: "Forecast Created" }, 
-                { key: "PO Created", label: "PO Created" }, 
-                { key: "ALL", label: "Semua Status" }
-            ];
-            const statusBtns = statuses.map(({ key, label }) =>
-                `<button class="filter-btn${_activeFcStatusFilter === key ? " active" : ""}" onclick="setStatusFilter('${key}')">${label}</button>`
-            ).join("");
-
-            document.getElementById("filterContainer").innerHTML = `
-                <div class="filter-panel">
-                    <div class="filter-group border-end pe-4">
-                        <div class="filter-label"><i class="bi bi-building"></i> Company</div>
-                        ${companyBtns}
-                    </div>
-                    <div class="filter-group">
-                        <div class="filter-label"><i class="bi bi-funnel"></i> Status</div>
-                        ${statusBtns}
-                    </div>
-                </div>
-            `;
-        }
-
-        function setFilter(company) {
-            _activeCompanyFilter = company;
-            renderPlanCards();
-        }
-
-        function setStatusFilter(status) {
-            _activeFcStatusFilter = status;
-            renderPlanCards();
-        }
 
         // ─── SAP MOCK DATA ────────────────────────────────────────────────────────
         function sapMock(plan, calc) {
@@ -1183,11 +1158,11 @@
             if (!items.length) return `<div class="text-center text-muted py-3 small">Belum ada item.</div>`;
             return items.map((r, idx) => `
                 <div class="d-flex align-items-center gap-2 p-2 mb-2" style="background:#f8faff;border-radius:8px;border:1px solid #e0e7ef;">
-                    <div style="width:22px;height:22px;background:#e0e7ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#3730a3;flex-shrink:0;">${idx+1}</div>
+                    <div style="width:22px;height:22px;background:#e0e7ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#3730a3;flex-shrink:0;">${idx + 1}</div>
                     <div style="flex:1;min-width:0;">
                         ${r.itemCode
-                            ? `<div class="fw-bold" style="font-size:12px;">${r.itemName}</div><div style="font-size:10px;color:#6b7280;">${r.itemCode} · ${r.uom}</div>`
-                            : `<div style="font-size:12px;color:#9ca3af;">Belum ada item dipilih</div>`}
+                    ? `<div class="fw-bold" style="font-size:12px;">${r.itemName}</div><div style="font-size:10px;color:#6b7280;">${r.itemCode} · ${r.uom}</div>`
+                    : `<div style="font-size:12px;color:#9ca3af;">Belum ada item dipilih</div>`}
                     </div>
                     <button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size:11px;white-space:nowrap;" onclick="openItemSearchReview('${planNo}',${r.id})">
                         <i class="bi bi-search me-1"></i>Pilih
@@ -1423,12 +1398,12 @@
 
         function renderGetDataList() {
             const farm = document.getElementById("getDataFarmFilter").value;
-            const kdg  = document.getElementById("getDataKdgFilter").value;
+            const kdg = document.getElementById("getDataKdgFilter").value;
 
             const filtered = _sapPlansPool.filter(p => {
                 if (p.company !== _activeGetDataCompany) return false;
                 if (farm && p.farm !== farm) return false;
-                if (kdg  && p.id   !== kdg)  return false;
+                if (kdg && p.id !== kdg) return false;
                 return true;
             });
 
@@ -1528,8 +1503,8 @@
         // ─── TOAST NOTIF ─────────────────────────────────────────────────────────
         function showToast(msg, type = "info") {
             const colorMap = { success: "#166534", warning: "#92400e", error: "#991b1b", info: "#1e40af" };
-            const bgMap    = { success: "#dcfce7", warning: "#fef3c7", error: "#fee2e2", info: "#dbeafe" };
-            const iconMap  = { success: "bi-check-circle-fill", warning: "bi-exclamation-triangle-fill", error: "bi-x-circle-fill", info: "bi-info-circle-fill" };
+            const bgMap = { success: "#dcfce7", warning: "#fef3c7", error: "#fee2e2", info: "#dbeafe" };
+            const iconMap = { success: "bi-check-circle-fill", warning: "bi-exclamation-triangle-fill", error: "bi-x-circle-fill", info: "bi-info-circle-fill" };
 
             const container = document.getElementById("toastContainer");
             const id = "toast-" + Date.now();
