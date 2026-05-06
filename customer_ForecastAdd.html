@@ -153,6 +153,13 @@
             text-align: center;
         }
 
+        .matrix-table thead tr:nth-child(3) th {
+            background: #f1f3f9;
+            color: #374151;
+            font-size: 11px;
+            text-align: center;
+        }
+
         .matrix-table th.th-yellow {
             background: #fef08a !important;
             color: #713f12 !important;
@@ -170,6 +177,100 @@
 
         .matrix-table tbody tr:hover {
             background: #f8faff;
+        }
+
+        .matrix-table .sticky-col {
+            position: sticky;
+            background: #fff;
+            z-index: 4;
+        }
+
+        .matrix-table th.sticky-col {
+            background: #1a237e;
+            color: #fff;
+            z-index: 8;
+        }
+
+        .matrix-table thead tr:nth-child(2) th.sticky-col {
+            background: #1a237e;
+            color: #fff;
+        }
+
+        .matrix-table .sticky-check {
+            left: 0;
+            min-width: 40px;
+            width: 40px;
+        }
+
+        .matrix-table .sticky-plan {
+            left: 40px;
+            min-width: 130px;
+            width: 130px;
+        }
+
+        .matrix-table .sticky-location {
+            left: 170px;
+            min-width: 90px;
+            width: 90px;
+        }
+
+        .matrix-table .sticky-kandang {
+            left: 260px;
+            min-width: 90px;
+            width: 90px;
+            box-shadow: 4px 0 8px rgba(15, 23, 42, 0.08);
+        }
+
+        .matrix-table tbody tr:hover .sticky-col {
+            background: #f8faff;
+        }
+
+        .formula-tip {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+            min-height: 20px;
+            cursor: help;
+            border-bottom: 1px dotted rgba(26, 35, 126, 0.45);
+        }
+
+        .formula-popover {
+            position: fixed;
+            min-width: 260px;
+            max-width: 360px;
+            white-space: pre-line;
+            text-align: left;
+            background: #111827;
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 11px;
+            line-height: 1.45;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.28);
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .12s ease;
+        }
+
+        .formula-popover.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .formula-popover::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #111827;
         }
 
         .col-feed {
@@ -697,7 +798,7 @@
                         <div class="row g-2">
                             <div class="col">
                                 <label class="form-label mb-1"
-                                    style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Farm</label>
+                                    style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Location</label>
                                 <select class="form-select form-select-sm" id="getDataFarmFilter"
                                     onchange="onGetDataFarmChange()">
                                     <option value="">Semua Farm</option>
@@ -840,23 +941,75 @@
         let DEMO_PLANS = [];
 
         let _sapPlansPool = [
-            { planNo: "PLAN-2026-001", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-01", wh: "WH-KDG01", docQty: 20000, docType: "DOC Broiler Cobb 500", age: 7 },
-            { planNo: "PLAN-2026-002", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-02", wh: "WH-KDG02", docQty: 24000, docType: "DOC Broiler Ross 308", age: 9 },
-            { planNo: "PLAN-2026-003", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-03", wh: "WH-KDG03", docQty: 18000, docType: "DOC Broiler Cobb 500", age: 14 },
-            { planNo: "PLAN-2026-004", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-04", wh: "WH-KDG04", docQty: 16000, docType: "DOC Broiler Ross 308", age: 5 },
-            { planNo: "PLAN-2026-005", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Binjai", id: "KDG-05", wh: "WH-KDG05", docQty: 12000, docType: "DOC Broiler Cobb 500", age: 19 },
-            { planNo: "PLAN-2026-006", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Binjai", id: "KDG-06", wh: "WH-KDG06", docQty: 10000, docType: "DOC Broiler Ross 308", age: 14 },
-            { planNo: "PLAN-2026-007", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Stabat", id: "KDG-07", wh: "WH-KDG07", docQty: 15000, docType: "DOC Broiler Cobb 500", age: 3 },
+            {
+                planNo: "100004423", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi",
+                location: "Pekalongan", id: "F0001364", wh: "F0001364", docQty: 9700, docType: "DOC Broiler",
+                ageLastPosting: 22, ageCurrent: 27, lastPostingDate: "29-Apr-26",
+                sapData: { mort: 269, lastPop: 9431, bw: 0.985, fcr: 1.297, fiAct: 1.242, fiCum: 12050, grpo: 22700, poItr: null, lastStok: 10650 }
+            },
+            {
+                planNo: "100004424", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi",
+                location: "Blora", id: "F0001471", wh: "F0001471", docQty: 30800, docType: "DOC Broiler",
+                ageLastPosting: 19, ageCurrent: 24, lastPostingDate: "29-Apr-26",
+                sapData: { mort: 738, lastPop: 30370, bw: 0.75, fcr: 1.225, fiAct: 0.082, fiCum: 0.906, grpo: 43000, poItr: null, lastStok: 16600 }
+            },
+            {
+                planNo: "100004425", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi",
+                location: "Klaten", id: "F0001470", wh: "F0001470", docQty: 7200, docType: "DOC Broiler",
+                ageLastPosting: 18, ageCurrent: 21, lastPostingDate: "1-May-26",
+                sapData: { mort: 446, lastPop: 6826, bw: 0.586, fcr: 1.212, fiAct: 0.08, fiCum: 0.674, grpo: 9000, poItr: null, lastStok: 3550 }
+            },
+            {
+                planNo: "100000271", fcStatus: "Draft", status: "Active", company: "PT AYM",
+                location: "Ponorogo", id: "F0000274", wh: "F0000274", docQty: 5000, docType: "DOC Broiler",
+                ageLastPosting: 12, ageCurrent: 14, lastPostingDate: "2-May-26",
+                sapData: { mort: 46, lastPop: 5004, bw: 0.345, fcr: 1.303, fiAct: 0.04, fiCum: 0.45, grpo: 4000, poItr: 1750 }
+            },
+            {
+                planNo: "100000272", fcStatus: "Draft", status: "Active", company: "PT AYM",
+                location: "Malang", id: "F0000073", wh: "F0000073", docQty: 8500, docType: "DOC Broiler",
+                ageLastPosting: 11, ageCurrent: 13, lastPostingDate: "1-May-26",
+                sapData: { mort: 155, lastPop: 8430, bw: 0.325, fcr: 1.113, fiAct: 0.059, fiCum: 0.359, grpo: 5500, poItr: 2450 }
+            },
+            {
+                planNo: "100000273", fcStatus: "Draft", status: "Active", company: "PT AYM",
+                location: "Tuban", id: "F0000173", wh: "F0000173", docQty: 9900, docType: "DOC Broiler",
+                ageLastPosting: 11, ageCurrent: 13, lastPostingDate: "1-May-26",
+                sapData: { mort: 329, lastPop: 9670, bw: 0.187, fcr: 1.244, fiAct: 0.031, fiCum: 0.227, grpo: 5000, poItr: 2750 }
+            },
+            {
+                planNo: "21000235", fcStatus: "Draft", status: "Active", company: "PT CTU",
+                location: "Pasuruan", id: "FSR0001", wh: "FSR0001", docQty: 9315, docType: "DOC Layer",
+                ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",
+                sapData: { mort: 386, lastPop: 8929, bw: null, fcr: null, fiAct: null, fiCum: null, grpo: 37700, poItr: null, lastStok: 1844, statusKalang: "GROWTH", kebutuhanMinggu: 4500, sisaKebutuhan: 18200 }
+            },
+            {
+                planNo: "21000236", fcStatus: "Draft", status: "Active", company: "PT CTU",
+                location: "Pasuruan", id: "FSR0002", wh: "FSR0002", docQty: 9460, docType: "DOC Layer",
+                ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",
+                sapData: { mort: 326, lastPop: 9134, bw: null, fcr: null, fiAct: null, fiCum: null, grpo: 37250, poItr: null, lastStok: 979, statusKalang: "GROWTH", kebutuhanMinggu: 3800, sisaKebutuhan: 15400 }
+            },
+            {
+                planNo: "21000237", fcStatus: "Draft", status: "Active", company: "PT CTU",
+                location: "Pasuruan", id: "FSR0003", wh: "FSR0003", docQty: 8940, docType: "DOC Layer",
+                ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",
+                sapData: { mort: 276, lastPop: 8664, bw: null, fcr: null, fiAct: null, fiCum: null, grpo: 31850, poItr: null, lastStok: 1537, statusKalang: "GROWTH", kebutuhanMinggu: 4200, sisaKebutuhan: 16800 }
+            },
+            {
+                planNo: "21000238", fcStatus: "Draft", status: "Active", company: "PT CTU",
+                location: "Pasuruan", id: "FSR0004", wh: "FSR0004", docQty: 9460, docType: "DOC Layer",
+                ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",
+                sapData: { mort: 291, lastPop: 9169, bw: null, fcr: null, fiAct: null, fiCum: null, grpo: 32150, poItr: null, lastStok: 836, statusKalang: "GROWTH", kebutuhanMinggu: 3600, sisaKebutuhan: 14400 }
+            },
+            {
+                planNo: "21000239", fcStatus: "Draft", status: "Active", company: "PT CTU",
+                location: "Pasuruan", id: "FSR0005", wh: "FSR0005", docQty: 9520, docType: "DOC Layer",
+                ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",
+                sapData: { mort: 211, lastPop: 9309, bw: null, fcr: null, fiAct: null, fiCum: null, grpo: 22900, poItr: null, lastStok: 1415, statusKalang: "GROWTH", kebutuhanMinggu: 4100, sisaKebutuhan: 16400 }
+            },
             { planNo: "PLAN-2026-008", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-08", wh: "WH-KDG08", docQty: 22000, docType: "DOC Broiler Ross 308", age: 23 },
             { planNo: "PLAN-2026-009", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-09", wh: "WH-KDG09", docQty: 18000, docType: "DOC Broiler Cobb 500", age: 7 },
             { planNo: "PLAN-2026-010", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX B", id: "KDG-10", wh: "WH-KDG10", docQty: 20000, docType: "DOC Broiler Ross 308", age: 11 },
-            { planNo: "PLAN-2026-011", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-11", wh: "WH-KDG11", docQty: 21000, docType: "DOC Broiler Cobb 500", age: 2 },
-            { planNo: "PLAN-2026-012", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli", id: "KDG-12", wh: "WH-KDG12", docQty: 19000, docType: "DOC Broiler Ross 308", age: 1 },
-            { planNo: "PLAN-2026-013", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-13", wh: "WH-KDG13", docQty: 17000, docType: "DOC Broiler Cobb 500", age: 4 },
-            { planNo: "PLAN-2026-014", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", farm: "Farm Medan", id: "KDG-14", wh: "WH-KDG14", docQty: 23000, docType: "DOC Broiler Ross 308", age: 6 },
-            { planNo: "PLAN-2026-015", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Binjai", id: "KDG-15", wh: "WH-KDG15", docQty: 13000, docType: "DOC Broiler Cobb 500", age: 8 },
-            { planNo: "PLAN-2026-016", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Stabat", id: "KDG-16", wh: "WH-KDG16", docQty: 11000, docType: "DOC Broiler Ross 308", age: 3 },
-            { planNo: "PLAN-2026-017", fcStatus: "Draft", status: "Active", company: "PT AYM", farm: "Farm Stabat", id: "KDG-17", wh: "WH-KDG17", docQty: 14000, docType: "DOC Broiler Cobb 500", age: 5 },
             { planNo: "PLAN-2026-018", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-18", wh: "WH-KDG18", docQty: 25000, docType: "DOC Broiler Ross 308", age: 1 },
             { planNo: "PLAN-2026-019", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX B", id: "KDG-19", wh: "WH-KDG19", docQty: 16000, docType: "DOC Broiler Cobb 500", age: 9 },
             { planNo: "PLAN-2026-020", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX B", id: "KDG-20", wh: "WH-KDG20", docQty: 20000, docType: "DOC Broiler Ross 308", age: 7 },
@@ -866,7 +1019,8 @@
 
         // ─── KALKULASI ────────────────────────────────────────────────────────────
         function calcFeedNeed(plan) {
-            const { docQty, age } = plan;
+            const { docQty } = plan;
+            const age = plan.ageCurrent ?? plan.age;
             const phaseResults = PHASES.map((ph, idx) => {
                 const startDay = Math.max(ph.dayFrom, age + 1);
                 const endDay = Math.min(ph.dayTo, HARVEST_DAY);
@@ -887,6 +1041,82 @@
         }
 
         function fmt(n, dec = 0) { return n.toLocaleString("id-ID", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+
+        function escHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, ch => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[ch]));
+        }
+
+        function tip(valueHtml, lines) {
+            return `<span class="formula-tip" data-tip="${escHtml(lines.join("\n"))}">${valueHtml}</span>`;
+        }
+
+        function fmtDate(date) {
+            return date.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+        }
+
+        function parsePlanDate(value) {
+            if (!value) return null;
+            const parsed = new Date(value);
+            if (!Number.isNaN(parsed.getTime())) return parsed;
+
+            const match = String(value).match(/^(\d{1,2})-([A-Za-z]{3})-(\d{2,4})$/);
+            if (!match) return null;
+            const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+            const month = months[match[2]];
+            if (month === undefined) return null;
+            const year = match[3].length === 2 ? 2000 + parseInt(match[3], 10) : parseInt(match[3], 10);
+            return new Date(year, month, parseInt(match[1], 10));
+        }
+
+        function addDays(date, days) {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+
+        function diffDays(fromDate, toDate) {
+            const msPerDay = 24 * 60 * 60 * 1000;
+            return Math.round((toDate - fromDate) / msPerDay);
+        }
+
+        function ceilTo(n, step = 50) {
+            return Math.ceil(n / step) * step;
+        }
+
+        function getStdRows() {
+            let cumFi = 0;
+            return STD.map(row => {
+                cumFi += row.fd || 0;
+                return {
+                    age: row.d,
+                    bw: row.bw ?? (0.045 + row.d * 0.055),
+                    fiCum: row.fiCum ?? cumFi
+                };
+            });
+        }
+
+        function lookupStdByTargetBW(targetBW) {
+            const rows = getStdRows();
+            return rows.find(row => row.bw >= targetBW) || rows[rows.length - 1];
+        }
+
+        function lookupStdByCumFi(cumFi, matchMode = 1) {
+            const rows = getStdRows();
+            if (matchMode === -1) {
+                let found = rows[0];
+                rows.forEach(row => { if (row.fiCum <= cumFi) found = row; });
+                return found;
+            }
+            return rows.find(row => row.fiCum >= cumFi) || rows[rows.length - 1];
+        }
+
+        function lookupCumFiByAge(age) {
+            const rows = getStdRows();
+            const safeAge = Math.max(1, Math.min(HARVEST_DAY, Math.round(age)));
+            return (rows.find(row => row.age === safeAge) || rows[rows.length - 1]).fiCum;
+        }
 
         // ─── FILTER STATE ─────────────────────────────────────────────────────────
         let _activeCompany = "ALL"; // set dari URL param
@@ -915,32 +1145,35 @@
                 const tableHeader = `
                     <thead>
                         <tr>
-                            <th rowspan="2" style="width:40px;text-align:center;"><input type="checkbox" onchange="toggleAllBulk(this, '${company}')"></th>
-                            <th rowspan="2" style="min-width:130px;">Plan No</th>
-                            <th rowspan="2" style="min-width:90px;">Farm</th>
-                            <th rowspan="2" style="min-width:70px;">Kandang</th>
+                            <th rowspan="2" class="sticky-col sticky-check" style="text-align:center;"><input type="checkbox" onchange="toggleAllBulk(this, '${company}')"></th>
+                            <th rowspan="2" class="sticky-col sticky-plan">Plan No</th>
+                            <th rowspan="2" class="sticky-col sticky-location">Location</th>
+                            <th rowspan="2" class="sticky-col sticky-kandang">Kandang</th>
                             <th rowspan="2">Populasi</th>
                             <th rowspan="2">Last Posting Date</th>
-                            <th colspan="11">Last Posting</th>
-                            <th rowspan="2" class="th-yellow">Status Kalang</th>
-                            <th rowspan="2" class="th-yellow">Pakan Habis</th>
-                            <th rowspan="2" class="th-yellow">BW/PANEN</th>
+                            <th colspan="7">Status Last Posting</th>
+                            <th colspan="4" class="th-yellow">Status Sekarang</th>
+                            <th colspan="2" class="th-yellow">Panen</th>
+                            <th colspan="3" class="th-yellow">Pakan Habis</th>
+                            <th rowspan="2">BW PANEN</th>
                             <th rowspan="2">Kebutuhan Minggu Depan</th>
                             <th rowspan="2">Sisa Kebutuhan</th>
-                            <th colspan="2">Estimate Habis Kapan</th>
+                            <th colspan="3">Estimate Habis Kapan</th>
                             <th rowspan="2" style="min-width:80px;">Aksi</th>
                         </tr>
                         <tr>
                             <th>Age</th><th>Mort</th><th>Last Populasi</th><th>BW</th><th>FCR</th>
                             <th>FI Act</th><th>FI Cum Pakan Terima</th><th>GRPO/IT</th><th>PO/ITR</th>
                             <th>Last Stok</th><th>Age</th>
-                            <th>Date</th><th>Age</th>
+                            <th class="th-yellow">Tanggal</th><th class="th-yellow">Ekor</th>
+                            <th class="th-yellow">Date</th><th class="th-yellow">Age</th><th class="th-yellow">Diff</th>
+                            <th>Date</th><th>Age</th><th>Diff</th>
                         </tr>
                     </thead>`;
 
                 const plans = DEMO_PLANS.filter(p => p.company === company);
                 const totalPop = plans.reduce((s, p) => s + p.docQty, 0);
-                const totalKebutuhan = plans.reduce((s, p) => s + Math.round(calcFeedNeed(p).totalQty), 0);
+                const totalKebutuhan = plans.reduce((s, p) => s + Math.round(sapMock(p, calcFeedNeed(p)).kebutuhanMinggu), 0);
 
                 const rows = plans.map(plan => {
                     const calc = calcFeedNeed(plan);
@@ -953,33 +1186,107 @@
                     const blockReason = !periodGuard.ok ? "Sudah ada forecast" : "";
 
                     return `<tr>
-                        <td style="text-align:center;">
+                        <td class="sticky-col sticky-check" style="text-align:center;">
                             <input type="checkbox" class="cb-bulk-${safeCompanyKey}" value="${plan.planNo}" onchange="toggleBulk('${plan.planNo}', this.checked)" ${isChecked} ${isDisabled} ${disabledMsg}>
                             ${blockReason ? `<div style="font-size:9px;color:#f87171;margin-top:2px;white-space:nowrap;">${blockReason}</div>` : ""}
                         </td>
-                        <td style="font-weight:700;color:#1a237e;white-space:nowrap;">${plan.planNo}</td>
-                        <td style="white-space:nowrap;">${plan.farm}</td>
-                        <td>${plan.id}</td>
+                        <td class="sticky-col sticky-plan" style="font-weight:700;color:#1a237e;white-space:nowrap;">${plan.planNo}</td>
+                        <td class="sticky-col sticky-location" style="white-space:nowrap;">${plan.location ?? plan.farm}</td>
+                        <td class="sticky-col sticky-kandang">${plan.id}</td>
                         <td style="font-weight:700;">${fmt(plan.docQty)}</td>
                         <td>${sap.lastPostStr}</td>
-                        <td>${plan.age}</td>
+                        <td>${tip(plan.ageLastPosting ?? plan.age, [
+                            "Age Last Posting",
+                            "= Last Posting Date - Tanggal CI",
+                            `= ${sap.lastPostStr} - ${fmtDate(addDays(parsePlanDate(sap.lastPostStr) || new Date(2026, 3, 20), -(sap.formula.ageLastPosting || 0)))}`,
+                            `= ${sap.formula.ageLastPosting} hari`
+                        ])}</td>
                         <td>${sap.mort}</td>
-                        <td>${fmt(sap.lastPop)}</td>
-                        <td>${sap.bw} kg</td>
-                        <td>${sap.fcr}</td>
-                        <td>${fmt(sap.fiAct)} kg</td>
-                        <td>${fmt(sap.fiCum)} kg</td>
-                        <td>${sap.grpo}</td>
-                        <td>${sap.poItr}</td>
-                        <td>${fmt(sap.lastStok)} kg</td>
-                        <td>${plan.age}</td>
-                        <td class="td-yellow">${sap.statusKalang}</td>
-                        <td class="td-yellow">${sap.pakanHabis}</td>
-                        <td class="td-yellow">${sap.bwPanen}</td>
-                        <td style="font-weight:700;color:#1a237e;">${fmt(sap.kebutuhanMinggu)} kg</td>
-                        <td style="font-weight:700;color:#92400e;">${fmt(sap.sisaKebutuhan)} kg</td>
-                        <td>${sap.tglHabisStr}</td>
-                        <td>Hari ${sap.ageHabis}</td>
+                        <td>${tip(fmt(sap.lastPop), [
+                            "Last Populasi",
+                            "= Populasi + Bonus - Mort",
+                            `= ${fmt(sap.formula.popBonus)} - ${fmt(sap.mort)}`,
+                            `= ${fmt(sap.lastPop)} ekor`
+                        ])}</td>
+                        <td>${sap.bw != null ? fmt(sap.bw, 3) + ' kg' : '-'}</td>
+                        <td>${sap.fcr != null ? tip(fmt(sap.fcr, 3), [
+                            "FCR",
+                            "Untuk data TOP, nilai FCR dipakai dari SAP/dummy.",
+                            "= Pakan Terpakai / Last Populasi / BW",
+                            `= ${fmt(sap.formula.pakanTerpakai, 3)} / ${fmt(sap.lastPop)} / ${fmt(sap.bw, 3)}`,
+                            `= ${fmt(sap.fcr, 3)}`
+                        ]) : '-'}</td>
+                        <td>${sap.fiAct != null ? tip(fmt(sap.fiAct, 3) + ' kg', [
+                            "FI Act",
+                            "Untuk data TOP, nilai FI Act dipakai dari SAP/dummy.",
+                            "= Pakan Terpakai / (Populasi + Bonus)",
+                            `= ${fmt(sap.formula.pakanTerpakai, 3)} / ${fmt(sap.formula.popBonus)}`,
+                            `= ${fmt(sap.fiAct, 3)} kg/ekor`
+                        ]) : '-'}</td>
+                        <td>${sap.fiCum != null ? tip(fmt(sap.fiCum, 3) + ' kg', [
+                            "FI Cum Pakan Terima",
+                            "= Lookup STD SAP by Target BW",
+                            `Target BW = ${fmt(sap.formula.targetBW, 2)} kg`,
+                            `FI Cum STD = ${fmt(sap.fiCum, 3)} kg/ekor`
+                        ]) : '-'}</td>
+                        <td>${sap.grpo != null ? fmt(sap.grpo) : '-'}</td>
+                        <td>${sap.poItr != null ? fmt(sap.poItr) : '-'}</td>
+                        <td>${tip(fmt(sap.lastStok) + ' kg', [
+                            "Last Stok",
+                            sap.formula.poItrCalc === 0 ? "Untuk TOP, Last Stock dipakai dari SAP/dummy." : "= GRPO/IT + PO/ITR - Pakan Terpakai",
+                            `GRPO/IT = ${fmt(sap.grpo)}; PO/ITR = ${fmt(sap.formula.poItrCalc)}`,
+                            `Pakan Terpakai = ${fmt(sap.formula.pakanTerpakai, 3)}`,
+                            `= ${fmt(sap.lastStok, 3)} kg`
+                        ])}</td>
+                        <td>${tip(sap.ageNow, [
+                            "Age Now",
+                            "= Today - Tanggal CI",
+                            "Untuk dummy masih memakai ageCurrent/age dari plan jika tersedia.",
+                            `= ${sap.ageNow} hari`
+                        ])}</td>
+                        <td class="td-yellow">${sap.panenDateStr}</td>
+                        <td class="td-yellow">${tip(fmt(sap.panenEkor), [
+                            "Ekor Panen",
+                            "Field asli: input manual.",
+                            "Dummy rule: jika Age Now >= 27, pakai 30% x Last Populasi.",
+                            `= ${sap.ageNow} >= 27 ? 30% x ${fmt(sap.lastPop)} : 0`,
+                            `= ${fmt(sap.panenEkor)} ekor`
+                        ])}</td>
+                        <td class="td-yellow">${sap.tglHabisStr}</td>
+                        <td class="td-yellow">Hari ${sap.ageHabis}</td>
+                        <td class="td-yellow">${tip(`${sap.pakanHabisDiff} hari`, [
+                            "Diff Pakan Habis",
+                            "Current: sebelum tambahan forecast.",
+                            "= Age Habis Pakan - Age Last Posting",
+                            `= ${sap.ageHabis} - ${sap.formula.ageLastPosting}`,
+                            `= ${sap.pakanHabisDiff} hari`
+                        ])}</td>
+                        <td>${sap.bwPanen}</td>
+                        <td style="font-weight:700;color:#1a237e;">${tip(fmt(sap.kebutuhanMinggu) + ' kg', [
+                            "Kebutuhan Total Pakan",
+                            "= CEILING((Populasi + Bonus) x FI Cum STD, 50)",
+                            `= CEILING(${fmt(sap.formula.popBonus)} x ${fmt(sap.fiCum, 3)}, 50)`,
+                            `= ${fmt(sap.kebutuhanMinggu)} kg`
+                        ])}</td>
+                        <td style="font-weight:700;color:#92400e;">${tip(fmt(sap.sisaKebutuhan) + ' kg', [
+                            "Sisa Kebutuhan",
+                            "= MAX(0, Kebutuhan Total - (GRPO/IT + PO/ITR))",
+                            `= ${fmt(sap.kebutuhanMinggu)} - (${fmt(sap.grpo)} + ${fmt(sap.formula.poItrCalc)})`,
+                            `Raw = ${fmt(sap.formula.sisaKebutuhanRaw)} kg`,
+                            `Display = ${fmt(sap.sisaKebutuhan)} kg`
+                        ])}</td>
+                        <td>${sap.tglEstimasiHabisStr}</td>
+                        <td>Hari ${sap.ageEstimasiHabis}</td>
+                        <td>${tip(`${sap.estimasiHabisDiff} hari`, [
+                            "Diff Estimasi Habis",
+                            "After forecast: Last Stok + MAX(0, Sisa Kebutuhan)",
+                            `Forecast Qty = ${fmt(sap.formula.forecastQty)} kg`,
+                            `Stok setelah forecast = ${fmt(sap.lastStok)} + ${fmt(sap.formula.forecastQty)} = ${fmt(sap.formula.lastStokAfterForecast)} kg`,
+                            `Tambahan hari = ${fmt(sap.formula.forecastQty)} / ${fmt(sap.formula.dailyFeedAfterCurrent, 3)} = ${sap.formula.extraDaysFromForecast} hari`,
+                            "= Age Estimasi Habis - Age Last Posting",
+                            `= ${sap.ageEstimasiHabis} - ${sap.formula.ageLastPosting}`,
+                            `= ${sap.estimasiHabisDiff} hari`
+                        ])}</td>
                         <td style="white-space:nowrap;">
                             <button class="btn-info-plan me-1" onclick="openPlanInfo('${plan.planNo}')"><i class="bi bi-info-circle"></i></button>
                             <a href="customer_ForecastView.html?planNo=${plan.planNo}" class="btn-info-plan" style="display:inline-flex;align-items:center;text-decoration:none;gap:3px;"><i class="bi bi-eye"></i> View</a>
@@ -1009,38 +1316,123 @@
                     </div>
                 </div>`;
             }).join("");
+            initFormulaTooltips();
         }
 
 
         // ─── SAP MOCK DATA ────────────────────────────────────────────────────────
+        function initFormulaTooltips() {
+            let popover = document.getElementById("formulaPopover");
+            if (!popover) {
+                popover = document.createElement("div");
+                popover.id = "formulaPopover";
+                popover.className = "formula-popover";
+                document.body.appendChild(popover);
+            }
+
+            const placePopover = (target) => {
+                const rect = target.getBoundingClientRect();
+                const popRect = popover.getBoundingClientRect();
+                let left = rect.left + (rect.width / 2) - (popRect.width / 2);
+                let top = rect.top - popRect.height - 12;
+
+                left = Math.max(12, Math.min(left, window.innerWidth - popRect.width - 12));
+                if (top < 12) top = rect.bottom + 12;
+
+                popover.style.left = `${left}px`;
+                popover.style.top = `${top}px`;
+            };
+
+            document.querySelectorAll(".formula-tip").forEach(el => {
+                el.onmouseenter = () => {
+                    popover.textContent = el.dataset.tip || "";
+                    popover.classList.add("show");
+                    placePopover(el);
+                };
+                el.onmousemove = () => placePopover(el);
+                el.onmouseleave = () => popover.classList.remove("show");
+            });
+        }
+
         function sapMock(plan, calc) {
-            const sisaHari = HARVEST_DAY - plan.age;
-            const mort = Math.round(plan.docQty * 0.003 * plan.age);
-            const lastPop = plan.docQty - mort;
-            const bw = (0.045 + plan.age * 0.055).toFixed(3);
-            const fcr = (1.4 + plan.age * 0.01).toFixed(3);
-            const fiAct = Math.round(plan.docQty * parseFloat(bw) * parseFloat(fcr) / Math.max(plan.age, 1));
-            const fiCum = fiAct * plan.age;
-            const grpo = Math.ceil(fiCum / 1000);
-            const poItr = grpo + 2;
-            const lastStok = Math.max(0, Math.round(fiCum * 0.12));
-            const kebutuhanMinggu = Math.round(Math.min(calc.totalQty, calc.totalQty / Math.max(sisaHari, 1) * 7));
-            const sisaKebutuhan = Math.round(calc.totalQty);
-            const hariHabis = lastStok > 0 && fiAct > 0 ? Math.floor(lastStok / (fiAct / Math.max(plan.age, 1))) : 3;
-            const tglHabis = new Date(2026, 3, 20 + hariHabis);
-            const tglHabisStr = tglHabis.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
-            const ageHabis = plan.age + hariHabis;
-            const lastPostStr = new Date(2026, 3, 20).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
-            const statusKalang = plan.age < 7 ? "Normal" : plan.age < 25 ? "Growing" : "Pre-Panen";
-            const bwPanen = (parseFloat(bw) + (HARVEST_DAY - plan.age) * 0.055).toFixed(2) + " kg";
-            return { mort, lastPop, bw, fcr, fiAct, fiCum, grpo, poItr, lastStok, kebutuhanMinggu, sisaKebutuhan, hariHabis, tglHabisStr, ageHabis, lastPostStr, statusKalang, pakanHabis: tglHabisStr, bwPanen };
+            const sd = plan.sapData || {};
+            const ageLastPosting = plan.ageLastPosting ?? plan.age ?? plan.ageCurrent ?? 0;
+            const lastPostingDate = parsePlanDate(plan.lastPostingDate) || new Date(2026, 3, 20);
+            const tanggalCI = parsePlanDate(plan.tanggalCI) || addDays(lastPostingDate, -ageLastPosting);
+            const ageNow = plan.ageCurrent ?? plan.age ?? diffDays(tanggalCI, new Date());
+            const popBonus = sd.popBonus ?? plan.popBonus ?? (plan.docQty * 1.01);
+            const mort = sd.mort ?? Math.round(plan.docQty * 0.003 * ageLastPosting);
+            const lastPop = sd.lastPop ?? Math.max(0, Math.round(popBonus - mort));
+            const bw = sd.bw ?? (0.045 + ageLastPosting * 0.055).toFixed(3);
+            const fcr = sd.fcr ?? null;
+            const fiAct = sd.fiAct ?? +(sd.pakanTerpakai ? sd.pakanTerpakai / Math.max(popBonus, 1) : (0.045 + ageLastPosting * 0.055)).toFixed(3);
+            const pakanTerpakai = sd.pakanTerpakai
+                ?? (fcr != null && bw != null ? fcr * lastPop * parseFloat(bw) : fiAct * popBonus);
+            const targetBW = sd.targetBW ?? plan.targetBW ?? 1.8;
+            const targetStd = lookupStdByTargetBW(targetBW);
+            const fiCum = targetStd.fiCum;
+            const grpo = sd.grpo ?? Math.ceil(pakanTerpakai / 1000);
+            const poItr = sd.poItr !== undefined ? sd.poItr : Math.max(0, grpo + 2);
+            const poItrCalc = poItr ?? 0;
+            const lastStok = sd.lastStok !== undefined ? sd.lastStok : Math.max(0, (grpo + poItrCalc) - pakanTerpakai);
+            const kebutuhanMinggu = ceilTo(popBonus * fiCum, 50);
+            const sisaKebutuhanRaw = kebutuhanMinggu - (grpo + poItrCalc);
+            const sisaKebutuhan = Math.max(0, sisaKebutuhanRaw);
+
+            const defaultPanenOffset = ageLastPosting >= 21 ? 3 : 5;
+            const panenDate = parsePlanDate(sd.tanggalPanen || plan.tanggalPanen) || addDays(lastPostingDate, defaultPanenOffset);
+            const usiaAkhir = Math.max(ageLastPosting, diffDays(tanggalCI, panenDate));
+            const panenEkor = sd.ekorPanen ?? plan.ekorPanen ?? (ageNow >= 27 ? Math.round(lastPop * 0.3) : 0);
+            const stockAkhir = Math.max(0, lastPop - panenEkor);
+            const ageFiAct = lookupStdByCumFi(fiAct, 1).age;
+            const cumFiSampaiPanen = lookupCumFiByAge(ageFiAct + usiaAkhir - ageLastPosting);
+            const pakanPakaiSampaiPanen = stockAkhir > 0
+                ? Math.min(ceilTo(stockAkhir * Math.max(0, cumFiSampaiPanen - fiAct), 50), lastStok)
+                : 0;
+            const cumFiSisaPakan = stockAkhir > 0 ? +((lastStok - pakanPakaiSampaiPanen) / stockAkhir).toFixed(3) : 0;
+            const cumFiStdTotal = +(cumFiSampaiPanen + Math.max(0, cumFiSisaPakan)).toFixed(3);
+            const usiaCumFiStd1 = lookupStdByCumFi(cumFiStdTotal, 1).age;
+            const usiaCumFiStd2 = lookupStdByCumFi(cumFiSampaiPanen, 1).age;
+            const ageHabis = cumFiStdTotal <= cumFiSampaiPanen
+                ? usiaAkhir
+                : usiaCumFiStd1 - usiaCumFiStd2 + usiaAkhir;
+            const tglHabis = addDays(tanggalCI, ageHabis);
+            const pakanHabisDiff = ageHabis - ageLastPosting;
+
+            const forecastQty = sd.orderTotal ?? plan.orderTotal ?? Math.max(0, sisaKebutuhan);
+            const lastStokAfterForecast = lastStok + forecastQty;
+            const feedRowForEstimate = STD[Math.min(Math.max(ageHabis, 1), STD.length) - 1] || STD[STD.length - 1];
+            const dailyFeedAfterCurrent = stockAkhir > 0 ? stockAkhir * feedRowForEstimate.fd : 0;
+            const extraDaysFromForecast = forecastQty > 0 && dailyFeedAfterCurrent > 0
+                ? Math.ceil(forecastQty / dailyFeedAfterCurrent)
+                : 0;
+            const ageEstimasiHabis = ageHabis + extraDaysFromForecast;
+            const tglEstimasiHabis = addDays(tanggalCI, ageEstimasiHabis);
+            const estimasiHabisDiff = ageEstimasiHabis - ageLastPosting;
+            const targetBWNum = parseFloat(targetBW) || 0;
+
+            return {
+                mort, lastPop, bw, fcr, fiAct, fiCum, grpo, poItr, ageNow,
+                lastStok, kebutuhanMinggu, sisaKebutuhan,
+                hariHabis: pakanHabisDiff, tglHabisStr: fmtDate(tglHabis), ageHabis,
+                panenDateStr: fmtDate(panenDate), panenEkor, pakanHabisDiff,
+                tglEstimasiHabisStr: fmtDate(tglEstimasiHabis), ageEstimasiHabis, estimasiHabisDiff,
+                lastPostStr: plan.lastPostingDate || fmtDate(lastPostingDate),
+                statusKalang: "Released", pakanHabis: fmtDate(tglHabis), bwPanen: `${targetBWNum.toFixed(2)} kg`,
+                formula: {
+                    ageLastPosting, ageNow, popBonus, pakanTerpakai, targetBW: targetBWNum, poItrCalc, sisaKebutuhanRaw,
+                    stockAkhir, panenDateStr: fmtDate(panenDate), forecastQty, lastStokAfterForecast,
+                    dailyFeedAfterCurrent, extraDaysFromForecast,
+                    pakanPakaiSampaiPanen, cumFiSampaiPanen, cumFiStdTotal
+                }
+            };
         }
 
         // ─── SUMMARY ──────────────────────────────────────────────────────────────
         function renderSummary() {
             const totalPlan = DEMO_PLANS.length;
             const totalPop = DEMO_PLANS.reduce((s, p) => s + p.docQty, 0);
-            const totalKebutuhan = DEMO_PLANS.reduce((s, p) => s + Math.round(calcFeedNeed(p).totalQty), 0);
+            const totalKebutuhan = DEMO_PLANS.reduce((s, p) => s + Math.round(sapMock(p, calcFeedNeed(p)).kebutuhanMinggu), 0);
             const drafted = DEMO_PLANS.filter(p => p.fcStatus === "Draft").length;
             document.getElementById("summaryGrid").innerHTML = `
                 <div class="summary-box"><div class="lbl">Total Plan Aktif</div><div class="val" style="color:#1a237e;">${totalPlan}</div></div>
@@ -1050,30 +1442,20 @@
         }
 
         // ─── REVIEW FLOW ──────────────────────────────────────────────────────────
-        function autoFillItems(plan) {
-            const phaseCalc = calcFeedNeed(plan).phaseResults;
-            const items = [];
-            phaseCalc.forEach((pc, idx) => {
-                if (!pc.skipped && pc.qty > 0) {
-                    items.push({
-                        id: Date.now() + idx + Math.random(),
-                        itemCode: PHASES[idx].code,
-                        itemName: PHASES[idx].name,
-                        qty: Math.ceil(pc.qty),
-                        uom: PHASES[idx].uom || "Kg"
-                    });
-                }
-            });
-            return items;
-        }
-
         function startReviewFlow() {
             if (_selectedPlansForBulk.length === 0) return;
             _reviewPlans = [..._selectedPlansForBulk];
             _reviewData = {};
             _reviewPlans.forEach(planNo => {
                 const plan = DEMO_PLANS.find(p => p.planNo === planNo);
-                if (plan) _reviewData[planNo] = { items: autoFillItems(plan), skipped: false };
+                if (!plan) return;
+                const sap = sapMock(plan, calcFeedNeed(plan));
+                const totalQty = Math.max(0, Math.ceil(sap.sisaKebutuhan));
+                _reviewData[planNo] = {
+                    items: [{ id: Date.now() + Math.random(), itemCode: "", itemName: "", qty: totalQty, uom: "Kg" }],
+                    totalQty,
+                    skipped: false
+                };
             });
             _reviewStep = 0;
             renderReviewStep();
@@ -1115,7 +1497,7 @@
                         </div>
                         <div class="col-6 col-md-2">
                             <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;">Farm / Kandang</div>
-                            <div>${plan.farm} / ${plan.id}</div>
+                            <div>${plan.location ?? plan.farm} / ${plan.id}</div>
                         </div>
                         <div class="col-6 col-md-2">
                             <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;">Umur</div>
@@ -1190,8 +1572,15 @@
         }
 
         function reviewSyncItem(planNo, id, field, value) {
-            const row = _reviewData[planNo]?.items.find(r => r.id === id);
+            const data = _reviewData[planNo];
+            if (!data) return;
+            const row = data.items.find(r => r.id === id);
             if (row) row[field] = field === "qty" ? parseFloat(value) || 0 : value;
+            // Kalau qty row 1 berubah dan sudah ada row 2, update sisa qty row 2
+            if (field === "qty" && data.items.length === 2 && data.items[0].id === id) {
+                data.items[1].qty = Math.max(0, (data.totalQty || 0) - (parseFloat(value) || 0));
+                document.getElementById("reviewItemList").innerHTML = renderReviewItemRows(planNo);
+            }
         }
 
         function reviewNext() { _reviewStep++; renderReviewStep(); }
@@ -1213,7 +1602,7 @@
                 return `<tr ${skip ? 'style="opacity:.5"' : ''}>
                     <td>${skip ? '<i class="bi bi-dash-circle text-danger"></i>' : '<i class="bi bi-check-circle-fill text-success"></i>'}</td>
                     <td class="fw-bold" style="color:#1a237e;">${plan.planNo}</td>
-                    <td>${plan.farm} / ${plan.id}</td>
+                    <td>${plan.location ?? plan.farm} / ${plan.id}</td>
                     <td>${data.items.length} item</td>
                     <td class="fw-bold">${skip ? '-' : fmt(totalQty) + ' Kg'}</td>
                     <td>${skip ? '<span class="badge bg-secondary">Dilewati</span>' : '<span class="badge bg-primary">Akan Dibuat</span>'}</td>
@@ -1228,7 +1617,7 @@
                     </div>
                     <table class="table table-sm" style="font-size:13px;">
                         <thead class="table-light">
-                            <tr><th style="width:32px;"></th><th>Plan No</th><th>Farm / Kandang</th><th>Item</th><th>Total QTY</th><th>Status</th></tr>
+                            <tr><th style="width:32px;"></th><th>Plan No</th><th>Location / Kandang</th><th>Item</th><th>Total QTY</th><th>Status</th></tr>
                         </thead>
                         <tbody>${rows}</tbody>
                     </table>
@@ -1270,7 +1659,7 @@
                 const today = new Date();
                 history.push({
                     fcNo, fcDate: today.toISOString().split('T')[0], period,
-                    planNo: plan.planNo, planName: `${plan.farm} / ${plan.id}`,
+                    planNo: plan.planNo, planName: `${plan.location ?? plan.farm} / ${plan.id}`,
                     planDesc: (plan.docType || '') + " - Hari " + plan.age,
                     company: plan.company, farm: plan.farm, warehouse: plan.wh, kdgId: plan.id,
                     status, docType: plan.docType, age: plan.age + " Hari", rawAge: plan.age,
@@ -1306,8 +1695,16 @@
 
         function selectItem(code, name, uom) {
             if (_itemSearchTargetPlanNo && _reviewData[_itemSearchTargetPlanNo]) {
-                const row = _reviewData[_itemSearchTargetPlanNo].items.find(r => r.id === _itemSearchTargetRowId);
-                if (row) { row.itemCode = code; row.itemName = name; row.uom = uom; }
+                const data = _reviewData[_itemSearchTargetPlanNo];
+                const row = data.items.find(r => r.id === _itemSearchTargetRowId);
+                if (row) {
+                    row.itemCode = code; row.itemName = name; row.uom = uom;
+                    // Auto-add row 2 dengan sisa qty saat item pertama dipilih
+                    if (data.items.length === 1) {
+                        const sisaQty = Math.max(0, (data.totalQty || 0) - (row.qty || 0));
+                        data.items.push({ id: Date.now() + Math.random(), itemCode: "", itemName: "", qty: sisaQty, uom: "Kg" });
+                    }
+                }
                 bootstrap.Modal.getInstance(document.getElementById("itemSearchModal")).hide();
                 document.getElementById("reviewItemList").innerHTML = renderReviewItemRows(_itemSearchTargetPlanNo);
             }
@@ -1319,9 +1716,10 @@
         function openPlanInfo(planNo) {
             const plan = DEMO_PLANS.find(p => p.planNo === planNo);
             if (!plan) return;
-            const sisaHari = HARVEST_DAY - plan.age;
-            const phase = PHASES.find(ph => plan.age + 1 >= ph.dayFrom && plan.age + 1 <= ph.dayTo) || PHASES[PHASES.length - 1];
-            const vit = STD[plan.age] ? STD[plan.age].v.toFixed(1) : "-";
+            const age = plan.ageCurrent ?? plan.age;
+            const sisaHari = HARVEST_DAY - age;
+            const phase = PHASES.find(ph => age + 1 >= ph.dayFrom && age + 1 <= ph.dayTo) || PHASES[PHASES.length - 1];
+            const vit = STD[age] ? STD[age].v.toFixed(1) : "-";
             document.getElementById("planInfoBody").innerHTML = `
                 <div class="pi-section pt-3">
                     <div class="pi-section-title">Identitas Plan</div>
@@ -1329,7 +1727,7 @@
                         <div class="pi-item"><div class="pik">Plan No</div><div class="piv">${plan.planNo}</div></div>
                         <div class="pi-item"><div class="pik">Status</div><div class="piv">${plan.status}</div></div>
                         <div class="pi-item"><div class="pik">Company</div><div class="piv">${plan.company}</div></div>
-                        <div class="pi-item"><div class="pik">Farm</div><div class="piv">${plan.farm}</div></div>
+                        <div class="pi-item"><div class="pik">Location</div><div class="piv">${plan.location ?? plan.farm}</div></div>
                         <div class="pi-item"><div class="pik">Kandang</div><div class="piv">${plan.id}</div></div>
                         <div class="pi-item"><div class="pik">Warehouse</div><div class="piv">${plan.wh}</div></div>
                     </div>
@@ -1339,7 +1737,7 @@
                     <div class="pi-grid">
                         <div class="pi-item"><div class="pik">DOC Type</div><div class="piv">${plan.docType}</div></div>
                         <div class="pi-item"><div class="pik">DOC Awal</div><div class="piv num">${fmt(plan.docQty)} ekor</div></div>
-                        <div class="pi-item"><div class="pik">Umur Saat Ini</div><div class="piv num" style="color:#92400e;">Hari ${plan.age}</div></div>
+                        <div class="pi-item"><div class="pik">Umur Saat Ini</div><div class="piv num" style="color:#92400e;">Hari ${age}</div></div>
                         <div class="pi-item"><div class="pik">Sisa Hari</div><div class="piv num" style="color:#dc2626;">${sisaHari} hari</div></div>
                         <div class="pi-item"><div class="pik">Fase Pakan</div><div class="piv">${phase.name}</div></div>
                         <div class="pi-item"><div class="pik">Vitality Std Hari Ini</div><div class="piv num" style="color:#166534;">${vit}%</div></div>
@@ -1377,9 +1775,9 @@
             _selectedGetDataPlans = [];
             document.getElementById("getDataCompany").textContent = company;
 
-            const farms = [...new Set(_sapPlansPool.filter(p => p.company === company).map(p => p.farm))].sort();
+            const farms = [...new Set(_sapPlansPool.filter(p => p.company === company).map(p => p.location ?? p.farm))].sort();
             document.getElementById("getDataFarmFilter").innerHTML =
-                `<option value="">Semua Farm</option>` + farms.map(f => `<option value="${f}">${f}</option>`).join("");
+                `<option value="">Semua Location</option>` + farms.map(f => `<option value="${f}">${f}</option>`).join("");
             document.getElementById("getDataKdgFilter").innerHTML = `<option value="">Semua Kandang</option>`;
 
             renderGetDataList();
@@ -1389,7 +1787,7 @@
         function onGetDataFarmChange() {
             const farm = document.getElementById("getDataFarmFilter").value;
             const kdgs = farm
-                ? [...new Set(_sapPlansPool.filter(p => p.company === _activeGetDataCompany && p.farm === farm).map(p => p.id))].sort()
+                ? [...new Set(_sapPlansPool.filter(p => p.company === _activeGetDataCompany && (p.location ?? p.farm) === farm).map(p => p.id))].sort()
                 : [];
             document.getElementById("getDataKdgFilter").innerHTML =
                 `<option value="">Semua Kandang</option>` + kdgs.map(k => `<option value="${k}">${k}</option>`).join("");
@@ -1402,7 +1800,7 @@
 
             const filtered = _sapPlansPool.filter(p => {
                 if (p.company !== _activeGetDataCompany) return false;
-                if (farm && p.farm !== farm) return false;
+                if (farm && (p.location ?? p.farm) !== farm) return false;
                 if (kdg && p.id !== kdg) return false;
                 return true;
             });
@@ -1424,13 +1822,13 @@
                 </div>
                 <table class="table table-sm mb-0" style="font-size:13px;">
                     <thead class="table-light">
-                        <tr><th>Plan No</th><th>Farm</th><th>Kandang</th><th>Umur</th><th class="text-end">Populasi</th></tr>
+                        <tr><th>Plan No</th><th>Location</th><th>Kandang</th><th>Umur</th><th class="text-end">Populasi</th></tr>
                     </thead>
                     <tbody>
                         ${filtered.map(p => `<tr>
                             <td class="fw-bold text-primary">${p.planNo}</td>
-                            <td>${p.farm}</td><td>${p.id}</td>
-                            <td>Hari ${p.age}</td>
+                            <td>${p.location ?? p.farm}</td><td>${p.id}</td>
+                            <td>Hari ${p.ageCurrent ?? p.age}</td>
                             <td class="text-end">${fmt(p.docQty)}</td>
                         </tr>`).join("")}
                     </tbody>

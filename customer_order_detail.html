@@ -435,7 +435,7 @@
                             <textarea class="form-control mb-4" rows="3"
                                 placeholder="Additional instruction..."></textarea>
 
-                            <button class="btn btn-save w-100 py-3" onclick="savePO()">
+                            <button class="btn btn-save w-100 py-3" id="btnSavePO" onclick="savePO()">
                                 <i class="bi bi-cloud-arrow-up-fill me-2"></i>CREATE PURCHASE ORDER
                             </button>
                         </div>
@@ -643,87 +643,232 @@
             document.getElementById('docDate').value = today;
             document.getElementById('docDelivery').value = today;
 
-            // Auto-gen doc number
             const rand = Math.floor(Math.random() * 90000) + 10000;
             document.getElementById('docNo').value = "PO-2026-" + rand;
 
-            // ── DOC Pre-fill (from customer_ForecastList Generate PO) ──
+            // ── Pre-fill dari URL param ?fcNo= (flow dari customer_orders) ──
+            const params = new URLSearchParams(window.location.search);
+            const fcNoParam = params.get("fcNo");
+            const isBulk    = params.get("bulk") === "1";
+
+            if (fcNoParam) {
+                const fc = getAllFc().find(f => f.fcNo === fcNoParam);
+                if (fc) {
+                    if (isBulk) renderBulkProgress();
+                    preFillFromForecast(fc);
+                    return;
+                }
+            }
+
+            // ── DOC Pre-fill (dari localStorage legacy flow) ──
             const pendingDoc = localStorage.getItem("IBOCS_doc_pending_po");
             if (pendingDoc) {
                 try {
                     const d = JSON.parse(pendingDoc);
                     localStorage.removeItem("IBOCS_doc_pending_po");
-
-                    // Banner
-                    const banner = document.createElement("div");
-                    banner.id = "docSourceBanner";
-                    banner.className = "container pt-3";
-                    banner.innerHTML = `
-                        <div class="alert d-flex align-items-start gap-3 mb-0 rounded-4"
-                             style="background:#eff6ff; border:1.5px solid #93c5fd;">
-                            <i class="bi bi-egg-fill text-primary fs-4 mt-1"></i>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold text-primary mb-1">Purchase Order dari DOC Forecast</div>
-                                <div class="d-flex flex-wrap gap-3" style="font-size:.85rem; color:#374151;">
-                                    <span><strong>Company:</strong> ${d.company}</span>
-                                    <span><strong>Farm:</strong> ${d.farm}</span>
-                                    <span><strong>Warehouse:</strong> ${d.warehouse}</span>
-                                    <span><strong>Plan No:</strong> ${d.planNo}</span>
-                                    <span><strong>Item:</strong> ${d.itemCode} — ${d.itemName}</span>
-                                    <span><strong>Required:</strong> ${(d.required||0).toLocaleString()}</span>
-                                    <span><strong>Ready:</strong> ${(d.ready||0).toLocaleString()}</span>
-                                    <span><strong>Gap:</strong> <span style="color:#991b1b;font-weight:700;">${(d.gap||0).toLocaleString()}</span></span>
-                                </div>
-                            </div>
-                            <a href="customer_ForecastList.html" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-arrow-left me-1"></i>Kembali
-                            </a>
-                        </div>`;
-                    document.querySelector(".container.py-4").before(banner);
-
-                    // Pre-fill header fields
-                    const whseSel = document.getElementById("whseSelect");
-                    whseSel.value = d.warehouse;
-                    if (!whseSel.value) {
-                        // Warehouse not in list yet — add it
-                        const opt = document.createElement("option");
-                        opt.value = d.warehouse;
-                        opt.textContent = d.warehouse;
-                        whseSel.appendChild(opt);
-                        whseSel.value = d.warehouse;
-                    }
-                    onWhseChange();
-
-                    // Plan select — add DOC plan if not there
-                    const planSel = document.getElementById("planSelect");
-                    let planOpt = [...planSel.options].find(o => o.value === d.planNo);
-                    if (!planOpt) {
-                        planOpt = document.createElement("option");
-                        planOpt.value = d.planNo;
-                        planOpt.textContent = d.planNo;
-                        planSel.appendChild(planOpt);
-                    }
-                    planSel.value = d.planNo;
-                    document.getElementById("fcRefInput").value = d.planNo;
-
-                    // Tag as DOC source (hidden field for savePO to read)
-                    const hiddenSource = document.createElement("input");
-                    hiddenSource.type = "hidden";
-                    hiddenSource.id = "sourceTypeHidden";
-                    hiddenSource.value = "DOC";
-                    document.body.appendChild(hiddenSource);
-
-                    // Pre-fill item rows
-                    document.getElementById("itemTbody").innerHTML = "";
-                    addRowFromForecast(d.itemCode, d.itemName, d.suggestedQty || d.gap || d.required);
-                    calculateGrandTotal();
-
+                    prefillDocPending(d);
                 } catch(e) { console.error("Error loading DOC pending PO:", e); }
+                return;
+            }
+
+            // Normal flow: start with one empty row
+            addRow();
+        });
+
+        function renderBulkProgress() {
+            const raw = localStorage.getItem("IBOCS_bulk_po_queue");
+            if (!raw) return;
+            const queue = JSON.parse(raw);
+            const current = queue.index + 1;
+            const total   = queue.fcNos.length;
+            const done    = queue.fcNos.filter((_, i) => i < queue.index).length;
+            const pct     = Math.round((done / total) * 100);
+
+            const bar = document.createElement("div");
+            bar.id = "bulkProgressBar";
+            bar.className = "container pt-3";
+            bar.innerHTML = `
+                <div class="alert mb-0 rounded-4" style="background:#eff6ff;border:1.5px solid #93c5fd;">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-layers-fill text-primary fs-5"></i>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="fw-bold text-primary" style="font-size:.9rem;">Bulk Create PO — ${current} dari ${total}</span>
+                                <span class="text-muted small">${pct}% selesai</span>
+                            </div>
+                            <div class="progress" style="height:6px;border-radius:99px;">
+                                <div class="progress-bar bg-primary" style="width:${pct}%;border-radius:99px;"></div>
+                            </div>
+                            <div class="mt-2 d-flex flex-wrap gap-1" style="font-size:.8rem;">
+                                ${queue.fcNos.map((f, i) => {
+                                    const isDone    = queue.doneSet && queue.doneSet.includes(f);
+                                    const isCurrent = i === queue.index;
+                                    const cls = isDone ? 'btn-success' : isCurrent ? 'btn-primary' : 'btn-outline-secondary';
+                                    const icon = isDone ? '✓' : isCurrent ? '▶' : '○';
+                                    return `<button class="btn btn-sm ${cls} py-0 px-2" style="font-size:11px;border-radius:6px;"
+                                        onclick="jumpToBulk(${i})">${icon} ${f}</button>`;
+                                }).join("")}
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column gap-1 ms-2">
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-sm btn-outline-primary" onclick="navBulk(-1)" ${queue.index === 0 ? 'disabled' : ''} title="PO sebelumnya">
+                                    <i class="bi bi-chevron-left"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary" onclick="navBulk(1)" ${queue.index >= total - 1 ? 'disabled' : ''} title="PO berikutnya">
+                                    <i class="bi bi-chevron-right"></i>
+                                </button>
+                            </div>
+                            <a href="customer_orders.html" class="btn btn-sm btn-outline-danger" onclick="localStorage.removeItem('IBOCS_bulk_po_queue')">
+                                <i class="bi bi-x-lg"></i> Batal
+                            </a>
+                        </div>
+                    </div>
+                </div>`;
+            document.querySelector(".container.py-4").before(bar);
+
+            // Ganti label tombol: "Next" kalau bukan PO terakhir
+            const isLast = queue.index >= queue.fcNos.length - 1;
+            if (!isLast) {
+                const btn = document.getElementById("btnSavePO");
+                if (btn) {
+                    btn.innerHTML = `<i class="bi bi-arrow-right-circle-fill me-2"></i>NEXT — SAVE & LANJUT KE ${queue.fcNos[queue.index + 1]}`;
+                }
+            }
+        }
+
+        function navBulk(delta) {
+            const raw = localStorage.getItem("IBOCS_bulk_po_queue");
+            if (!raw) return;
+            const queue = JSON.parse(raw);
+            const next = queue.index + delta;
+            if (next < 0 || next >= queue.fcNos.length) return;
+            queue.index = next;
+            localStorage.setItem("IBOCS_bulk_po_queue", JSON.stringify(queue));
+            window.location.href = `customer_order_detail.html?fcNo=${encodeURIComponent(queue.fcNos[next])}&bulk=1`;
+        }
+
+        function jumpToBulk(idx) {
+            const raw = localStorage.getItem("IBOCS_bulk_po_queue");
+            if (!raw) return;
+            const queue = JSON.parse(raw);
+            if (idx < 0 || idx >= queue.fcNos.length) return;
+            queue.index = idx;
+            localStorage.setItem("IBOCS_bulk_po_queue", JSON.stringify(queue));
+            window.location.href = `customer_order_detail.html?fcNo=${encodeURIComponent(queue.fcNos[idx])}&bulk=1`;
+        }
+
+        function preFillFromForecast(fc) {
+            // Banner info
+            const banner = document.createElement("div");
+            banner.className = "container pt-3";
+            banner.innerHTML = `
+                <div class="alert d-flex align-items-start gap-3 mb-0 rounded-4"
+                     style="background:#f0fdf4; border:1.5px solid #86efac;">
+                    <i class="bi bi-graph-up-arrow text-success fs-4 mt-1"></i>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold text-success mb-1">Pre-filled dari Forecast ${fc.fcNo}</div>
+                        <div class="d-flex flex-wrap gap-3" style="font-size:.85rem; color:#374151;">
+                            <span><strong>Company:</strong> ${fc.company || "-"}</span>
+                            <span><strong>Farm:</strong> ${fc.farm || "-"}</span>
+                            <span><strong>Warehouse:</strong> ${fc.warehouse || "-"}</span>
+                            <span><strong>Plan:</strong> ${fc.planNo || "-"}</span>
+                            <span><strong>Period:</strong> ${fc.period || fc.week || "-"}</span>
+                        </div>
+                    </div>
+                    <a href="customer_orders.html" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>Kembali
+                    </a>
+                </div>`;
+            document.querySelector(".container.py-4").before(banner);
+
+            // Warehouse
+            const whseSel = document.getElementById("whseSelect");
+            if (![...whseSel.options].some(o => o.value === fc.warehouse)) {
+                const opt = document.createElement("option");
+                opt.value = fc.warehouse; opt.textContent = fc.warehouse;
+                whseSel.appendChild(opt);
+            }
+            whseSel.value = fc.warehouse;
+            onWhseChange();
+
+            // Plan
+            const planSel = document.getElementById("planSelect");
+            if (![...planSel.options].some(o => o.value === fc.planNo)) {
+                const opt = document.createElement("option");
+                opt.value = fc.planNo; opt.textContent = fc.planNo;
+                planSel.appendChild(opt);
+            }
+            planSel.value = fc.planNo;
+
+            // FC Ref
+            document.getElementById("fcRefInput").value = fc.fcNo;
+
+            // Week
+            if (fc.period) {
+                const ws = document.getElementById("weekSelect");
+                if (![...ws.options].some(o => o.value === fc.period)) {
+                    const opt = document.createElement("option");
+                    opt.value = fc.period; opt.textContent = fc.period;
+                    ws.appendChild(opt);
+                }
+                ws.value = fc.period;
+            }
+
+            // Plan data card
+            populatePlanData(fc);
+
+            // Items from forecast lines
+            let fcLines = fc.lines || [];
+            if (!fcLines.length) {
+                const savedRekom = localStorage.getItem("IBOCS_rekom_" + fc.planNo);
+                if (savedRekom) {
+                    try { fcLines = JSON.parse(savedRekom).map(r => ({ itemCode: r.itemCode, itemName: r.itemName, recommendedQty: r.qty, manualAdjustment: 0 })); } catch(e) {}
+                }
+            }
+
+            const items = fcLines.map(l => ({
+                itemCode: l.itemCode,
+                itemName: l.itemName,
+                qty: (Number(l.recommendedQty) || 0) + (Number(l.manualAdjustment) || 0)
+            })).filter(r => r.qty > 0);
+
+            document.getElementById("itemTbody").innerHTML = "";
+            if (items.length) {
+                items.forEach(item => addRowFromForecast(item.itemCode, item.itemName, item.qty));
             } else {
-                // Normal flow: start with one empty row
                 addRow();
             }
-        });
+            calculateGrandTotal();
+        }
+
+        function prefillDocPending(d) {
+            const whseSel = document.getElementById("whseSelect");
+            if (![...whseSel.options].some(o => o.value === d.warehouse)) {
+                const opt = document.createElement("option");
+                opt.value = d.warehouse; opt.textContent = d.warehouse;
+                whseSel.appendChild(opt);
+            }
+            whseSel.value = d.warehouse;
+            onWhseChange();
+
+            const planSel = document.getElementById("planSelect");
+            if (![...planSel.options].some(o => o.value === d.planNo)) {
+                const opt = document.createElement("option");
+                opt.value = d.planNo; opt.textContent = d.planNo;
+                planSel.appendChild(opt);
+            }
+            planSel.value = d.planNo;
+            document.getElementById("fcRefInput").value = d.planNo;
+
+            const hiddenSource = document.createElement("input");
+            hiddenSource.type = "hidden"; hiddenSource.id = "sourceTypeHidden"; hiddenSource.value = "DOC";
+            document.body.appendChild(hiddenSource);
+
+            document.getElementById("itemTbody").innerHTML = "";
+            addRowFromForecast(d.itemCode, d.itemName, d.suggestedQty || d.gap || d.required);
+            calculateGrandTotal();
+        }
 
         function rupiah(n) { return "Rp " + (n || 0).toLocaleString("id-ID"); }
 
@@ -896,6 +1041,26 @@
                 }))
             });
             localStorage.setItem("IBOCS_so_list", JSON.stringify(soList));
+
+            // Bulk queue: mark done, advance to next undone FC or finish
+            const rawQueue = localStorage.getItem("IBOCS_bulk_po_queue");
+            if (rawQueue) {
+                const queue = JSON.parse(rawQueue);
+                if (!queue.doneSet) queue.doneSet = [];
+                const curFcNo = queue.fcNos[queue.index];
+                if (!queue.doneSet.includes(curFcNo)) queue.doneSet.push(curFcNo);
+
+                const nextIdx = queue.fcNos.findIndex((f, i) => i > queue.index && !queue.doneSet.includes(f));
+                if (nextIdx !== -1) {
+                    queue.index = nextIdx;
+                    localStorage.setItem("IBOCS_bulk_po_queue", JSON.stringify(queue));
+                    // Langsung navigate tanpa overlay
+                    window.location.href = `customer_order_detail.html?fcNo=${encodeURIComponent(queue.fcNos[nextIdx])}&bulk=1`;
+                    return;
+                } else {
+                    localStorage.removeItem("IBOCS_bulk_po_queue");
+                }
+            }
 
             // Success Animation
             document.getElementById('successOverlay').style.display = 'flex';

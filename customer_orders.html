@@ -310,43 +310,22 @@
                         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
                             <div>
                                 <div class="d-flex align-items-center gap-3 mb-1">
-                                    <h5 class="fw-bold mb-0">Purchase Order list</h5>
-                                    <button
-                                        class="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-sm border-0"
-                                        style="border-radius: 20px; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, var(--primary), #22c55e); transition: transform 0.2s ease, box-shadow 0.2s ease; font-size: 0.85rem;"
-                                        onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 6px rgba(34, 197, 94, 0.25)'"
-                                        onmouseout="this.style.transform='none'; this.style.boxShadow='0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)'"
-                                        onclick="location.href='customer_order_detail.html'">
-                                        <i class="bi bi-plus-lg"></i>
-                                        <span class="fw-bold">New</span>
-                                    </button>
+                                    <h5 class="fw-bold mb-0">Customer Orders</h5>
                                 </div>
+                                <div class="text-muted small">Centang forecast confirmed untuk dibuat PO.</div>
                             </div>
                             <div class="d-flex flex-wrap gap-2 align-items-center">
-                                <select id="statusFilter" class="form-select form-select-sm" style="width:150px">
-                                    <option value="All">All Status</option>
-                                    <option value="Open" selected>Open</option>
-                                    <option value="Closed">Closed</option>
-                                    <option value="Canceled">Canceled</option>
-                                    <option value="Partially Receipt">Partially Receipt</option>
+                                <button id="btnBulkPO" class="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-sm"
+                                    style="border-radius:20px;padding:.25rem .9rem;background:linear-gradient(135deg,var(--primary),#22c55e);font-size:.85rem;display:none!important;"
+                                    onclick="startBulkPO()">
+                                    <i class="bi bi-bag-plus"></i>
+                                    <span class="fw-bold">Bulk Create PO (<span id="bulkCount">0</span>)</span>
+                                </button>
+                                <select id="periodFilter" class="form-select form-select-sm" style="width:150px" onchange="render()">
+                                    <option value="ALL">Semua Week</option>
                                 </select>
                                 <input id="q" class="form-control form-control-sm" style="width:200px"
-                                    placeholder="Cari No PO / Plan / FC / Whse">
-                                <div class="vr d-none d-md-block"></div>
-                                <!-- 
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#createOrderModal">
-                                    <i class="bi bi-plus-circle me-1"></i>Create Order
-                                </button>
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#importExcelModal">
-                                    <i class="bi bi-file-earmark-excel me-1"></i>Import Excel
-                                </button>
-                                <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#apiIntegrationModal">
-                                    <i class="bi bi-cloud-arrow-up me-1"></i>API Integration
-                                </button>
-                                -->
+                                    placeholder="Cari FC / Plan / Farm / Whse" oninput="render()">
                             </div>
                         </div>
                     </div>
@@ -802,6 +781,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="forecast_master.js"></script>
+    <script src="sidebar.js"></script>
 
     <script>
         // =========================
@@ -820,229 +800,161 @@
         });
 
         // =========================
-        // DATA SOURCE
+        // FORECAST DATA
         // =========================
-        const LS_ORDERS = "IBOCS_customer_orders";
-        const LS_ORDER_LINES = "IBOCS_customer_order_lines";
-        const LS_PRODUCTS = "IBOCS_vendor_products";
-        const LS_BATCH_INVOICES = "IBOCS_batch_invoices";
+        const DEMO_FC = [
+            { fcNo: "FC-001", fcDate: "2026-04-29", period: "Week 18", company: "PT TOP Distribusi", farm: "Farm Deli",   warehouse: "WH-KDG01", planNo: "PLAN-2026-001", planName: "Farm Deli / KDG-01",   status: "Confirmed", lines: [{ itemCode:"FEED-002", itemName:"Pakan Starter (BR-1)", recommendedQty:7300 }, { itemCode:"FEED-003", itemName:"Pakan Grower (BR-2)", recommendedQty:5200 }] },
+            { fcNo: "FC-002", fcDate: "2026-04-29", period: "Week 18", company: "PT TOP Distribusi", farm: "Farm Deli",   warehouse: "WH-KDG02", planNo: "PLAN-2026-002", planName: "Farm Deli / KDG-02",   status: "Confirmed", lines: [{ itemCode:"FEED-002", itemName:"Pakan Starter (BR-1)", recommendedQty:8000 }, { itemCode:"FEED-004", itemName:"Pakan Finisher (BR-3)", recommendedQty:7000 }] },
+            { fcNo: "FC-003", fcDate: "2026-04-28", period: "Week 18", company: "PT AYM",            farm: "Farm Binjai", warehouse: "WH-KDG03", planNo: "PLAN-2026-003", planName: "Farm Binjai / KDG-03", status: "PO Created", lines: [{ itemCode:"FEED-002", itemName:"Pakan Starter (BR-1)", recommendedQty:6200 }, { itemCode:"FEED-003", itemName:"Pakan Grower (BR-2)", recommendedQty:4300 }] },
+            { fcNo: "FC-004", fcDate: "2026-04-30", period: "Week 19", company: "PT AYM",            farm: "Farm Binjai", warehouse: "WH-KDG03", planNo: "PLAN-2026-004", planName: "Farm Binjai / KDG-03", status: "Confirmed", lines: [{ itemCode:"DOC-001", itemName:"DOC Broiler Cobb 500 (M)", recommendedQty:10000 }, { itemCode:"DOC-002", itemName:"DOC Broiler Cobb 500 (F)", recommendedQty:10000 }] },
+            { fcNo: "FC-005", fcDate: "2026-04-30", period: "Week 19", company: "PT BMAX",           farm: "Farm BMAX",   warehouse: "WH-KDG04", planNo: "PLAN-2026-005", planName: "Farm BMAX / KDG-04",   status: "Draft",     lines: [] }
+        ];
 
-        let orders = [];
-        let orderLines = {};
-        let products = [];
-        let batchInvoices = [];
-
-        try {
-            orders = JSON.parse(localStorage.getItem(LS_ORDERS) || "[]");
-            orderLines = JSON.parse(localStorage.getItem(LS_ORDER_LINES) || "{}");
-
-            // ── Demo order lines aligned with master_data.js ──────────────────────
-            // Feed items (FEED-xxx) → vendor SIC
-            // DOC  items (DOC-xxx)  → vendor CTU
-            orderLines['PO-2604-001'] = [
-                { sku: 'FEED-002', name: 'Pakan Starter (BR-1)',  qty: 7500,  price: 50000, uom: 'Kg' },
-                { sku: 'FEED-003', name: 'Pakan Grower (BR-2)',   qty: 5500,  price: 48000, uom: 'Kg' }
-            ];
-            orderLines['PO-2604-002'] = [
-                { sku: 'DOC-001', name: 'DOC Broiler Cobb 500 (M)', qty: 10000, price: 7500, uom: 'Ekor' },
-                { sku: 'DOC-002', name: 'DOC Broiler Cobb 500 (F)', qty: 10000, price: 7000, uom: 'Ekor' }
-            ];
-            orderLines['PO-2604-003'] = [
-                { sku: 'FEED-002', name: 'Pakan Starter (BR-1)',  qty: 6200,  price: 50000, uom: 'Kg' },
-                { sku: 'FEED-003', name: 'Pakan Grower (BR-2)',   qty: 4300,  price: 48000, uom: 'Kg' }
-            ];
-            orderLines['PO-2604-004'] = [
-                { sku: 'DOC-007', name: 'DOC Hubbard (M)', qty: 8000, price: 9000, uom: 'Ekor' },
-                { sku: 'DOC-008', name: 'DOC Hubbard (F)', qty: 8000, price: 8500, uom: 'Ekor' }
-            ];
-            orderLines['PO-2604-005'] = [
-                { sku: 'FEED-002', name: 'Pakan Starter (BR-1)',  qty: 8000,  price: 50000, uom: 'Kg' },
-                { sku: 'FEED-004', name: 'Pakan Finisher (BR-3)', qty: 7000,  price: 46000, uom: 'Kg' }
-            ];
-            orderLines['PO-2604-006'] = [
-                { sku: 'DOC-005', name: 'DOC Layer Lohmann (M)', qty: 9500, price: 12000, uom: 'Ekor' },
-                { sku: 'DOC-006', name: 'DOC Layer Lohmann (F)', qty: 9500, price: 11000, uom: 'Ekor' }
-            ];
-            orderLines['PO-2604-007'] = [
-                { sku: 'FEED-004', name: 'Pakan Finisher (BR-3)', qty: 8700, price: 46000, uom: 'Kg' },
-                { sku: 'FEED-003', name: 'Pakan Grower (BR-2)',   qty: 5700, price: 48000, uom: 'Kg' }
-            ];
-
-            localStorage.setItem(LS_ORDER_LINES, JSON.stringify(orderLines));
-
-            // Seed orders if missing or outdated
-            const needsSeed = orders.length === 0 || !orders.some(o => o.no === 'PO-2604-001');
-
-            if (needsSeed) {
-                const baseData = [
-                    { no: 'PO-2604-001', vendorCode: 'SIC', sourceType: 'Feed', customerCode: 'CUST-001', date: '2026-04-01', requiredDate: '2026-04-08', warehouse: 'WH-KDG01', planNo: 'PL-001', week: 'Week 18', fcRef: 'FC-001', status: 'Open' },
-                    { no: 'PO-2604-002', vendorCode: 'CTU', sourceType: 'DOC',  customerCode: 'CUST-001', date: '2026-04-02', requiredDate: '2026-04-09', warehouse: 'WH-KDG01', planNo: 'PL-001', week: 'Week 18', fcRef: 'FC-001', status: 'Open' },
-                    { no: 'PO-2604-003', vendorCode: 'SIC', sourceType: 'Feed', customerCode: 'CUST-002', date: '2026-04-03', requiredDate: '2026-04-10', warehouse: 'WH-KDG03', planNo: 'PL-008', week: 'Week 18', fcRef: 'FC-003', status: 'Open' },
-                    { no: 'PO-2604-004', vendorCode: 'CTU', sourceType: 'DOC',  customerCode: 'CUST-002', date: '2026-04-04', requiredDate: '2026-04-11', warehouse: 'WH-KDG03', planNo: 'PL-008', week: 'Week 18', fcRef: 'FC-003', status: 'Open' },
-                    { no: 'PO-2604-005', vendorCode: 'SIC', sourceType: 'Feed', customerCode: 'CUST-001', date: '2026-04-05', requiredDate: '2026-04-12', warehouse: 'WH-KDG02', planNo: 'PL-002', week: 'Week 18', fcRef: 'FC-002', status: 'Closed' },
-                    { no: 'PO-2604-006', vendorCode: 'CTU', sourceType: 'DOC',  customerCode: 'CUST-003', date: '2026-04-06', requiredDate: '2026-04-13', warehouse: 'WH-KDG02', planNo: 'PL-009', week: 'Week 20', fcRef: 'FC-005', status: 'Open' },
-                    { no: 'PO-2604-007', vendorCode: 'SIC', sourceType: 'Feed', customerCode: 'CUST-003', date: '2026-04-07', requiredDate: '2026-04-14', warehouse: 'WH-KDG02', planNo: 'PL-009', week: 'Week 20', fcRef: 'FC-005', status: 'Open' }
-                ];
-                orders = baseData.map(o => {
-                    const lines = orderLines[o.no] || [];
-                    o.total = lines.reduce((s, it) => s + (it.price * it.qty), 0) * 1.11;
-                    return o;
-                });
-                localStorage.setItem(LS_ORDERS, JSON.stringify(orders));
-            }
-            products = JSON.parse(localStorage.getItem(LS_PRODUCTS) || "[]");
-            batchInvoices = JSON.parse(localStorage.getItem(LS_BATCH_INVOICES) || "[]");
-        } catch (e) { }
-
-        function rupiah(n) { return "Rp " + (n || 0).toLocaleString("id-ID"); }
-
-        function todayYMD() {
-            return new Date().toISOString().split('T')[0];
+        function getFcList() {
+            const stored = JSON.parse(localStorage.getItem("IBOCS_fc_list") || "[]");
+            const storedNos = new Set(stored.map(f => f.fcNo));
+            return [...stored, ...DEMO_FC.filter(d => !storedNos.has(d.fcNo))];
         }
 
-        function genOrderNo() {
-            const n = Math.floor(Math.random() * 900000) + 100000;
-            return "ORD-2026-" + String(n);
+        function calcTotalQty(fc) {
+            return (fc.lines || []).reduce((s, l) => s + (Number(l.recommendedQty || l.standardNeed) || 0) + (Number(l.manualAdjustment) || 0), 0);
         }
 
-        function badgeStatus(status) {
-            const map = {
-                "Open": "bg-primary",
-                "Closed": "bg-secondary",
-                "Canceled": "bg-danger",
-                "Partially Receipt": "bg-warning text-dark",
-                "Dipesan": "bg-primary",
-                "Dikonfirmasi": "bg-info",
-                "Dikirim": "bg-warning text-dark",
-                "Sampai": "bg-success",
-                "Selesai": "bg-success"
-            };
-            const cls = map[status] || "bg-secondary";
-            return `<span class="badge ${cls}">${status}</span>`;
+        function fmt(n) { return Number(n || 0).toLocaleString("id-ID"); }
+
+        function setupPeriodFilter() {
+            const data = getFcList().filter(f => f.status === "Confirmed");
+            const periods = ["ALL", ...new Set(data.map(f => f.period || f.week || "Week 18"))];
+            document.getElementById("periodFilter").innerHTML = periods.map(p =>
+                `<option value="${p}">${p === "ALL" ? "Semua Week" : p}</option>`
+            ).join("");
         }
 
         let currentPage = 1;
-        const pageSize = 5;
+        const pageSize = 10;
+        const selectedFcNos = new Set();
 
-        function formatDateShort(dateStr) {
-            if (!dateStr) return "-";
-            const date = new Date(dateStr);
-            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const d = date.getDate();
-            const m = months[date.getMonth()];
-            const y = String(date.getFullYear()).slice(-2);
-            return `${d}-${m}-${y}`;
+        function onCheckChange(el) {
+            if (el.checked) selectedFcNos.add(el.value);
+            else selectedFcNos.delete(el.value);
+            updateBulkBtn();
+            // update row highlight tanpa re-render penuh
+            const row = el.closest("tr");
+            if (el.checked) row.classList.add("table-success");
+            else row.classList.remove("table-success");
+        }
+
+        function updateBulkBtn() {
+            const btn = document.getElementById("btnBulkPO");
+            const count = selectedFcNos.size;
+            document.getElementById("bulkCount").textContent = count;
+            btn.style.display = count > 0 ? "inline-flex" : "none";
+        }
+
+        function startBulkPO() {
+            const queue = [...selectedFcNos];
+            if (!queue.length) return;
+            localStorage.setItem("IBOCS_bulk_po_queue", JSON.stringify({ fcNos: queue, index: 0 }));
+            window.location.href = `customer_order_detail.html?fcNo=${encodeURIComponent(queue[0])}&bulk=1`;
         }
 
         function changePage(delta) {
-            const q = document.getElementById("q").value.trim().toLowerCase();
-            const filtered = orders.filter(o => {
-                return !q || o.no.toLowerCase().includes(q);
-            });
-
-            const maxPage = Math.ceil(filtered.length / pageSize);
             currentPage += delta;
-            if (currentPage < 1) currentPage = 1;
-            if (currentPage > maxPage) currentPage = maxPage;
             render();
         }
 
         function render() {
-            const q = document.getElementById("q").value.trim().toLowerCase();
-            const statusFilter = document.getElementById("statusFilter").value;
+            const q      = document.getElementById("q").value.trim().toLowerCase();
+            const period = document.getElementById("periodFilter").value || "ALL";
             const container = document.getElementById("ordersContainer");
-            container.innerHTML = "";
 
-            const filtered = orders.filter(o => {
-                const matchQuery  = !q
-                    || o.no.toLowerCase().includes(q)
-                    || (o.planNo    || "").toLowerCase().includes(q)
-                    || (o.fcRef     || "").toLowerCase().includes(q)
-                    || (o.warehouse || "").toLowerCase().includes(q)
-                    || (o.customer  || o.customerName || "").toLowerCase().includes(q);
-                const matchStatus = statusFilter === 'All' || (o.status || "Open") === statusFilter;
-                return matchQuery && matchStatus;
-            });
+            const data = getFcList().filter(fc => {
+                if (fc.status !== "Confirmed") return false;
+                const fcPeriod = fc.period || fc.week || "Week 18";
+                const hay = [fc.fcNo, fc.planNo, fc.planName, fc.company, fc.farm, fc.warehouse].join(" ").toLowerCase();
+                return (period === "ALL" || fcPeriod === period) && (!q || hay.includes(q));
+            }).sort((a, b) => String(b.fcNo).localeCompare(String(a.fcNo)));
 
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="text-center text-muted py-5">No orders found.</div>`;
+            if (data.length === 0) {
+                container.innerHTML = `<div class="text-center text-muted py-5"><i class="bi bi-inbox fs-3 d-block mb-2"></i>Tidak ada forecast confirmed.</div>`;
                 return;
             }
 
-            // Pagination
-            const totalPages = Math.ceil(filtered.length / pageSize);
-            if (currentPage > totalPages) currentPage = totalPages || 1;
+            const totalPages = Math.ceil(data.length / pageSize);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            const page = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-            const startIdx = (currentPage - 1) * pageSize;
-            const pageOrders = filtered.slice(startIdx, startIdx + pageSize);
+            const companies = [...new Set(page.map(fc => fc.company || "Lainnya"))];
 
-            let tableHtml = `
-                <div class="table-responsive bg-white rounded-4 shadow-sm border">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="ps-3" style="width:60px">No</th>
-                                <th style="width:180px">Order Number</th>
-                                <th>Source</th>
-                                <th>Whse</th>
-                                <th>Plan No</th>
-                                <th>Week</th>
-                                <th>Forecast Ref</th>
-                                <th>PO Date</th>
-                                <th>Required Date</th>
-                                <th>Status</th>
-                                <th class="text-end pe-3">Doc Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
+            let html = companies.map(company => {
+                const rows = page.filter(fc => (fc.company || "Lainnya") === company);
+                const rowsHtml = rows.map((fc) => {
+                    const checked = selectedFcNos.has(fc.fcNo) ? "checked" : "";
+                    return `
+                    <tr class="${selectedFcNos.has(fc.fcNo) ? 'table-success' : ''}" style="cursor:default;">
+                        <td class="ps-3">
+                            <input type="checkbox" class="form-check-input fc-check" value="${fc.fcNo}"
+                                ${checked} onchange="onCheckChange(this)">
+                        </td>
+                        <td class="fw-bold text-primary mono">${fc.fcNo}</td>
+                        <td>${fc.planNo || "-"}</td>
+                        <td>${fc.planName || "-"}</td>
+                        <td><span class="badge bg-light text-dark border">${fc.period || fc.week || "-"}</span></td>
+                        <td>${fc.farm || "-"}</td>
+                        <td><span class="badge bg-light text-dark border">${fc.warehouse || "-"}</span></td>
+                        <td class="fw-bold text-success">${fmt(calcTotalQty(fc))} kg</td>
+                        <td>
+                            <a href="customer_order_detail.html?fcNo=${encodeURIComponent(fc.fcNo)}"
+                               class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1"
+                               style="border-radius:8px;font-size:12px;">
+                                <i class="bi bi-bag-plus"></i> Create PO
+                            </a>
+                        </td>
+                    </tr>`;
+                }).join("");
 
-            pageOrders.forEach((o, index) => {
-                const rowNo = startIdx + index + 1;
-                const reqDate = o.requiredDate || formatDateShort(new Date(new Date(o.date).getTime() + 7 * 24 * 60 * 60 * 1000));
-
-                const fcRefLink = o.fcRef
-                    ? `<a href="#" onclick="event.stopPropagation();openOrderDetail('${o.no}')" class="text-success fw-bold small">${o.fcRef}</a>`
-                    : `<span class="text-muted small">-</span>`;
-                tableHtml += `
-                    <tr onclick="openOrderDetail('${o.no}')">
-                        <td class="ps-3 text-muted small">${rowNo}</td>
-                        <td class="mono text-dark">${o.no}</td>
-                        <td>${o.sourceType === 'DOC' ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;">DOC</span>' : '<span class="badge" style="background:#dcfce7;color:#166534;">Feed</span>'}</td>
-                        <td><span class="badge bg-light text-dark border fw-medium">${o.warehouse || '-'}</span></td>
-                        <td><span class="badge bg-light text-dark border fw-medium">${o.planNo || '-'}</span></td>
-                        <td><span class="small text-muted">${o.week || '-'}</span></td>
-                        <td>${fcRefLink}</td>
-                        <td>${formatDateShort(o.date)}</td>
-                        <td>${reqDate}</td>
-                        <td>${badgeStatus(o.status || "Open")}</td>
-                        <td class="text-end pe-3 fw-bold text-dark">${rupiah(o.total)}</td>
-                    </tr>
-                `;
-            });
-
-            tableHtml += `
-                        </tbody>
-                    </table>
-                </div>
-            `;
-
-            // Pagination Footer
-            tableHtml += `
-                <div class="d-flex align-items-center justify-content-end gap-3 mt-4">
-                    <span class="page-info">Page ${currentPage} of ${totalPages || 1}</span>
-                    <div class="d-flex gap-1">
-                        <button class="btn-pagination" onclick="changePage(-1)" ${currentPage <= 1 ? 'disabled' : ''}>
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <button class="btn-pagination" onclick="changePage(1)" ${currentPage >= totalPages ? 'disabled' : ''}>
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
+                return `
+                <div class="mb-4">
+                    <div style="display:flex;align-items:center;background:#15803d;border-radius:10px 10px 0 0;padding:10px 16px;">
+                        <i class="bi bi-building me-2" style="color:#fff;"></i>
+                        <span style="font-size:13px;font-weight:700;color:#fff;">${company}</span>
+                        <span style="font-size:11px;color:#bbf7d0;margin-left:10px;">${rows.length} forecast confirmed</span>
                     </div>
-                </div>
-            `;
+                    <div style="border:1.5px solid #e0e7ef;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-3" style="width:44px"></th>
+                                        <th>No Forecast</th>
+                                        <th>Plan No</th>
+                                        <th>Plan Name</th>
+                                        <th>Week</th>
+                                        <th>Farm</th>
+                                        <th>Warehouse</th>
+                                        <th>Total QTY</th>
+                                        <th style="width:130px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>${rowsHtml}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>`;
+            }).join("");
 
-            container.innerHTML = tableHtml;
+            // Pagination
+            html += `
+                <div class="d-flex align-items-center justify-content-end gap-3 mt-2">
+                    <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+                    <div class="d-flex gap-1">
+                        <button class="btn-pagination" onclick="changePage(-1)" ${currentPage <= 1 ? 'disabled' : ''}><i class="bi bi-chevron-left"></i></button>
+                        <button class="btn-pagination" onclick="changePage(1)"  ${currentPage >= totalPages ? 'disabled' : ''}><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                </div>`;
+
+            container.innerHTML = html;
         }
         // =========================
         // ORDER DETAIL MODAL LOGIC (Ported from customer_order_detail.html)
@@ -1181,51 +1093,17 @@
             }
         };
 
-        // Storage Keys
-        const LS_RETAIL_DELIVERIES = "IBOCS_customer_deliveries";
-        const LS_RETAIL_PAYMENTS = "IBOCS_customer_payments";
-        const LS_PAYMENT_EVIDENCE = "IBOCS_payment_evidence";
-
         // Global exposure for onclick
         window.changePage = changePage;
-        window.openOrderDetail = openOrderDetail;
-
-        // Events
-        document.getElementById("q").addEventListener("input", () => {
-            // Reset page on search
-            currentPage = 1;
-            render();
-        });
-
-        document.getElementById("statusFilter").addEventListener("change", () => {
-            // Reset page on filter change
-            currentPage = 1;
-            render();
-        });
 
         // Init
-        render();
+        document.addEventListener("DOMContentLoaded", () => {
+            new SidebarSystem(null, "orders").render();
+            setupPeriodFilter();
+            render();
+        });
 
-        /*
-        // =========================
-        // FEATURE 1: MANUAL ORDER CREATION
-        // =========================
-        // ... (code below is commented out) ...
-        // ... (Manual creation logic) ...
-
-        // =========================
-        // FEATURE 2: EXCEL IMPORT
-        // =========================
-        // ... (Excel import logic) ...
-
-        // =========================
-        // FEATURE 3: API INTEGRATION
-        // =========================
-        // ... (API sync logic) ...
-        */
-
-        /*
-        // Populate product dropdown
+        /* legacy code removed
         function populateProductDropdowns() {
             const activeProducts = products.filter(p => p.active);
             const selects = document.querySelectorAll('.item-product');
@@ -1671,12 +1549,6 @@ Warung Sejahtera,2026-01-11,BRG-003,10,21000`;
             render();
         });
 
-    </script>
-    <script src="sidebar.js"></script>
-    <script>
-        // Init Sidebar
-        // Render sidebar immediately (reads role from session)
-        new SidebarSystem(null, 'orders').render();
     </script>
 </body>
 

@@ -178,13 +178,20 @@
         ];
 
         const DEMO_PLANS = [
-            { planNo: "PLAN-2026-001", fcStatus: "Draft",            status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-01", wh: "WH-KDG01", docQty: 20000, docType: "DOC Broiler Cobb 500",  age: 7  },
-            { planNo: "PLAN-2026-002", fcStatus: "Forecast Created",  status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-02", wh: "WH-KDG02", docQty: 24000, docType: "DOC Broiler Ross 308",  age: 9  },
-            { planNo: "PLAN-2026-003", fcStatus: "Draft",            status: "Active", company: "PT AYM",            farm: "Farm Binjai", id: "KDG-03", wh: "WH-KDG03", docQty: 12000, docType: "DOC Broiler Cobb 500",  age: 19 },
-            { planNo: "PLAN-2026-004", fcStatus: "PO Created",       status: "Active", company: "PT BMAX",           farm: "Farm BMAX",   id: "KDG-04", wh: "WH-KDG04", docQty: 15000, docType: "DOC Broiler Ross 308",  age: 23 },
-            { planNo: "PLAN-2026-005", fcStatus: "Draft",            status: "Active", company: "PT TOP Distribusi", farm: "Farm Deli",   id: "KDG-05", wh: "WH-KDG05", docQty: 18000, docType: "DOC Broiler Cobb 500",  age: 3  },
-            { planNo: "PLAN-2026-006", fcStatus: "Forecast Created",  status: "Active", company: "PT AYM",            farm: "Farm Binjai", id: "KDG-06", wh: "WH-KDG06", docQty: 10000, docType: "DOC Broiler Ross 308",  age: 14 },
-            { planNo: "PLAN-2026-007", fcStatus: "Draft",            status: "Active", company: "PT BMAX",           farm: "Farm BMAX",   id: "KDG-07", wh: "WH-KDG07", docQty: 22000, docType: "DOC Broiler Cobb 500",  age: 28 },
+            { planNo: "100004423", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", location: "Pekalongan", id: "F0001364", wh: "F0001364", docQty: 9700,  docType: "DOC Broiler", ageLastPosting: 22, ageCurrent: 27, lastPostingDate: "29-Apr-26", sapData: { mort: 269, lastPop: 9431,  bw: 0.985, fcr: 1.297, fiAct: 1.242, fiCum: 12050, grpo: 22700, poItr: 10650, lastStok: 10650 } },
+            { planNo: "100004424", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", location: "Blora",      id: "F0001471", wh: "F0001471", docQty: 30800, docType: "DOC Broiler", ageLastPosting: 19, ageCurrent: 24, lastPostingDate: "29-Apr-26", sapData: { mort: 738, lastPop: 30370, bw: 0.75,  fcr: 1.225, fiAct: 0.082, fiCum: 0.906, grpo: 43000, poItr: 16600, lastStok: 16600 } },
+            { planNo: "100004425", fcStatus: "Draft", status: "Active", company: "PT TOP Distribusi", location: "Klaten",     id: "F0001470", wh: "F0001470", docQty: 7200,  docType: "DOC Broiler", ageLastPosting: 18, ageCurrent: 21, lastPostingDate: "1-May-26",  sapData: { mort: 446, lastPop: 6826,  bw: 0.586, fcr: 1.212, fiAct: 0.08,  fiCum: 0.674, grpo: 9000,  poItr: 3550,  lastStok: 3550  } },
+            { planNo: "100000271", fcStatus: "Draft", status: "Active", company: "PT AYM",            location: "Ponorogo",   id: "F0000274", wh: "F0000274", docQty: 5000,  docType: "DOC Broiler", ageLastPosting: 12, ageCurrent: 14, lastPostingDate: "2-May-26",  sapData: { mort: 46,  lastPop: 5004,  bw: 0.345, fcr: 1.303, fiAct: 0.04,  fiCum: 0.45,  grpo: 4000,  poItr: 1750,  lastStok: 1844 } },
+            { planNo: "100000272", fcStatus: "Draft", status: "Active", company: "PT AYM",            location: "Malang",     id: "F0000073", wh: "F0000073", docQty: 8500,  docType: "DOC Broiler", ageLastPosting: 11, ageCurrent: 13, lastPostingDate: "1-May-26",  sapData: { mort: 155, lastPop: 8430,  bw: 0.325, fcr: 1.113, fiAct: 0.059, fiCum: 0.359, grpo: 5500,  poItr: 2450,  lastStok: 979  } },
+            { planNo: "100000273", fcStatus: "Draft", status: "Active", company: "PT AYM",            location: "Tuban",      id: "F0000173", wh: "F0000173", docQty: 9900,  docType: "DOC Broiler", ageLastPosting: 11, ageCurrent: 13, lastPostingDate: "1-May-26",  sapData: { mort: 329, lastPop: 9670,  bw: 0.187, fcr: 1.244, fiAct: 0.031, fiCum: 0.227, grpo: 5000,  poItr: 2750,  lastStok: 537  } },
+            { planNo: "21000235",  fcStatus: "Draft", status: "Active", company: "PT CTU",            location: "Pasuruan",   id: "FSR0001",  wh: "FSR0001",  docQty: 9315,  docType: "DOC Layer",   ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",  sapData: { mort: 386, lastPop: 8929,  bw: null,  fcr: null,  fiAct: null,  fiCum: null,  grpo: 37700, poItr: null,  lastStok: 1844, statusKalang: "GROWTH", kebutuhanMinggu: 4500, sisaKebutuhan: 18200 } },
+            { planNo: "21000236",  fcStatus: "Draft", status: "Active", company: "PT CTU",            location: "Pasuruan",   id: "FSR0002",  wh: "FSR0002",  docQty: 9460,  docType: "DOC Layer",   ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",  sapData: { mort: 326, lastPop: 9134,  bw: null,  fcr: null,  fiAct: null,  fiCum: null,  grpo: 37250, poItr: null,  lastStok: 979,  statusKalang: "GROWTH", kebutuhanMinggu: 3800, sisaKebutuhan: 15400 } },
+            { planNo: "21000237",  fcStatus: "Draft", status: "Active", company: "PT CTU",            location: "Pasuruan",   id: "FSR0003",  wh: "FSR0003",  docQty: 8940,  docType: "DOC Layer",   ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",  sapData: { mort: 276, lastPop: 8664,  bw: null,  fcr: null,  fiAct: null,  fiCum: null,  grpo: 31850, poItr: null,  lastStok: 1537, statusKalang: "GROWTH", kebutuhanMinggu: 4200, sisaKebutuhan: 16800 } },
+            { planNo: "21000238",  fcStatus: "Draft", status: "Active", company: "PT CTU",            location: "Pasuruan",   id: "FSR0004",  wh: "FSR0004",  docQty: 9460,  docType: "DOC Layer",   ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",  sapData: { mort: 291, lastPop: 9169,  bw: null,  fcr: null,  fiAct: null,  fiCum: null,  grpo: 32150, poItr: null,  lastStok: 836,  statusKalang: "GROWTH", kebutuhanMinggu: 3600, sisaKebutuhan: 14400 } },
+            { planNo: "21000239",  fcStatus: "Draft", status: "Active", company: "PT CTU",            location: "Pasuruan",   id: "FSR0005",  wh: "FSR0005",  docQty: 9520,  docType: "DOC Layer",   ageLastPosting: 98, ageCurrent: 98, lastPostingDate: "2-May-26",  sapData: { mort: 211, lastPop: 9309,  bw: null,  fcr: null,  fiAct: null,  fiCum: null,  grpo: 22900, poItr: null,  lastStok: 1415, statusKalang: "GROWTH", kebutuhanMinggu: 4100, sisaKebutuhan: 16400 } },
+            { planNo: "PLAN-2026-008", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-08", wh: "WH-KDG08", docQty: 22000, docType: "DOC Broiler Ross 308", age: 23 },
+            { planNo: "PLAN-2026-009", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX A", id: "KDG-09", wh: "WH-KDG09", docQty: 18000, docType: "DOC Broiler Cobb 500", age: 7  },
+            { planNo: "PLAN-2026-010", fcStatus: "Draft", status: "Active", company: "PT BMAX", farm: "Farm BMAX B", id: "KDG-10", wh: "WH-KDG10", docQty: 20000, docType: "DOC Broiler Ross 308", age: 11 },
         ];
 
         const HARVEST_DAY = 35;
@@ -192,8 +199,9 @@
         function fmt(n, dec = 0) { return Number(n).toLocaleString("id-ID", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
 
         function calcFeedNeed(plan) {
+            const age = plan.ageCurrent ?? plan.age;
             const phaseResults = PHASES.map((ph, idx) => {
-                const startDay = Math.max(ph.dayFrom, plan.age + 1);
+                const startDay = Math.max(ph.dayFrom, age + 1);
                 const endDay   = Math.min(ph.dayTo, HARVEST_DAY);
                 if (startDay > endDay) return { phaseIdx: idx, qty: 0, avgVitality: null, avgFeedCons: null, days: 0, skipped: true };
                 let totalQty = 0, sumV = 0, sumFc = 0, count = 0;
@@ -208,25 +216,48 @@
         }
 
         function sapMock(plan, calc) {
-            const sisaHari = HARVEST_DAY - plan.age;
-            const mort = Math.round(plan.docQty * 0.003 * plan.age);
+            const age = plan.ageCurrent ?? plan.age;
+            const sisaHari = HARVEST_DAY - age;
+
+            if (plan.sapData) {
+                const sd = plan.sapData;
+                const lastStok = sd.lastStok !== undefined ? sd.lastStok : Math.max(0, Math.round((sd.fiCum || 0) * 0.12));
+                const kebutuhanMinggu = sd.kebutuhanMinggu !== undefined ? sd.kebutuhanMinggu : Math.round(calc.totalQty / Math.max(sisaHari, 1) * 7);
+                const sisaKebutuhan = sd.sisaKebutuhan !== undefined ? sd.sisaKebutuhan : Math.round(calc.totalQty);
+                const stdRow = STD[Math.min(age - 1, STD.length - 1)];
+                const dailyConsumption = stdRow && sd.lastPop > 0 ? sd.lastPop * stdRow.fd : 0;
+                const hariHabis = lastStok > 0 && dailyConsumption > 0 ? Math.floor(lastStok / dailyConsumption) : 3;
+                const tglHabis = new Date(2026, 3, 20 + hariHabis);
+                const tglHabisStr = tglHabis.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+                const ageHabis = age + hariHabis;
+                const statusKalang = "Released";
+                const bwPanen = sd.bw != null ? (parseFloat(sd.bw) + (HARVEST_DAY - age) * 0.055).toFixed(2) + " kg" : "-";
+                return {
+                    mort: sd.mort, lastPop: sd.lastPop, bw: sd.bw, fcr: sd.fcr,
+                    fiAct: sd.fiAct, fiCum: sd.fiCum, grpo: sd.grpo, poItr: sd.poItr,
+                    lastStok, kebutuhanMinggu, sisaKebutuhan, hariHabis, tglHabisStr, ageHabis,
+                    lastPostStr: plan.lastPostingDate || "-", statusKalang, pakanHabis: tglHabisStr, bwPanen
+                };
+            }
+
+            const mort = Math.round(plan.docQty * 0.003 * age);
             const lastPop = plan.docQty - mort;
-            const bw = (0.045 + plan.age * 0.055).toFixed(3);
-            const fcr = (1.4 + plan.age * 0.01).toFixed(3);
-            const fiAct = Math.round(plan.docQty * parseFloat(bw) * parseFloat(fcr) / Math.max(plan.age, 1));
-            const fiCum = fiAct * plan.age;
+            const bw = (0.045 + age * 0.055).toFixed(3);
+            const fcr = (1.4 + age * 0.01).toFixed(3);
+            const fiAct = Math.round(plan.docQty * parseFloat(bw) * parseFloat(fcr) / Math.max(age, 1));
+            const fiCum = fiAct * age;
             const grpo = Math.ceil(fiCum / 1000);
             const poItr = grpo + 2;
             const lastStok = Math.max(0, Math.round(fiCum * 0.12));
             const kebutuhanMinggu = Math.round(Math.min(calc.totalQty, calc.totalQty / Math.max(sisaHari, 1) * 7));
             const sisaKebutuhan = Math.round(calc.totalQty);
-            const hariHabis = lastStok > 0 && fiAct > 0 ? Math.floor(lastStok / (fiAct / Math.max(plan.age, 1))) : 3;
+            const hariHabis = lastStok > 0 && fiAct > 0 ? Math.floor(lastStok / (fiAct / Math.max(age, 1))) : 3;
             const tglHabis = new Date(2026, 3, 20 + hariHabis);
             const tglHabisStr = tglHabis.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
-            const ageHabis = plan.age + hariHabis;
+            const ageHabis = age + hariHabis;
             const lastPostStr = new Date(2026, 3, 20).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
-            const statusKalang = plan.age < 7 ? "Normal" : plan.age < 25 ? "Growing" : "Pre-Panen";
-            const bwPanen = (parseFloat(bw) + (HARVEST_DAY - plan.age) * 0.055).toFixed(2) + " kg";
+            const statusKalang = "Released";
+            const bwPanen = (parseFloat(bw) + (HARVEST_DAY - age) * 0.055).toFixed(2) + " kg";
             return { mort, lastPop, bw, fcr, fiAct, fiCum, grpo, poItr, lastStok, kebutuhanMinggu, sisaKebutuhan, hariHabis, tglHabisStr, ageHabis, lastPostStr, statusKalang, pakanHabis: tglHabisStr, bwPanen };
         }
 
@@ -234,9 +265,10 @@
         function renderView(plan) {
             const calc  = calcFeedNeed(plan);
             const sap   = sapMock(plan, calc);
-            const phase = PHASES.find(ph => plan.age + 1 >= ph.dayFrom && plan.age + 1 <= ph.dayTo) || PHASES[PHASES.length - 1];
-            const vit   = STD[plan.age] ? STD[plan.age].v.toFixed(1) : "-";
-            const sisaHari = HARVEST_DAY - plan.age;
+            const age   = plan.ageCurrent ?? plan.age;
+            const phase = PHASES.find(ph => age + 1 >= ph.dayFrom && age + 1 <= ph.dayTo) || PHASES[PHASES.length - 1];
+            const vit   = STD[age] ? STD[age].v.toFixed(1) : "-";
+            const sisaHari = HARVEST_DAY - age;
 
             // Update topbar
             const fcBadge = plan.fcStatus === "Draft"
@@ -245,7 +277,7 @@
                 ? `<span class="badge-status badge-fc">${plan.fcStatus}</span>`
                 : `<span class="badge-status badge-po">${plan.fcStatus}</span>`;
             document.getElementById("pageTitle").innerHTML = `${plan.planNo} &nbsp;${fcBadge}`;
-            document.getElementById("pageSubtext").textContent = `${plan.company} · ${plan.farm} · ${plan.id}`;
+            document.getElementById("pageSubtext").textContent = `${plan.company} · ${plan.location ?? plan.farm} · ${plan.id}`;
 
             // ── Section 1: Info Plan ──────────────────────────────────────────
             const infoCard = `
@@ -260,12 +292,12 @@
                         <div class="info-item"><div class="ik">Status FC</div><div class="iv">${plan.fcStatus}</div></div>
                         <div class="info-item"><div class="ik">Status Plan</div><div class="iv">${plan.status}</div></div>
                         <div class="info-item"><div class="ik">Company</div><div class="iv">${plan.company}</div></div>
-                        <div class="info-item"><div class="ik">Farm</div><div class="iv">${plan.farm}</div></div>
+                        <div class="info-item"><div class="ik">Location</div><div class="iv">${plan.location ?? plan.farm}</div></div>
                         <div class="info-item"><div class="ik">Warehouse</div><div class="iv">${plan.wh}</div></div>
                         <div class="info-item"><div class="ik">Kandang</div><div class="iv">${plan.id}</div></div>
                         <div class="info-item"><div class="ik">DOC Type</div><div class="iv">${plan.docType || "-"}</div></div>
                         <div class="info-item"><div class="ik">DOC Awal</div><div class="iv num">${fmt(plan.docQty)} ekor</div></div>
-                        <div class="info-item"><div class="ik">Umur Saat Ini</div><div class="iv num" style="color:#92400e;">Hari ${plan.age}</div></div>
+                        <div class="info-item"><div class="ik">Umur Saat Ini</div><div class="iv num" style="color:#92400e;">Hari ${age}</div></div>
                         <div class="info-item"><div class="ik">Sisa Hari ke Panen</div><div class="iv num" style="color:#dc2626;">${sisaHari} hari</div></div>
                         <div class="info-item"><div class="ik">Fase Pakan</div><div class="iv">${phase.name}</div></div>
                     </div>
@@ -334,17 +366,17 @@
                                 <tr>
                                     <td style="font-weight:700;">${fmt(plan.docQty)}</td>
                                     <td>${sap.lastPostStr}</td>
-                                    <td>${plan.age}</td>
-                                    <td>${sap.mort}</td>
+                                    <td>${plan.ageLastPosting ?? plan.age}</td>
+                                    <td>${fmt(sap.mort)}</td>
                                     <td>${fmt(sap.lastPop)}</td>
-                                    <td>${sap.bw} kg</td>
-                                    <td>${sap.fcr}</td>
-                                    <td>${fmt(sap.fiAct)} kg</td>
-                                    <td>${fmt(sap.fiCum)} kg</td>
-                                    <td>${sap.grpo}</td>
-                                    <td>${sap.poItr}</td>
+                                    <td>${sap.bw != null ? fmt(sap.bw, 3) + ' kg' : '-'}</td>
+                                    <td>${sap.fcr != null ? fmt(sap.fcr, 3) : '-'}</td>
+                                    <td>${sap.fiAct != null ? fmt(sap.fiAct, 3) + ' kg' : '-'}</td>
+                                    <td>${sap.fiCum != null ? fmt(sap.fiCum, 3) + ' kg' : '-'}</td>
+                                    <td>${sap.grpo != null ? fmt(sap.grpo) : '-'}</td>
+                                    <td>${sap.poItr != null ? fmt(sap.poItr) : '-'}</td>
                                     <td>${fmt(sap.lastStok)} kg</td>
-                                    <td>${plan.age}</td>
+                                    <td>${plan.ageCurrent ?? plan.age}</td>
                                     <td class="td-yellow">${sap.statusKalang}</td>
                                     <td class="td-yellow">${sap.pakanHabis}</td>
                                     <td class="td-yellow">${sap.bwPanen}</td>
